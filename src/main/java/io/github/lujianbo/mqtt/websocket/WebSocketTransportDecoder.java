@@ -6,15 +6,13 @@ import io.netty.handler.codec.http.websocketx.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Locale;
-
-public class WebSocketTransportHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
+public class WebSocketTransportDecoder extends SimpleChannelInboundHandler<WebSocketFrame> {
 
     private final WebSocketServerHandshaker handshaker;
 
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketTransportHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketTransportDecoder.class);
 
-    public WebSocketTransportHandler(WebSocketServerHandshaker handshaker) {
+    public WebSocketTransportDecoder(WebSocketServerHandshaker handshaker) {
         this.handshaker = handshaker;
     }
 
