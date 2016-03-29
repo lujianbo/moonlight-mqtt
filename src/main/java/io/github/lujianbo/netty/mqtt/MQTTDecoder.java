@@ -12,16 +12,10 @@ import java.util.function.BiFunction;
 /**
  * 考虑到安全防御,哪怕是结构相同的数据，也要根据其状态进行分类处理
  * */
-public class MQTTDecoder extends ReplayingDecoder<MQTTDecoder.State> {
+public class MQTTDecoder extends ReplayingDecoder {
 
-    enum State{
-        Connect,//尚未完成连接
-        Connected,//已经完成连接
-    }
 
     public MQTTDecoder(){
-        //默认状态
-        super(State.Connect);
     }
 
     @Override
@@ -34,18 +28,6 @@ public class MQTTDecoder extends ReplayingDecoder<MQTTDecoder.State> {
             remaining.writeBytes(in, remainingLength);//读取剩余的数据
             MQTTMessage message= MQTTDecoderTool.valueOf(type).decode(byte1,remaining);
             out.add(message);
-//            switch (state()){
-//                case Connect:
-//                    if (type!=MQTTMessage.CONNECT){ ctx.close();}
-//
-//                    return;
-//                case Connected:
-//                    break;
-//            }
-
-            //处理数据
-
-
         }catch (Exception e){
             e.printStackTrace();
         }

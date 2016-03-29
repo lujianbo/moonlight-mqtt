@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.behavior.session;
+package io.github.lujianbo.mqtt.session;
 
 import java.nio.channels.Channel;
 
