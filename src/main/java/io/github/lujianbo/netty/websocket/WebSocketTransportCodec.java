@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.websocket;
+package io.github.lujianbo.netty.websocket;
 
 import io.netty.channel.CombinedChannelDuplexHandler;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;

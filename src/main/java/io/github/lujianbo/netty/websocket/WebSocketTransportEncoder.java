@@ -1,6 +1,5 @@
-package io.github.lujianbo.mqtt.websocket;
+package io.github.lujianbo.netty.websocket;
 
-import io.github.lujianbo.mqtt.codec.message.MQTTMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;

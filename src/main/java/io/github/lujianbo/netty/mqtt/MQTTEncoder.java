@@ -1,6 +1,6 @@
-package io.github.lujianbo.mqtt.codec;
+package io.github.lujianbo.netty.mqtt;
 
-import io.github.lujianbo.mqtt.codec.message.*;
+import io.github.lujianbo.mqtt.domain.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

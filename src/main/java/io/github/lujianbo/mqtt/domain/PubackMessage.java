@@ -1,11 +1,13 @@
-package io.github.lujianbo.mqtt.codec.message;
+package io.github.lujianbo.mqtt.domain;
 
 /**
  * Created by jianbo on 2016/3/24.
  */
-public class PubrecMessage extends MQTTMessage {
+public class PubackMessage extends MQTTMessage {
 
     protected int packetIdentifier;
+
+
 
     public int getPacketIdentifier() {
         return packetIdentifier;

@@ -1,4 +1,4 @@
-package io.github.lujianbo.websocket;
+package io.github.lujianbo.netty.websocket;
 
 import io.github.lujianbo.web.WebSocketServerIndexPage;
 import io.netty.buffer.ByteBuf;

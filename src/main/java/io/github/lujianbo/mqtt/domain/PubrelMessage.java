@@ -1,13 +1,11 @@
-package io.github.lujianbo.mqtt.codec.message;
+package io.github.lujianbo.mqtt.domain;
 
 /**
  * Created by jianbo on 2016/3/24.
  */
-public class PubackMessage extends MQTTMessage {
+public class PubrelMessage extends MQTTMessage {
 
     protected int packetIdentifier;
-
-
 
     public int getPacketIdentifier() {
         return packetIdentifier;
@@ -16,4 +14,5 @@ public class PubackMessage extends MQTTMessage {
     public void setPacketIdentifier(int packetIdentifier) {
         this.packetIdentifier = packetIdentifier;
     }
+
 }

@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.websocket;
+package io.github.lujianbo.netty.websocket;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.codec.message;
+package io.github.lujianbo.mqtt.domain;
 
 import java.util.LinkedList;
 import java.util.List;
