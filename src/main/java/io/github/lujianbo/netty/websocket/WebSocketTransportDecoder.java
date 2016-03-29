@@ -2,11 +2,15 @@ package io.github.lujianbo.netty.websocket;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.MessageToMessageDecoder;
+import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.handler.codec.http.websocketx.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WebSocketTransportDecoder extends SimpleChannelInboundHandler<WebSocketFrame> {
+import java.util.List;
+
+public class WebSocketTransportDecoder extends MessageToMessageDecoder<WebSocketFrame> {
 
     private final WebSocketServerHandshaker handshaker;
 
@@ -17,21 +21,21 @@ public class WebSocketTransportDecoder extends SimpleChannelInboundHandler<WebSo
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
-        if (frame instanceof CloseWebSocketFrame) {
-            handshaker.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
+    protected void decode(ChannelHandlerContext ctx, WebSocketFrame msg, List<Object> out) throws Exception {
+        if (msg instanceof CloseWebSocketFrame) {
+            handshaker.close(ctx.channel(), (CloseWebSocketFrame) msg.retain());
             return;
         }
-        if (frame instanceof TextWebSocketFrame) {
+        if (msg instanceof TextWebSocketFrame) {
             //TextWebSocketFrame 已经被禁止
-            handshaker.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
+            handshaker.close(ctx.channel(), (CloseWebSocketFrame) msg.retain());
             return;
         }
 
         //Mqtt只能通过BinaryWebSocket来进行传输
-        if (frame instanceof BinaryWebSocketFrame) {
+        if (msg instanceof BinaryWebSocketFrame) {
             //将数据传输到下一个handler
-            ctx.fireChannelRead(frame.content());
+            out.add(msg.content().retain());
             return;
         }
     }
