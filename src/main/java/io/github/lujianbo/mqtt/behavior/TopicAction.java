@@ -6,4 +6,6 @@ package io.github.lujianbo.mqtt.behavior;
 public class TopicAction {
 
 
+
+
 }

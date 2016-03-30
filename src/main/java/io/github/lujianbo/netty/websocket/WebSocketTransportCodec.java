@@ -14,6 +14,7 @@ public final class WebSocketTransportCodec extends CombinedChannelDuplexHandler<
     private final WebSocketServerHandshaker handshaker;
 
     public WebSocketTransportCodec(WebSocketServerHandshaker handshaker){
+        super(new WebSocketTransportDecoder(handshaker),new WebSocketTransportEncoder());
         this.handshaker = handshaker;
     }
 }
