@@ -1,14 +1,14 @@
 package io.github.lujianbo.netty.handler;
 
 import io.github.lujianbo.mqtt.domain.*;
-import io.github.lujianbo.mqtt.service.MQTTOutboundHandler;
+import io.github.lujianbo.mqtt.service.MQTTWriter;
 import io.netty.channel.Channel;
 
 
 /**
  * 实现了MQTT逻辑部分与netty框架之间的桥梁
  */
-public class MQTTServerHandlerImpl implements MQTTOutboundHandler{
+public class MQTTServerHandlerImpl implements MQTTWriter {
 
     public Channel channel;
 

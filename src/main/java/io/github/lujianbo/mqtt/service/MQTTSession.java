@@ -3,37 +3,37 @@ package io.github.lujianbo.mqtt.service;
 
 import io.github.lujianbo.mqtt.domain.*;
 
-public interface MQTTSession {
+public abstract class MQTTSession {
 
-    public void onConnectMessage(ConnectMessage message);
+    abstract public void onConnectMessage(ConnectMessage message);
 
-    public void onConnackMessage(ConnackMessage message);
+    abstract public void onConnackMessage(ConnackMessage message);
 
-    public void onDisconnectMessage(DisconnectMessage message);
+    abstract public void onDisconnectMessage(DisconnectMessage message);
 
-    public void onPingreqMessage(PingreqMessage message);
+    abstract public void onPingreqMessage(PingreqMessage message);
 
-    public void onPingrespMessage(PingrespMessage message);
+    abstract public void onPingrespMessage(PingrespMessage message);
 
-    public void onSubscribeMessage(SubscribeMessage message);
+    abstract public void onSubscribeMessage(SubscribeMessage message);
 
-    public void onSubackMessage(SubackMessage message);
+    abstract public void onSubackMessage(SubackMessage message);
 
-    public void onUnsubscribeMessage(UnsubscribeMessage message);
+    abstract public void onUnsubscribeMessage(UnsubscribeMessage message);
 
-    public void onUnsubackMessage(UnsubackMessage message);
+    abstract public void onUnsubackMessage(UnsubackMessage message);
 
-    public void onPublishMessage(PublishMessage message);
+    abstract public void onPublishMessage(PublishMessage message);
 
-    public void onPubackMessage(PubackMessage message);
+    abstract public void onPubackMessage(PubackMessage message);
 
-    public void onPubrecMessage(PubrecMessage message);
+    abstract public void onPubrecMessage(PubrecMessage message);
 
-    public void onPubrelMessage(PubrelMessage message);
+    abstract public void onPubrelMessage(PubrelMessage message);
 
-    public void onPubcompMessage(PubcompMessage message);
+    abstract public void onPubcompMessage(PubcompMessage message);
 
-    public void onClose();
+    abstract public void onClose();
 
-    public void onException();
+    abstract public void onException();
 }

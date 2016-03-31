@@ -1,15 +1,28 @@
 package io.github.lujianbo.mqtt.topic;
 
-import com.google.common.eventbus.EventBus;
-
-import java.util.EventListener;
-import java.util.Observable;
-
+import java.util.HashSet;
 /**
- * Created by jianbo on 2016/3/30.
+ *
  */
-public class Topic  {
+public class Topic<T> {
 
-    EventBus eventBus;
+    private final String name;
 
+    private final HashSet<T> listeners=new HashSet<>();
+
+    public Topic(String name){
+        this.name=name;
+    }
+
+    public void addListener(T listener){
+        this.listeners.add(listener);
+    }
+
+    public void removeListener(T listener){
+        this.listeners.remove(listener);
+    }
+
+    public HashSet<T> getListeners() {
+        return listeners;
+    }
 }
