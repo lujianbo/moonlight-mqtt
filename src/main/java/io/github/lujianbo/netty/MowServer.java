@@ -16,16 +16,13 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 import javax.net.ssl.SSLException;
 import java.security.cert.CertificateException;
 
-/**
- * Created by jianbo on 2016/3/30.
- */
+
 public class MowServer {
 
     private EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     private EventLoopGroup workerGroup = new NioEventLoopGroup();
 
     private ChannelInitializer<SocketChannel> initializer;
-
     /**
      * SSL支持
      * */

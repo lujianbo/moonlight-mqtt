@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.topic;
+package io.github.lujianbo.mqtt.common;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;

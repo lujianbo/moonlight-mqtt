@@ -16,17 +16,19 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
 import io.netty.util.CharsetUtil;
 
-import static io.netty.handler.codec.http.HttpHeaders.Names.HOST;
 import static io.netty.handler.codec.http.HttpMethod.GET;
 import static io.netty.handler.codec.http.HttpResponseStatus.*;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
+/**
+ * 完成 websocket 的握手和后续处理器的配置
+ * */
 public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
-    private final String path;
+    private HandlerContext context;
 
-    public MowServerHandler(String path) {
-        this.path = path;
+    public MowServerHandler(HandlerContext context) {
+        this.context = context;
     }
 
     @Override
@@ -44,7 +46,7 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
         /**
          * 当且仅当uri为指定path的时候,进行websocket通讯的升级
          * */
-        if (path.equals(req.getUri())
+        if (context.getPath().equals(req.getUri())
                 //CONNECTION 字段的值为 UPGRADE
                 && HttpHeaders.Values.UPGRADE.equalsIgnoreCase(req.headers().get(HttpHeaders.Names.CONNECTION))
                 //UPGRADE 字段的值为 WEBSOCKET
@@ -52,7 +54,7 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
                 )
         {
             WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
-                    getWebSocketLocation(req, path), null, true, 5 * 1024 * 1024);
+                    context.getWebSocketLocation(), null, true, 5 * 1024 * 1024);
             WebSocketServerHandshaker handshaker=wsFactory.newHandshaker(req);
             if (handshaker == null) {
                 /**
@@ -78,7 +80,7 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
                         /**
                          * 添加协议的处理桥接部分
                          * */
-                        ctx.pipeline().addLast(new MQTTServerHandler());
+                        ctx.pipeline().addLast(new MQTTServerHandler(context.getMqttContext()));
                     }
                 });
             }
@@ -105,8 +107,5 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
         }
     }
 
-    private static String getWebSocketLocation(FullHttpRequest req,String path) {
-        String location =  req.headers().get(HOST) + path;
-        return "ws://" + location;
-    }
+
 }

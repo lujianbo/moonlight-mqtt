@@ -8,16 +8,14 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.ssl.SslContext;
 
 /**
- * Created by jianbo on 2016/3/30.
- */
+ * 完成初始化的编解码配置
+ * */
 public class MowServerInitializer extends ChannelInitializer<SocketChannel> {
 
-    private static final String WEBSOCKET_PATH = "/websocket";
+    private HandlerContext handlerContext;
 
-    private final SslContext sslCtx;
-
-    public MowServerInitializer(SslContext sslCtx) {
-        this.sslCtx = sslCtx;
+    public MowServerInitializer(HandlerContext handlerContext) {
+       this.handlerContext=handlerContext;
     }
 
     @Override
@@ -27,8 +25,8 @@ public class MowServerInitializer extends ChannelInitializer<SocketChannel> {
         /**
          * SSL支持
          * */
-        if (sslCtx != null) {
-            pipeline.addLast(sslCtx.newHandler(ch.alloc()));
+        if (handlerContext.getSslCtx() != null) {
+            pipeline.addLast(handlerContext.getSslCtx().newHandler(ch.alloc()));
         }
 
         /**
@@ -41,6 +39,6 @@ public class MowServerInitializer extends ChannelInitializer<SocketChannel> {
         /**
          * 完成握手和后置的Handler配置
          * */
-        pipeline.addLast(new MowServerHandler(WEBSOCKET_PATH));
+        pipeline.addLast(new MowServerHandler(handlerContext));
     }
 }

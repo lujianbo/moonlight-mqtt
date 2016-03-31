@@ -8,6 +8,8 @@ import java.util.HashSet;
 public class Subscription {
 
     //一组订阅过滤规则的集合
-    HashSet<String> topicFilter;
+    String topicFilter;
+
+    byte qosLevel;
 
 }

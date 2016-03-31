@@ -1,5 +1,6 @@
 package io.github.lujianbo.mqtt.topic;
 
+import io.github.lujianbo.mqtt.common.Tree;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

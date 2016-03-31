@@ -5,7 +5,7 @@ import io.github.lujianbo.mqtt.domain.*;
 /**
  * Created by jianbo on 2016/3/29.
  */
-public interface MQTTWriter {
+public interface MQTTOutbound {
 
     public void writeConnectMessage(ConnectMessage message);
 
