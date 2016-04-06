@@ -18,18 +18,14 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTMessage> 
 
     private Logger logger = LoggerFactory.getLogger(MQTTServerHandler.class);
 
-    private ChannelHandlerContext ctx;
+    private MQTTContext context;
 
     public MQTTServerHandler(MQTTContext context){
-
+        this.context=context;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        /**
-         * 初始化
-         * */
-        this.ctx=ctx;
 
     }
 

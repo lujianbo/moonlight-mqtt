@@ -1,5 +1,6 @@
 package io.github.lujianbo.netty;
 
+import io.github.lujianbo.netty.handler.HandlerContext;
 import io.github.lujianbo.netty.handler.MowServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -13,6 +14,7 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import java.security.cert.CertificateException;
 
@@ -57,14 +59,14 @@ public class MowServer {
 
     public static void main(String[] args) {
        try {
-           final SslContext sslCtx;
+
+           HandlerContext handlerContext=new HandlerContext();
            if (SSL) {
                SelfSignedCertificate ssc = new SelfSignedCertificate();
-               sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
-           } else {
-               sslCtx = null;
+               SslContext sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
+               handlerContext.setSslCtx(sslCtx);
            }
-           MowServer proxyServer=new MowServer(new MowServerInitializer(sslCtx));
+           MowServer proxyServer=new MowServer(new MowServerInitializer(handlerContext));
            proxyServer.start();
        } catch (CertificateException | SSLException e) {
            e.printStackTrace();
