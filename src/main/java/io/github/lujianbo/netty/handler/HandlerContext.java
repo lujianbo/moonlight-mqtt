@@ -1,16 +1,14 @@
 package io.github.lujianbo.netty.handler;
 
-import io.github.lujianbo.mqtt.service.MQTTContext;
+import io.github.lujianbo.mqtt.service.MQTTMessageHandlerFactory;
 import io.netty.handler.ssl.SslContext;
-
-import static io.netty.handler.codec.http.HttpHeaders.Names.HOST;
 
 /**
  * 处理容器，用来装载完成整个对接过程中需要的信息
  */
 public class HandlerContext {
 
-    private MQTTContext mqttContext;
+    private MQTTMessageHandlerFactory factory;
 
     private String path;
 
@@ -43,12 +41,12 @@ public class HandlerContext {
         this.host = host;
     }
 
-    public MQTTContext getMqttContext() {
-        return mqttContext;
+    public MQTTMessageHandlerFactory getFactory() {
+        return factory;
     }
 
-    public void setMqttContext(MQTTContext mqttContext) {
-        this.mqttContext = mqttContext;
+    public void setFactory(MQTTMessageHandlerFactory factory) {
+        this.factory = factory;
     }
 
     public SslContext getSslCtx() {
