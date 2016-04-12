@@ -2,7 +2,11 @@ package io.github.lujianbo.mqtt.service;
 
 import io.github.lujianbo.mqtt.domain.MQTTMessage;
 
-public interface MQTTSession {
+
+/**
+ *  代表的是一个MQTT的链接
+ * */
+public interface MQTTConnection {
 
     /**
      * write操作

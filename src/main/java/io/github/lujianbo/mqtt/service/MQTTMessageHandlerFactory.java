@@ -6,6 +6,6 @@ public interface MQTTMessageHandlerFactory {
     /**
      *
      * */
-    public MQTTMessageHandler register(MQTTSession session);
+    public MQTTMessageHandler register(MQTTConnection session);
 
 }

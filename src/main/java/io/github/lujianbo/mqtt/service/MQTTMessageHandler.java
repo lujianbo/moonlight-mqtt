@@ -7,15 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by lujianbo on 2016/4/12.
+ * Handler处理器
  */
 public class MQTTMessageHandler {
 
     private Logger logger = LoggerFactory.getLogger(MQTTMessageHandler.class);
 
-    private MQTTSession session;
+    private MQTTConnection session;
 
-    public MQTTMessageHandler(MQTTSession session) {
+    public MQTTMessageHandler(MQTTConnection session) {
         this.session = session;
     }
 
@@ -196,6 +196,7 @@ public class MQTTMessageHandler {
     }
 
     private UnsubackMessage handleUnsubscribeMessage(UnsubscribeMessage message) {
+
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {

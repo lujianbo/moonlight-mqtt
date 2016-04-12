@@ -24,7 +24,7 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTMessage> 
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        handler = factory.register(new MQTTNettySession(ctx.channel()));
+        handler = factory.register(new MQTTNettyConnection(ctx.channel()));
     }
 
     @Override

@@ -2,17 +2,17 @@ package io.github.lujianbo.netty.handler;
 
 
 import io.github.lujianbo.mqtt.domain.MQTTMessage;
-import io.github.lujianbo.mqtt.service.MQTTSession;
+import io.github.lujianbo.mqtt.service.MQTTConnection;
 import io.netty.channel.Channel;
 
 /**
  *
  */
-public class MQTTNettySession implements MQTTSession {
+public class MQTTNettyConnection implements MQTTConnection {
 
     private Channel channel;
 
-    public MQTTNettySession(Channel channel) {
+    public MQTTNettyConnection(Channel channel) {
         this.channel = channel;
     }
 
