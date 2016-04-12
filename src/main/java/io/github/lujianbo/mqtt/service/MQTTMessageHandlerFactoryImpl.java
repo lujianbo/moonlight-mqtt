@@ -12,6 +12,6 @@ public class MQTTMessageHandlerFactoryImpl implements MQTTMessageHandlerFactory 
 
     @Override
     public MQTTMessageHandler register(MQTTConnection session) {
-        return new MQTTMessageHandler(session);
+        return new MQTTMessageHandlerImpl(session);
     }
 }
