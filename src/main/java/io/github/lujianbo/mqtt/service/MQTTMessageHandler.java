@@ -2,6 +2,7 @@ package io.github.lujianbo.mqtt.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.lujianbo.mqtt.domain.*;
+import io.github.lujianbo.mqtt.manager.MQTTContext;
 import io.github.lujianbo.util.ObjectMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,8 @@ public class MQTTMessageHandler {
     private Logger logger = LoggerFactory.getLogger(MQTTMessageHandler.class);
 
     private MQTTConnection session;
+
+    private MQTTContext context;
 
     public MQTTMessageHandler(MQTTConnection session) {
         this.session = session;
@@ -107,6 +110,9 @@ public class MQTTMessageHandler {
 
     }
 
+    /**
+     * 处理连接
+     * */
     private ConnackMessage handleConnectMessage(ConnectMessage message) {
 
         try {
@@ -128,6 +134,9 @@ public class MQTTMessageHandler {
         return connackMessage;
     }
 
+    /**
+     * 处理publish
+     * */
     private void handlePublishQS0Message(PublishMessage message) {
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
@@ -136,6 +145,9 @@ public class MQTTMessageHandler {
         }
     }
 
+    /**
+     * 处理qs1的publish
+     * */
     private PubackMessage handlePublishQS1Message(PublishMessage message) {
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
@@ -148,6 +160,9 @@ public class MQTTMessageHandler {
         return pubackMessage;
     }
 
+    /**
+     * 处理qs2的publish
+     * */
     private PubrecMessage handlePublishQS2Message(PublishMessage message) {
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
@@ -160,6 +175,9 @@ public class MQTTMessageHandler {
         return pubrecMessage;
     }
 
+    /**
+     * qs2相关的处理
+     * */
     private PubcompMessage handlePubrelMessage(PubrelMessage message) {
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
@@ -172,6 +190,9 @@ public class MQTTMessageHandler {
         return pubcompMessage;
     }
 
+    /**
+     * 订阅相关的处理
+     * */
     private SubackMessage handleSubscribeMessage(SubscribeMessage message) {
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
@@ -195,6 +216,9 @@ public class MQTTMessageHandler {
         return subackMessage;
     }
 
+    /**
+     * 取消订阅相关的处理
+     * */
     private UnsubackMessage handleUnsubscribeMessage(UnsubscribeMessage message) {
 
         try {

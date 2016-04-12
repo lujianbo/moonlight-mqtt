@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.common;
+package io.github.lujianbo.mqtt.util;
 
 
 import java.util.concurrent.ExecutorService;
