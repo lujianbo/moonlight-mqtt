@@ -15,7 +15,7 @@ public class SubackMessage extends MQTTMessage {
 
     protected int packetIdentifier;
 
-    private List<Byte> returnCodes=new LinkedList<>();
+    private List<Byte> returnCodes = new LinkedList<>();
 
     public int getPacketIdentifier() {
         return packetIdentifier;
@@ -33,7 +33,7 @@ public class SubackMessage extends MQTTMessage {
         this.returnCodes = returnCodes;
     }
 
-    public void addReturnCode(byte b){
+    public void addReturnCode(byte b) {
         this.returnCodes.add(b);
     }
 }

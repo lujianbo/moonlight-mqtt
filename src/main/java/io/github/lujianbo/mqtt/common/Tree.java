@@ -19,12 +19,12 @@ public class Tree<T> {
         private T data;
         private ConcurrentHashMap<String, TreeNode<T>> children = new ConcurrentHashMap<>();
 
-        public TreeNode(TreeNode<T> parent,T data){
-            this.parent=parent;
-            this.data=data;
+        public TreeNode(TreeNode<T> parent, T data) {
+            this.parent = parent;
+            this.data = data;
         }
 
-        public TreeNode(){
+        public TreeNode() {
         }
 
         public TreeNode getParent() {
@@ -49,8 +49,8 @@ public class Tree<T> {
 
         /**
          * 对于任意child进行操作
-         * */
-        public void foreachChild(Consumer<TreeNode<T>> consumer){
+         */
+        public void foreachChild(Consumer<TreeNode<T>> consumer) {
 
         }
     }

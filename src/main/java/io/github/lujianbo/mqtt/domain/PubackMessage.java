@@ -8,7 +8,6 @@ public class PubackMessage extends MQTTMessage {
     protected int packetIdentifier;
 
 
-
     public int getPacketIdentifier() {
         return packetIdentifier;
     }

@@ -6,7 +6,6 @@ package io.github.lujianbo.mqtt.domain;
 public class PublishMessage extends MQTTMessage {
 
 
-
     //qos 级别
     protected byte qosLevel = mostOnce;
 

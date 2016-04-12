@@ -1,6 +1,7 @@
 package io.github.lujianbo.mqtt.topic;
 
 import java.util.HashSet;
+
 /**
  *
  */
@@ -8,17 +9,17 @@ public class Topic<T> {
 
     private final String name;
 
-    private final HashSet<T> listeners=new HashSet<>();
+    private final HashSet<T> listeners = new HashSet<>();
 
-    public Topic(String name){
-        this.name=name;
+    public Topic(String name) {
+        this.name = name;
     }
 
-    public void addListener(T listener){
+    public void addListener(T listener) {
         this.listeners.add(listener);
     }
 
-    public void removeListener(T listener){
+    public void removeListener(T listener) {
         this.listeners.remove(listener);
     }
 

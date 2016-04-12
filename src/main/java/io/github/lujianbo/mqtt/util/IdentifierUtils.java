@@ -9,8 +9,8 @@ public class IdentifierUtils {
 
     /**
      * 生成一个UUID
-     * */
-    public static String generateUUID(){
+     */
+    public static String generateUUID() {
         return UUID.randomUUID().toString();
     }
 }

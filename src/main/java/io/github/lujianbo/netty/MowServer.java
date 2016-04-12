@@ -14,7 +14,6 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import java.security.cert.CertificateException;
 
@@ -27,13 +26,13 @@ public class MowServer {
     private ChannelInitializer<SocketChannel> initializer;
     /**
      * SSL支持
-     * */
+     */
     public static final boolean SSL = System.getProperty("ssl") != null;
 
-    static final int PORT = Integer.parseInt(System.getProperty("port", SSL? "8443" : "8080"));
+    static final int PORT = Integer.parseInt(System.getProperty("port", SSL ? "8443" : "8080"));
 
-    public MowServer(ChannelInitializer<SocketChannel> initializer){
-        this.initializer=initializer;
+    public MowServer(ChannelInitializer<SocketChannel> initializer) {
+        this.initializer = initializer;
     }
 
     public void start() {
@@ -52,24 +51,24 @@ public class MowServer {
         }
     }
 
-    public void stop(){
+    public void stop() {
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
     }
 
     public static void main(String[] args) {
-       try {
+        try {
 
-           HandlerContext handlerContext=new HandlerContext();
-           if (SSL) {
-               SelfSignedCertificate ssc = new SelfSignedCertificate();
-               SslContext sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
-               handlerContext.setSslCtx(sslCtx);
-           }
-           MowServer proxyServer=new MowServer(new MowServerInitializer(handlerContext));
-           proxyServer.start();
-       } catch (CertificateException | SSLException e) {
-           e.printStackTrace();
-       }
+            HandlerContext handlerContext = new HandlerContext();
+            if (SSL) {
+                SelfSignedCertificate ssc = new SelfSignedCertificate();
+                SslContext sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
+                handlerContext.setSslCtx(sslCtx);
+            }
+            MowServer proxyServer = new MowServer(new MowServerInitializer(handlerContext));
+            proxyServer.start();
+        } catch (CertificateException | SSLException e) {
+            e.printStackTrace();
+        }
     }
 }

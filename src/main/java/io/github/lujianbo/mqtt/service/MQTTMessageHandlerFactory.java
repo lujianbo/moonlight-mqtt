@@ -8,5 +8,4 @@ public interface MQTTMessageHandlerFactory {
      * */
     public MQTTMessageHandler register(MQTTSession session);
 
-
 }

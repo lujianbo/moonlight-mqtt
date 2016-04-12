@@ -17,10 +17,10 @@ public class HandlerContext {
     private SslContext sslCtx;
 
     public String getWebSocketLocation() {
-        String location =  host + path;
-        if (sslCtx!=null){
+        String location = host + path;
+        if (sslCtx != null) {
             return "wss://" + location;
-        }else {
+        } else {
             return "ws://" + location;
         }
     }

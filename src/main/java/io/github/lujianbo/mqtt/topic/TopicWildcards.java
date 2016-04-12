@@ -12,16 +12,16 @@ public class TopicWildcards {
 
     String topicName;
 
-    public String[] process(String topicName){
-        String[] result=StringUtils.split(topicName,"/");
-        if (result[0].startsWith("$")){
+    public String[] process(String topicName) {
+        String[] result = StringUtils.split(topicName, "/");
+        if (result[0].startsWith("$")) {
 
-        }else {
-            for (String str:result){
-                if (str.equals("#")){
+        } else {
+            for (String str : result) {
+                if (str.equals("#")) {
 
                 }
-                if (str.equals("+")){
+                if (str.equals("+")) {
 
                 }
             }

@@ -22,7 +22,7 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
 /**
  * 完成 websocket 的握手和后续处理器的配置
- * */
+ */
 public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     private HandlerContext context;
@@ -51,11 +51,10 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
                 && HttpHeaders.Values.UPGRADE.equalsIgnoreCase(req.headers().get(HttpHeaders.Names.CONNECTION))
                 //UPGRADE 字段的值为 WEBSOCKET
                 && HttpHeaders.Values.WEBSOCKET.equalsIgnoreCase(req.headers().get(HttpHeaders.Names.UPGRADE))
-                )
-        {
+                ) {
             WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
                     context.getWebSocketLocation(), null, true, 5 * 1024 * 1024);
-            WebSocketServerHandshaker handshaker=wsFactory.newHandshaker(req);
+            WebSocketServerHandshaker handshaker = wsFactory.newHandshaker(req);
             if (handshaker == null) {
                 /**
                  * 不支持的协议
@@ -66,7 +65,7 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
                  * 握手结束后补充如下协议
                  * */
                 handshaker.handshake(ctx.channel(), req).addListener(future -> {
-                    if (future.isSuccess()){
+                    if (future.isSuccess()) {
                         /**
                          * 添加websocket Frame 的支持
                          * */

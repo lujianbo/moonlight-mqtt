@@ -5,5 +5,5 @@ package io.github.lujianbo.mqtt.topic;
  */
 public interface TopicListener {
 
-    public void publish(String name,byte[] message);
+    public void publish(String name, byte[] message);
 }

@@ -14,21 +14,21 @@ public class TopicManager<T> {
 
     /**
      * 查找匹配的 topic
-     * */
-    public List<Topic<T>> findMatchTopic(String topicFilter){
-        List<Topic<T>> topics=null;
+     */
+    public List<Topic<T>> findMatchTopic(String topicFilter) {
+        List<Topic<T>> topics = null;
         return topics;
     }
 
     /**
      * 查找指定名称的topic
-     * */
-    public Topic findTopic(String topicName){
+     */
+    public Topic findTopic(String topicName) {
         return null;
     }
 
-    private String[] parserToken(String topicFilter){
-        String[] tokens= StringUtils.split(topicFilter,"/");
+    private String[] parserToken(String topicFilter) {
+        String[] tokens = StringUtils.split(topicFilter, "/");
         return tokens;
     }
 }

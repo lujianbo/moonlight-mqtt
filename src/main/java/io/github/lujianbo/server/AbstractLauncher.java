@@ -6,7 +6,7 @@ package io.github.lujianbo.server;
 public abstract class AbstractLauncher {
 
 
-    public AbstractLauncher(){
+    public AbstractLauncher() {
 
         /**
          * 配置shutdown的hook

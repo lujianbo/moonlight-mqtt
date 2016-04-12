@@ -9,7 +9,7 @@ import java.util.List;
 public class SubscribeMessage extends MQTTMessage {
 
     private int packetIdentifier;
-    private List<TopicFilterQoSPair> pairs=new LinkedList<>();
+    private List<TopicFilterQoSPair> pairs = new LinkedList<>();
 
     public int getPacketIdentifier() {
         return packetIdentifier;
@@ -27,11 +27,11 @@ public class SubscribeMessage extends MQTTMessage {
         this.pairs = pairs;
     }
 
-    public void addTopicFilterQoSPair(String topicName, byte qos){
+    public void addTopicFilterQoSPair(String topicName, byte qos) {
         this.pairs.add(new TopicFilterQoSPair(topicName, qos));
     }
 
-    public class TopicFilterQoSPair{
+    public class TopicFilterQoSPair {
         private String topicName;
         private byte qos;
 

@@ -1,7 +1,5 @@
 package io.github.lujianbo.mqtt.domain;
 
-import io.netty.buffer.ByteBuf;
-
 /**
  * Created by jianbo on 2016/3/24.
  */

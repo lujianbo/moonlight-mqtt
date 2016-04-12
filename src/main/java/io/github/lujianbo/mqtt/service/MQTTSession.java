@@ -6,7 +6,7 @@ public interface MQTTSession {
 
     /**
      * write操作
-     * */
+     */
     public void write(MQTTMessage message);
 
     public void close();

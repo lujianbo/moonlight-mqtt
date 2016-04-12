@@ -10,7 +10,7 @@ public class UnsubscribeMessage extends MQTTMessage {
 
     protected int packetIdentifier;
 
-    protected List<String> topicNames=new LinkedList<>();
+    protected List<String> topicNames = new LinkedList<>();
 
     public int getPacketIdentifier() {
         return packetIdentifier;
@@ -28,7 +28,7 @@ public class UnsubscribeMessage extends MQTTMessage {
         this.topicNames = topicNames;
     }
 
-    public void addTopicName(String topicName){
+    public void addTopicName(String topicName) {
         topicNames.add(topicName);
     }
 }

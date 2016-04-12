@@ -13,14 +13,14 @@ public class MQTTMessageHandler {
 
     private Logger logger = LoggerFactory.getLogger(MQTTMessageHandler.class);
 
-    private  MQTTSession session;
+    private MQTTSession session;
 
-    public MQTTMessageHandler(MQTTSession session){
+    public MQTTMessageHandler(MQTTSession session) {
         this.session = session;
     }
 
 
-    public void onRead(MQTTMessage msg){
+    public void onRead(MQTTMessage msg) {
 
         //处理心跳程序
         if (msg instanceof PingreqMessage) {
@@ -80,17 +80,17 @@ public class MQTTMessageHandler {
         }
 
 
-        if (msg instanceof PubackMessage){
+        if (msg instanceof PubackMessage) {
             //doNothing
             return;
         }
 
-        if (msg instanceof PubrecMessage){
-            PubrecMessage message=(PubrecMessage)msg;
+        if (msg instanceof PubrecMessage) {
+            PubrecMessage message = (PubrecMessage) msg;
 
             //doSomeThing
 
-            PubrelMessage pubrelMessage=new PubrelMessage();
+            PubrelMessage pubrelMessage = new PubrelMessage();
             pubrelMessage.setPacketIdentifier(message.getPacketIdentifier());
             session.write(pubrelMessage);
             return;
@@ -101,10 +101,10 @@ public class MQTTMessageHandler {
             return;
         }
 
-        if (msg instanceof PubcompMessage){
+        if (msg instanceof PubcompMessage) {
             //doNothing
         }
-        
+
     }
 
     private ConnackMessage handleConnectMessage(ConnectMessage message) {
@@ -194,7 +194,6 @@ public class MQTTMessageHandler {
         }
         return subackMessage;
     }
-
 
     private UnsubackMessage handleUnsubscribeMessage(UnsubscribeMessage message) {
         try {

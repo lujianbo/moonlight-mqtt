@@ -13,8 +13,8 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
     @Override
     protected void encode(ChannelHandlerContext ctx, MQTTMessage msg, ByteBuf out) throws Exception {
         if (msg instanceof ConnectMessage) {
-            ByteBuf variableHeader=ctx.alloc().buffer(10);
-            ByteBuf payLoad=ctx.alloc().buffer();
+            ByteBuf variableHeader = ctx.alloc().buffer(10);
+            ByteBuf payLoad = ctx.alloc().buffer();
             try {
                 ConnectMessage message = (ConnectMessage) msg;
                 //Protocol Name
@@ -24,19 +24,29 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
 
                 //flags
                 byte connectionFlags = 0;
-                if (message.isCleanSession()) {connectionFlags |= 0x02;}
-                if (message.isWillFlag()) {connectionFlags |= 0x04;}
+                if (message.isCleanSession()) {
+                    connectionFlags |= 0x02;
+                }
+                if (message.isWillFlag()) {
+                    connectionFlags |= 0x04;
+                }
                 connectionFlags |= ((message.getWillQos() & 0x03) << 3);
-                if (message.isWillRetain()) { connectionFlags |= 0x020;}
-                if (message.isPasswordFlag()) {connectionFlags |= 0x040;}
-                if (message.isUserFlag()) {connectionFlags |= 0x080;}
+                if (message.isWillRetain()) {
+                    connectionFlags |= 0x020;
+                }
+                if (message.isPasswordFlag()) {
+                    connectionFlags |= 0x040;
+                }
+                if (message.isUserFlag()) {
+                    connectionFlags |= 0x080;
+                }
                 variableHeader.writeByte(connectionFlags);
 
                 //keepAlive
                 variableHeader.writeShort(message.getKeepAlive());
 
                 //payLoad
-                if (message.getClientId()!=null){
+                if (message.getClientId() != null) {
                     payLoad.readBytes(encodeString(message.getClientId()));
                     if (message.isWillFlag()) {
                         payLoad.writeBytes(encodeString(message.getWillTopic()));
@@ -52,19 +62,19 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
                 //写入数据
                 out.writeByte(MQTTMessage.CONNECT << 4);
                 //写入长度
-                out.writeBytes(encodeRemainingLength(variableHeader.readableBytes()+payLoad.readableBytes()));
+                out.writeBytes(encodeRemainingLength(variableHeader.readableBytes() + payLoad.readableBytes()));
                 //可变头部
                 out.writeBytes(variableHeader);
                 //payload
                 out.writeBytes(payLoad);
-            }finally {
+            } finally {
                 variableHeader.release();
                 payLoad.release();
             }
             return;
         }
         if (msg instanceof ConnackMessage) {
-            ConnackMessage message=(ConnackMessage)msg;
+            ConnackMessage message = (ConnackMessage) msg;
 
             out.writeByte(MQTTMessage.CONNACK << 4);
             out.writeBytes(encodeRemainingLength(2));
@@ -73,12 +83,16 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             return;
         }
         if (msg instanceof PublishMessage) {
-            PublishMessage message=(PublishMessage)msg;
-            ByteBuf variableHeader=ctx.alloc().buffer(10);
+            PublishMessage message = (PublishMessage) msg;
+            ByteBuf variableHeader = ctx.alloc().buffer(10);
             //flags
             byte flags = 0;
-            if (message.isDupFlag()) {flags |= 0x08;}
-            if (message.isRetainFlag()) {flags |= 0x01;}
+            if (message.isDupFlag()) {
+                flags |= 0x08;
+            }
+            if (message.isRetainFlag()) {
+                flags |= 0x01;
+            }
             flags |= ((message.getQosLevel() & 0x03) << 1);
 
             //variableHeader
@@ -86,8 +100,8 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             variableHeader.writeShort(message.getPacketIdentifier());//packet id
 
             //write
-            out.writeByte(MQTTMessage.PUBLISH<< 4 | flags);
-            out.writeBytes(encodeRemainingLength(variableHeader.readableBytes()+message.getPayload().length));
+            out.writeByte(MQTTMessage.PUBLISH << 4 | flags);
+            out.writeBytes(encodeRemainingLength(variableHeader.readableBytes() + message.getPayload().length));
             out.writeBytes(variableHeader);
             out.writeBytes(message.getPayload());
 
@@ -96,44 +110,44 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             return;
         }
         if (msg instanceof PubackMessage) {
-            PubackMessage message=(PubackMessage)msg;
-            out.writeByte(MQTTMessage.PUBACK<< 4);
+            PubackMessage message = (PubackMessage) msg;
+            out.writeByte(MQTTMessage.PUBACK << 4);
             out.writeBytes(encodeRemainingLength(2));
             out.writeShort(message.getPacketIdentifier());
         }
         if (msg instanceof PubrecMessage) {
-            PubrecMessage message=(PubrecMessage)msg;
-            out.writeByte(MQTTMessage.PUBREC<< 4);
+            PubrecMessage message = (PubrecMessage) msg;
+            out.writeByte(MQTTMessage.PUBREC << 4);
             out.writeBytes(encodeRemainingLength(2));
             out.writeShort(message.getPacketIdentifier());
             return;
         }
         if (msg instanceof PubrelMessage) {
-            PubrelMessage message=(PubrelMessage)msg;
-            out.writeByte(MQTTMessage.PUBREL<< 4);
+            PubrelMessage message = (PubrelMessage) msg;
+            out.writeByte(MQTTMessage.PUBREL << 4);
             out.writeBytes(encodeRemainingLength(2));
             out.writeShort(message.getPacketIdentifier());
             return;
         }
 
         if (msg instanceof PubcompMessage) {
-            PubcompMessage message=(PubcompMessage)msg;
-            out.writeByte(MQTTMessage.PUBCOMP<< 4);
+            PubcompMessage message = (PubcompMessage) msg;
+            out.writeByte(MQTTMessage.PUBCOMP << 4);
             out.writeBytes(encodeRemainingLength(2));
             out.writeShort(message.getPacketIdentifier());
             return;
         }
 
         if (msg instanceof SubscribeMessage) {
-            SubscribeMessage message=(SubscribeMessage)msg;
+            SubscribeMessage message = (SubscribeMessage) msg;
 
-            ByteBuf payload=ctx.alloc().buffer();
-            for (SubscribeMessage.TopicFilterQoSPair pair :message.getPairs()){
+            ByteBuf payload = ctx.alloc().buffer();
+            for (SubscribeMessage.TopicFilterQoSPair pair : message.getPairs()) {
                 payload.writeBytes(encodeString(pair.getTopicName()));
                 payload.writeByte(pair.getQos());
             }
             out.writeByte(MQTTMessage.SUBSCRIBE << 4);
-            out.writeBytes(encodeRemainingLength(2+payload.readableBytes()));
+            out.writeBytes(encodeRemainingLength(2 + payload.readableBytes()));
             out.writeShort(message.getPacketIdentifier());
             out.writeBytes(payload);
 
@@ -141,14 +155,14 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             return;
         }
         if (msg instanceof SubackMessage) {
-            SubackMessage message=(SubackMessage)msg;
+            SubackMessage message = (SubackMessage) msg;
 
-            ByteBuf payload=ctx.alloc().buffer();
-            for (byte b:message.getReturnCodes()){
+            ByteBuf payload = ctx.alloc().buffer();
+            for (byte b : message.getReturnCodes()) {
                 payload.writeByte(b);
             }
             out.writeByte(MQTTMessage.SUBACK << 4);
-            out.writeBytes(encodeRemainingLength(2+payload.readableBytes()));
+            out.writeBytes(encodeRemainingLength(2 + payload.readableBytes()));
             out.writeShort(message.getPacketIdentifier());
             out.writeBytes(payload);
 
@@ -156,14 +170,14 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             return;
         }
         if (msg instanceof UnsubscribeMessage) {
-            UnsubscribeMessage message=(UnsubscribeMessage)msg;
+            UnsubscribeMessage message = (UnsubscribeMessage) msg;
 
-            ByteBuf payload=ctx.alloc().buffer();
-            for (String topicName:message.getTopicNames()){
+            ByteBuf payload = ctx.alloc().buffer();
+            for (String topicName : message.getTopicNames()) {
                 payload.writeBytes(encodeString(topicName));
             }
             out.writeByte(MQTTMessage.UNSUBSCRIBE << 4);
-            out.writeBytes(encodeRemainingLength(2+payload.readableBytes()));
+            out.writeBytes(encodeRemainingLength(2 + payload.readableBytes()));
             out.writeShort(message.getPacketIdentifier());
             out.writeBytes(payload);
 
@@ -207,7 +221,7 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
         return encodeFixedLengthContent(raw);
     }
 
-    private  ByteBuf encodeFixedLengthContent(byte[] content) {
+    private ByteBuf encodeFixedLengthContent(byte[] content) {
         ByteBuf out = Unpooled.buffer(2);
         out.writeShort(content.length);
         out.writeBytes(content);

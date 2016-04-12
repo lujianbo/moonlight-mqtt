@@ -5,17 +5,16 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.ssl.SslContext;
 
 /**
  * 完成初始化的编解码配置
- * */
+ */
 public class MowServerInitializer extends ChannelInitializer<SocketChannel> {
 
     private HandlerContext handlerContext;
 
     public MowServerInitializer(HandlerContext handlerContext) {
-       this.handlerContext=handlerContext;
+        this.handlerContext = handlerContext;
     }
 
     @Override

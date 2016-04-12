@@ -8,10 +8,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  */
 public class ObjectMapperUtil {
 
-    public static ObjectMapper objectMapper=objectMapper();
+    public static ObjectMapper objectMapper = objectMapper();
 
-    public static ObjectMapper objectMapper(){
-        ObjectMapper objectMapper=new ObjectMapper();
+    public static ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
 
         //格式化时间到ISO-8601
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);

@@ -8,12 +8,12 @@ import io.netty.channel.Channel;
 /**
  *
  */
-public class MQTTNettySession implements MQTTSession{
+public class MQTTNettySession implements MQTTSession {
 
     private Channel channel;
 
-    public MQTTNettySession(Channel channel){
-        this.channel=channel;
+    public MQTTNettySession(Channel channel) {
+        this.channel = channel;
     }
 
     @Override

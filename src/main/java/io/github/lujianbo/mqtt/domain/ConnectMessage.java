@@ -6,13 +6,13 @@ package io.github.lujianbo.mqtt.domain;
 public class ConnectMessage extends MQTTMessage {
 
     //protocol
-    protected String protocolName ="MQTT";
+    protected String protocolName = "MQTT";
     protected byte protocolLevel = 0x04;
 
     //flags
     protected boolean cleanSession = true;
     protected boolean willFlag = true;
-    protected byte willQos ;
+    protected byte willQos;
     protected boolean willRetain = true;
     protected boolean passwordFlag = true;
     protected boolean userFlag = true;
