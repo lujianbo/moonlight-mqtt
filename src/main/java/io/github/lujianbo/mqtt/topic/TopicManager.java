@@ -5,27 +5,50 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-/**
- * Created by jianbo on 2016/3/31.
- */
-public class TopicManager<T> {
 
-    private Tree<Topic<T>> tree;
+/**
+ * 订阅树的管理
+ * */
+public class TopicManager {
+
+    private Tree<Topic<String>> tree;
+
+    /**
+     * 订阅
+     * */
+    public void subscribe(String clientId,String topicFilter){
+        List<Topic<String>> topics = findMatchTopic(topicFilter);
+        for (Topic<String> topic:topics){
+            topic.addListener(clientId);
+        }
+    }
+
+    /**
+     * 反订阅
+     * */
+    public void unSubscribe(String clientId,String topicFilter){
+        List<Topic<String>> topics = findMatchTopic(topicFilter);
+        for (Topic<String> topic:topics){
+            topic.removeListener(clientId);
+        }
+    }
+
+
 
     /**
      * 查找匹配的 topic
      */
-    public List<Topic<T>> findMatchTopic(String topicFilter) {
-        List<Topic<T>> topics = null;
+    public List<Topic<String>> findMatchTopic(String topicFilter) {
+        String[] tokens=parserToken(topicFilter);
+        //根据tokens,来在树里进行遍历和查找
+        
+
+
+
+        List<Topic<String>> topics = null;
         return topics;
     }
 
-    /**
-     * 查找指定名称的topic
-     */
-    public Topic findTopic(String topicName) {
-        return null;
-    }
 
     private String[] parserToken(String topicFilter) {
         String[] tokens = StringUtils.split(topicFilter, "/");

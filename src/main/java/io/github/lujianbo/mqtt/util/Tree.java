@@ -51,7 +51,7 @@ public class Tree<T> {
          * 对于任意child进行操作
          */
         public void foreachChild(Consumer<TreeNode<T>> consumer) {
-
+            children.forEach((s, tTreeNode) -> {consumer.accept(tTreeNode);});
         }
     }
 
