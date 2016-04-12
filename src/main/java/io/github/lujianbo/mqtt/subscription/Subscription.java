@@ -12,4 +12,6 @@ public class Subscription {
 
     byte qosLevel;
 
+
+
 }
