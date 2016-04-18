@@ -1,6 +1,6 @@
 package io.github.lujianbo.server;
 
-import io.github.lujianbo.mqtt.common.MQTTContext;
+import io.github.lujianbo.mqtt.manager.MQTTContext;
 import io.github.lujianbo.mqtt.handler.MQTTMessageHandlerFactory;
 import io.github.lujianbo.netty.MowServer;
 import io.github.lujianbo.netty.handler.HandlerContext;

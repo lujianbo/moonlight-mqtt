@@ -1,7 +1,6 @@
 package io.github.lujianbo.mqtt.manager.impl;
 
 import io.github.lujianbo.mqtt.common.MQTTTopic;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +29,6 @@ public class DefaultMQTTTopicManager {
      * 反订阅
      * */
     public void unSubscribe(String clientId,String topicFilter){
-
         findMatchTopic(topicFilter).removeListener(clientId);
     }
 

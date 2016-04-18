@@ -1,6 +1,6 @@
 package io.github.lujianbo.mqtt.handler;
 
-import io.github.lujianbo.mqtt.common.MQTTContext;
+import io.github.lujianbo.mqtt.manager.MQTTContext;
 
 /**
  * session注册接口的默认实现

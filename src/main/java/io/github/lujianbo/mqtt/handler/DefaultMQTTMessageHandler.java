@@ -2,7 +2,7 @@ package io.github.lujianbo.mqtt.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.lujianbo.mqtt.protocol.*;
-import io.github.lujianbo.mqtt.common.MQTTContext;
+import io.github.lujianbo.mqtt.manager.MQTTContext;
 import io.github.lujianbo.util.ObjectMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
