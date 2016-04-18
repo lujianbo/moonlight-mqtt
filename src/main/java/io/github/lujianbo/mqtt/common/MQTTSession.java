@@ -11,4 +11,7 @@ public abstract class MQTTSession {
         this.clientId = clientId;
     }
 
+    public String getClientId() {
+        return clientId;
+    }
 }

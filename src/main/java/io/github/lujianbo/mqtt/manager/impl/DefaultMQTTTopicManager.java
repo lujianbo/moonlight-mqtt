@@ -12,7 +12,7 @@ import java.util.List;
  * */
 public class DefaultMQTTTopicManager {
 
-    private Tree<MQTTTopic> tree;
+    private Tree<MQTTTopic> tree=new Tree<>();
 
     /**
      * 订阅
@@ -42,6 +42,8 @@ public class DefaultMQTTTopicManager {
     public List<MQTTTopic> findMatchTopic(String topicFilter) {
         String[] tokens=parserToken(topicFilter);
         //根据tokens,来在树里进行遍历和查找
+
+
 
         List<MQTTTopic> topics = null;
         return topics;

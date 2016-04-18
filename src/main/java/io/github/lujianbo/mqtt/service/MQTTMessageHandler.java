@@ -1,6 +1,6 @@
 package io.github.lujianbo.mqtt.service;
 
-import io.github.lujianbo.mqtt.domain.*;
+import io.github.lujianbo.mqtt.protocol.*;
 
 /**
  * Handler处理器接口

@@ -1,6 +1,6 @@
 package io.github.lujianbo.netty.mqtt;
 
-import io.github.lujianbo.mqtt.domain.*;
+import io.github.lujianbo.mqtt.protocol.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;

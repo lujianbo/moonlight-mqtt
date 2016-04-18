@@ -35,6 +35,16 @@ public class MowServer {
         this.initializer = initializer;
     }
 
+
+    public MowServer(HandlerContext handlerContext) throws CertificateException, SSLException {
+
+        if (SSL) {
+            SelfSignedCertificate ssc = new SelfSignedCertificate();
+            SslContext sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
+            handlerContext.setSslCtx(sslCtx);
+        }
+    }
+
     public void start() {
         try {
             ServerBootstrap b = new ServerBootstrap();
@@ -56,19 +66,4 @@ public class MowServer {
         workerGroup.shutdownGracefully();
     }
 
-    public static void main(String[] args) {
-        try {
-
-            HandlerContext handlerContext = new HandlerContext();
-            if (SSL) {
-                SelfSignedCertificate ssc = new SelfSignedCertificate();
-                SslContext sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
-                handlerContext.setSslCtx(sslCtx);
-            }
-            MowServer proxyServer = new MowServer(new MowServerInitializer(handlerContext));
-            proxyServer.start();
-        } catch (CertificateException | SSLException e) {
-            e.printStackTrace();
-        }
-    }
 }

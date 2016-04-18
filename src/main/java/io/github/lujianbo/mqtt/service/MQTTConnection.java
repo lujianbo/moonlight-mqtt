@@ -1,6 +1,6 @@
 package io.github.lujianbo.mqtt.service;
 
-import io.github.lujianbo.mqtt.domain.MQTTProtocol;
+import io.github.lujianbo.mqtt.protocol.MQTTProtocol;
 
 
 /**

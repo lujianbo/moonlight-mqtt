@@ -20,6 +20,36 @@ public class MQTTMessage {
      * */
     public byte[] playLoad;
 
+    public MQTTMessage(String sender, String topic, byte[] playLoad) {
+        this.sender = sender;
+        this.topic = topic;
+        this.playLoad = playLoad;
+    }
 
+    public MQTTMessage() {
+    }
 
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public byte[] getPlayLoad() {
+        return playLoad;
+    }
+
+    public void setPlayLoad(byte[] playLoad) {
+        this.playLoad = playLoad;
+    }
 }

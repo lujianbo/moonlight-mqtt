@@ -1,8 +1,8 @@
 package io.github.lujianbo.mqtt.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.lujianbo.mqtt.domain.*;
-import io.github.lujianbo.mqtt.manager.MQTTContext;
+import io.github.lujianbo.mqtt.protocol.*;
+import io.github.lujianbo.mqtt.common.MQTTContext;
 import io.github.lujianbo.util.ObjectMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,12 +11,13 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
 
     private Logger logger = LoggerFactory.getLogger(DefaultMQTTMessageHandler.class);
 
-    private MQTTConnection session;
+    private MQTTConnection connection;
 
     private MQTTContext context;
 
-    public DefaultMQTTMessageHandler(MQTTConnection session) {
-        this.session = session;
+    public DefaultMQTTMessageHandler(MQTTContext context,MQTTConnection connection) {
+        this.context=context;
+        this.connection = connection;
     }
 
 
@@ -24,14 +25,14 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
 
         //处理心跳程序
         if (msg instanceof PingreqProtocol) {
-            session.write(new PingrespProtocol());
+            connection.write(new PingrespProtocol());
             return;
         }
 
         //处理connect
         if (msg instanceof ConnectProtocol) {
             ConnackProtocol connackMessage = handleConnectMessage((ConnectProtocol) msg);
-            session.write(connackMessage);
+            connection.write(connackMessage);
 
             /**
              If the Client supplies a zero-byte ClientId with CleanSession set to 0, the Server MUST respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection [MQTT-3.1.3-8].
@@ -39,19 +40,19 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
              If the Server rejects the ClientId it MUST respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection [MQTT-3.1.3-9].
              */
             if (connackMessage.getReturnCode() == ConnackProtocol.IDENTIFIER_REJECTED) {
-                session.close();
+                connection.close();
             }
 
             return;
         }
         //处理subscribe
         if (msg instanceof SubscribeProtocol) {
-            session.write(handleSubscribeMessage((SubscribeProtocol) msg));
+            connection.write(handleSubscribeMessage((SubscribeProtocol) msg));
             return;
         }
         //处理unSubscribe
         if (msg instanceof UnsubscribeProtocol) {
-            session.write(handleUnsubscribeMessage((UnsubscribeProtocol) msg));
+            connection.write(handleUnsubscribeMessage((UnsubscribeProtocol) msg));
             return;
         }
 
@@ -60,7 +61,7 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
         if (msg instanceof PublishProtocol) {
             PublishProtocol message = (PublishProtocol) msg;
             if (message.getQosLevel() == PublishProtocol.reserved) {
-                session.write(new DisconnectProtocol());
+                connection.write(new DisconnectProtocol());
                 return;
             }
             if (message.getQosLevel() == PublishProtocol.mostOnce) {
@@ -69,12 +70,12 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
             }
 
             if (message.getQosLevel() == PublishProtocol.leastOnce) {
-                session.write(handlePublishQS1Message(message));
+                connection.write(handlePublishQS1Message(message));
                 return;
             }
 
             if (message.getQosLevel() == PublishProtocol.exactlyOnce) {
-                session.write(handlePublishQS2Message(message));
+                connection.write(handlePublishQS2Message(message));
                 return;
             }
         }
@@ -92,12 +93,12 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
 
             PubrelProtocol pubrelMessage = new PubrelProtocol();
             pubrelMessage.setPacketIdentifier(message.getPacketIdentifier());
-            session.write(pubrelMessage);
+            connection.write(pubrelMessage);
             return;
         }
 
         if (msg instanceof PubrelProtocol) {
-            session.write(handlePubrelMessage((PubrelProtocol) msg));
+            connection.write(handlePubrelMessage((PubrelProtocol) msg));
             return;
         }
 
@@ -136,6 +137,7 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
      * */
     private void handlePublishQS0Message(PublishProtocol message) {
         try {
+
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {
             e.printStackTrace();

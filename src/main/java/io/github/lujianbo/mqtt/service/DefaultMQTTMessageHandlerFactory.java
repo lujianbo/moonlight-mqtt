@@ -1,6 +1,6 @@
 package io.github.lujianbo.mqtt.service;
 
-import io.github.lujianbo.mqtt.manager.MQTTContext;
+import io.github.lujianbo.mqtt.common.MQTTContext;
 
 /**
  * session注册接口的默认实现
@@ -16,6 +16,6 @@ public class DefaultMQTTMessageHandlerFactory implements MQTTMessageHandlerFacto
 
     @Override
     public MQTTMessageHandler register(MQTTConnection session) {
-        return new DefaultMQTTMessageHandler(session);
+        return new DefaultMQTTMessageHandler(context,session);
     }
 }

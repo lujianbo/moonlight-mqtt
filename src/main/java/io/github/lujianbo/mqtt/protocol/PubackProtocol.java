@@ -1,11 +1,12 @@
-package io.github.lujianbo.mqtt.domain;
+package io.github.lujianbo.mqtt.protocol;
 
 /**
  * Created by jianbo on 2016/3/24.
  */
-public class PubcompProtocol extends MQTTProtocol {
+public class PubackProtocol extends MQTTProtocol {
 
     protected int packetIdentifier;
+
 
     public int getPacketIdentifier() {
         return packetIdentifier;
