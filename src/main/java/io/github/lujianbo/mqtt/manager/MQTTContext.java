@@ -32,6 +32,17 @@ public class MQTTContext {
     });
 
 
+    /**
+     * 推送消息
+     * */
+    public void publish(){
+
+    }
+
+    /**
+     * 订阅频道
+     * */
+
 
 
 }
