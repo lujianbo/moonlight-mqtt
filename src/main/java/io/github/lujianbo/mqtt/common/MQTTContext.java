@@ -1,6 +1,5 @@
 package io.github.lujianbo.mqtt.common;
 
-import io.github.lujianbo.mqtt.manager.MQTTMessageManager;
 import io.github.lujianbo.mqtt.manager.MQTTSessionManager;
 import io.github.lujianbo.mqtt.manager.MQTTTopicManager;
 
@@ -14,10 +13,6 @@ public class MQTTContext {
      * */
     private MQTTSessionManager sessionManager;
 
-    /**
-     * 信息管理
-     * */
-    private MQTTMessageManager messageManager;
 
     /**
      * 频道订阅管理
