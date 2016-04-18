@@ -1,6 +1,6 @@
 package io.github.lujianbo.netty.handler;
 
-import io.github.lujianbo.mqtt.service.MQTTMessageHandlerFactory;
+import io.github.lujianbo.mqtt.handler.MQTTMessageHandlerFactory;
 import io.netty.handler.ssl.SslContext;
 
 /**

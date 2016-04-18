@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.service;
+package io.github.lujianbo.mqtt.handler;
 
 import io.github.lujianbo.mqtt.protocol.MQTTProtocol;
 
