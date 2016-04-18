@@ -1,24 +1,25 @@
-package io.github.lujianbo.mqtt.topic;
+package io.github.lujianbo.mqtt.manager.impl;
 
+import io.github.lujianbo.mqtt.common.MQTTTopic;
 import io.github.lujianbo.mqtt.util.Tree;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashSet;
 import java.util.List;
 
-
 /**
- * 订阅树的管理
+ * Topic的默认实现，使用内存来管理可以订阅的频道，和管理频道上的订阅者
  * */
-public class TopicManager {
+public class DefaultMQTTTopicManager {
 
-    private Tree<Topic<String>> tree;
+    private Tree<MQTTTopic> tree;
 
     /**
      * 订阅
      * */
     public void subscribe(String clientId,String topicFilter){
-        List<Topic<String>> topics = findMatchTopic(topicFilter);
-        for (Topic<String> topic:topics){
+        List<MQTTTopic> topics = findMatchTopic(topicFilter);
+        for (MQTTTopic topic:topics){
             topic.addListener(clientId);
         }
     }
@@ -27,8 +28,8 @@ public class TopicManager {
      * 反订阅
      * */
     public void unSubscribe(String clientId,String topicFilter){
-        List<Topic<String>> topics = findMatchTopic(topicFilter);
-        for (Topic<String> topic:topics){
+        List<MQTTTopic> topics = findMatchTopic(topicFilter);
+        for (MQTTTopic topic:topics){
             topic.removeListener(clientId);
         }
     }
@@ -38,14 +39,11 @@ public class TopicManager {
     /**
      * 查找匹配的 topic
      */
-    public List<Topic<String>> findMatchTopic(String topicFilter) {
+    public List<MQTTTopic> findMatchTopic(String topicFilter) {
         String[] tokens=parserToken(topicFilter);
         //根据tokens,来在树里进行遍历和查找
-        
 
-
-
-        List<Topic<String>> topics = null;
+        List<MQTTTopic> topics = null;
         return topics;
     }
 
@@ -54,4 +52,6 @@ public class TopicManager {
         String[] tokens = StringUtils.split(topicFilter, "/");
         return tokens;
     }
+
+
 }

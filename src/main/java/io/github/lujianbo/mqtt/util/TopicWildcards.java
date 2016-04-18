@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.topic;
+package io.github.lujianbo.mqtt.util;
 
 import org.apache.commons.lang3.StringUtils;
 

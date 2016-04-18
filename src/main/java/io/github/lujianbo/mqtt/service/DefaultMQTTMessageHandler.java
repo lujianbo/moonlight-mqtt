@@ -7,18 +7,15 @@ import io.github.lujianbo.util.ObjectMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by lujianbo on 2016/4/12.
- */
-public class MQTTMessageHandlerImpl implements MQTTMessageHandler{
+public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
 
-    private Logger logger = LoggerFactory.getLogger(MQTTMessageHandlerImpl.class);
+    private Logger logger = LoggerFactory.getLogger(DefaultMQTTMessageHandler.class);
 
     private MQTTConnection session;
 
     private MQTTContext context;
 
-    public MQTTMessageHandlerImpl(MQTTConnection session) {
+    public DefaultMQTTMessageHandler(MQTTConnection session) {
         this.session = session;
     }
 
