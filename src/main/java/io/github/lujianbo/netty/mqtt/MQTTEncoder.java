@@ -8,15 +8,15 @@ import io.netty.handler.codec.MessageToByteEncoder;
 
 import java.io.UnsupportedEncodingException;
 
-public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
+public class MQTTEncoder extends MessageToByteEncoder<MQTTProtocol> {
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, MQTTMessage msg, ByteBuf out) throws Exception {
-        if (msg instanceof ConnectMessage) {
+    protected void encode(ChannelHandlerContext ctx, MQTTProtocol msg, ByteBuf out) throws Exception {
+        if (msg instanceof ConnectProtocol) {
             ByteBuf variableHeader = ctx.alloc().buffer(10);
             ByteBuf payLoad = ctx.alloc().buffer();
             try {
-                ConnectMessage message = (ConnectMessage) msg;
+                ConnectProtocol message = (ConnectProtocol) msg;
                 //Protocol Name
                 variableHeader.writeBytes(encodeString(message.getProtocolName()));
                 //Protocol Level
@@ -60,7 +60,7 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
                     }
                 }
                 //写入数据
-                out.writeByte(MQTTMessage.CONNECT << 4);
+                out.writeByte(MQTTProtocol.CONNECT << 4);
                 //写入长度
                 out.writeBytes(encodeRemainingLength(variableHeader.readableBytes() + payLoad.readableBytes()));
                 //可变头部
@@ -73,17 +73,17 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             }
             return;
         }
-        if (msg instanceof ConnackMessage) {
-            ConnackMessage message = (ConnackMessage) msg;
+        if (msg instanceof ConnackProtocol) {
+            ConnackProtocol message = (ConnackProtocol) msg;
 
-            out.writeByte(MQTTMessage.CONNACK << 4);
+            out.writeByte(MQTTProtocol.CONNACK << 4);
             out.writeBytes(encodeRemainingLength(2));
             out.writeByte(message.isSessionPresentFlag() ? 0x01 : 0x00);
             out.writeByte(message.getReturnCode());
             return;
         }
-        if (msg instanceof PublishMessage) {
-            PublishMessage message = (PublishMessage) msg;
+        if (msg instanceof PublishProtocol) {
+            PublishProtocol message = (PublishProtocol) msg;
             ByteBuf variableHeader = ctx.alloc().buffer(10);
             //flags
             byte flags = 0;
@@ -100,7 +100,7 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             variableHeader.writeShort(message.getPacketIdentifier());//packet id
 
             //write
-            out.writeByte(MQTTMessage.PUBLISH << 4 | flags);
+            out.writeByte(MQTTProtocol.PUBLISH << 4 | flags);
             out.writeBytes(encodeRemainingLength(variableHeader.readableBytes() + message.getPayload().length));
             out.writeBytes(variableHeader);
             out.writeBytes(message.getPayload());
@@ -109,44 +109,44 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             variableHeader.release();
             return;
         }
-        if (msg instanceof PubackMessage) {
-            PubackMessage message = (PubackMessage) msg;
-            out.writeByte(MQTTMessage.PUBACK << 4);
+        if (msg instanceof PubackProtocol) {
+            PubackProtocol message = (PubackProtocol) msg;
+            out.writeByte(MQTTProtocol.PUBACK << 4);
             out.writeBytes(encodeRemainingLength(2));
             out.writeShort(message.getPacketIdentifier());
         }
-        if (msg instanceof PubrecMessage) {
-            PubrecMessage message = (PubrecMessage) msg;
-            out.writeByte(MQTTMessage.PUBREC << 4);
-            out.writeBytes(encodeRemainingLength(2));
-            out.writeShort(message.getPacketIdentifier());
-            return;
-        }
-        if (msg instanceof PubrelMessage) {
-            PubrelMessage message = (PubrelMessage) msg;
-            out.writeByte(MQTTMessage.PUBREL << 4);
+        if (msg instanceof PubrecProtocol) {
+            PubrecProtocol message = (PubrecProtocol) msg;
+            out.writeByte(MQTTProtocol.PUBREC << 4);
             out.writeBytes(encodeRemainingLength(2));
             out.writeShort(message.getPacketIdentifier());
             return;
         }
-
-        if (msg instanceof PubcompMessage) {
-            PubcompMessage message = (PubcompMessage) msg;
-            out.writeByte(MQTTMessage.PUBCOMP << 4);
+        if (msg instanceof PubrelProtocol) {
+            PubrelProtocol message = (PubrelProtocol) msg;
+            out.writeByte(MQTTProtocol.PUBREL << 4);
             out.writeBytes(encodeRemainingLength(2));
             out.writeShort(message.getPacketIdentifier());
             return;
         }
 
-        if (msg instanceof SubscribeMessage) {
-            SubscribeMessage message = (SubscribeMessage) msg;
+        if (msg instanceof PubcompProtocol) {
+            PubcompProtocol message = (PubcompProtocol) msg;
+            out.writeByte(MQTTProtocol.PUBCOMP << 4);
+            out.writeBytes(encodeRemainingLength(2));
+            out.writeShort(message.getPacketIdentifier());
+            return;
+        }
+
+        if (msg instanceof SubscribeProtocol) {
+            SubscribeProtocol message = (SubscribeProtocol) msg;
 
             ByteBuf payload = ctx.alloc().buffer();
-            for (SubscribeMessage.TopicFilterQoSPair pair : message.getPairs()) {
+            for (SubscribeProtocol.TopicFilterQoSPair pair : message.getPairs()) {
                 payload.writeBytes(encodeString(pair.getTopicName()));
                 payload.writeByte(pair.getQos());
             }
-            out.writeByte(MQTTMessage.SUBSCRIBE << 4);
+            out.writeByte(MQTTProtocol.SUBSCRIBE << 4);
             out.writeBytes(encodeRemainingLength(2 + payload.readableBytes()));
             out.writeShort(message.getPacketIdentifier());
             out.writeBytes(payload);
@@ -154,14 +154,14 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             payload.release();
             return;
         }
-        if (msg instanceof SubackMessage) {
-            SubackMessage message = (SubackMessage) msg;
+        if (msg instanceof SubackProtocol) {
+            SubackProtocol message = (SubackProtocol) msg;
 
             ByteBuf payload = ctx.alloc().buffer();
             for (byte b : message.getReturnCodes()) {
                 payload.writeByte(b);
             }
-            out.writeByte(MQTTMessage.SUBACK << 4);
+            out.writeByte(MQTTProtocol.SUBACK << 4);
             out.writeBytes(encodeRemainingLength(2 + payload.readableBytes()));
             out.writeShort(message.getPacketIdentifier());
             out.writeBytes(payload);
@@ -169,14 +169,14 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             payload.release();
             return;
         }
-        if (msg instanceof UnsubscribeMessage) {
-            UnsubscribeMessage message = (UnsubscribeMessage) msg;
+        if (msg instanceof UnsubscribeProtocol) {
+            UnsubscribeProtocol message = (UnsubscribeProtocol) msg;
 
             ByteBuf payload = ctx.alloc().buffer();
             for (String topicName : message.getTopicNames()) {
                 payload.writeBytes(encodeString(topicName));
             }
-            out.writeByte(MQTTMessage.UNSUBSCRIBE << 4);
+            out.writeByte(MQTTProtocol.UNSUBSCRIBE << 4);
             out.writeBytes(encodeRemainingLength(2 + payload.readableBytes()));
             out.writeShort(message.getPacketIdentifier());
             out.writeBytes(payload);
@@ -185,23 +185,23 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTMessage> {
             return;
         }
 
-        if (msg instanceof UnsubackMessage) {
-            UnsubackMessage message = (UnsubackMessage) msg;
-            out.writeByte(MQTTMessage.UNSUBACK << 4)
+        if (msg instanceof UnsubackProtocol) {
+            UnsubackProtocol message = (UnsubackProtocol) msg;
+            out.writeByte(MQTTProtocol.UNSUBACK << 4)
                     .writeBytes(encodeRemainingLength(2))
                     .writeShort(message.getPacketIdentifier());
             return;
         }
-        if (msg instanceof PingreqMessage) {
-            out.writeByte(MQTTMessage.PINGREQ << 4).writeByte(0);
+        if (msg instanceof PingreqProtocol) {
+            out.writeByte(MQTTProtocol.PINGREQ << 4).writeByte(0);
             return;
         }
-        if (msg instanceof PingrespMessage) {
-            out.writeByte(MQTTMessage.PINGRESP << 4).writeByte(0);
+        if (msg instanceof PingrespProtocol) {
+            out.writeByte(MQTTProtocol.PINGRESP << 4).writeByte(0);
             return;
         }
-        if (msg instanceof DisconnectMessage) {
-            out.writeByte(MQTTMessage.DISCONNECT << 4).writeByte(0);
+        if (msg instanceof DisconnectProtocol) {
+            out.writeByte(MQTTProtocol.DISCONNECT << 4).writeByte(0);
             ctx.close();
             return;
         }

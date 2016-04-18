@@ -26,7 +26,7 @@ public class MQTTDecoder extends ReplayingDecoder {
             int remainingLength = decodeRemainingLength(in);//读取剩余数据的长度
             ByteBuf remaining = ctx.alloc().buffer(remainingLength);
             remaining.writeBytes(in, remainingLength);//读取剩余的数据
-            MQTTMessage message = MQTTDecoderTool.valueOf(type).decode(byte1, remaining);
+            MQTTProtocol message = MQTTDecoderTool.valueOf(type).decode(byte1, remaining);
             out.add(message);
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,7 +50,7 @@ public class MQTTDecoder extends ReplayingDecoder {
 
         CONNECT((byte) 1, (b, in) -> {
             try {
-                ConnectMessage message = new ConnectMessage();
+                ConnectProtocol message = new ConnectProtocol();
                 //读取协议名长度
                 String protocolName = decodeUTF8String(in);
                 byte protocolLevel = in.readByte();
@@ -104,7 +104,7 @@ public class MQTTDecoder extends ReplayingDecoder {
             return null;
         }),
         CONNACK((byte) 2, (b, in) -> {
-            ConnackMessage connackMessage = new ConnackMessage();
+            ConnackProtocol connackMessage = new ConnackProtocol();
             byte acknowledgeFlags = in.readByte();
             byte returnCode = in.readByte();
             connackMessage.setSessionPresentFlag(acknowledgeFlags == 0x01);
@@ -113,7 +113,7 @@ public class MQTTDecoder extends ReplayingDecoder {
         }),
         PUBLISH((byte) 3, (b, in) -> {
             try {
-                PublishMessage message = new PublishMessage();
+                PublishProtocol message = new PublishProtocol();
                 String topicName = decodeUTF8String(in);
                 message.setTopicName(topicName);
                 boolean DUPflag = ((b & 0x08) >> 3) == 1;
@@ -143,31 +143,31 @@ public class MQTTDecoder extends ReplayingDecoder {
             return null;
         }),
         PUBACK((byte) 4, (b, in) -> {
-            PubackMessage pubackMessage = new PubackMessage();
+            PubackProtocol pubackMessage = new PubackProtocol();
             int packetIdentifier = in.readUnsignedShort();
             pubackMessage.setPacketIdentifier(packetIdentifier);
             return pubackMessage;
         }),
         PUBREC((byte) 5, (b, in) -> {
-            PubrecMessage pubrecMessage = new PubrecMessage();
+            PubrecProtocol pubrecMessage = new PubrecProtocol();
             int packetIdentifier = in.readUnsignedShort();
             pubrecMessage.setPacketIdentifier(packetIdentifier);
             return pubrecMessage;
         }),
         PUBREL((byte) 6, (b, in) -> {
-            PubrelMessage pubrelMessage = new PubrelMessage();
+            PubrelProtocol pubrelMessage = new PubrelProtocol();
             int packetIdentifier = in.readUnsignedShort();
             pubrelMessage.setPacketIdentifier(packetIdentifier);
             return pubrelMessage;
         }),
         PUBCOMP((byte) 7, (b, in) -> {
-            PubcompMessage pubcompMessage = new PubcompMessage();
+            PubcompProtocol pubcompMessage = new PubcompProtocol();
             int packetIdentifier = in.readUnsignedShort();
             pubcompMessage.setPacketIdentifier(packetIdentifier);
             return pubcompMessage;
         }),
         SUBSCRIBE((byte) 8, (b, in) -> {
-            SubscribeMessage subscribeMessage = new SubscribeMessage();
+            SubscribeProtocol subscribeMessage = new SubscribeProtocol();
             try {
                 int packetIdentifier = in.readUnsignedShort();
                 subscribeMessage.setPacketIdentifier(packetIdentifier);
@@ -183,7 +183,7 @@ public class MQTTDecoder extends ReplayingDecoder {
             return null;
         }),
         SUBACK((byte) 9, (b, in) -> {
-            SubackMessage subackMessage = new SubackMessage();
+            SubackProtocol subackMessage = new SubackProtocol();
             int packetIdentifier = in.readUnsignedShort();
             subackMessage.setPacketIdentifier(packetIdentifier);
             while (in.readableBytes() > 0) {
@@ -194,7 +194,7 @@ public class MQTTDecoder extends ReplayingDecoder {
         }),
         UNSUBSCRIBE((byte) 10, (b, in) -> {
             try {
-                UnsubscribeMessage unsubscribeMessage = new UnsubscribeMessage();
+                UnsubscribeProtocol unsubscribeMessage = new UnsubscribeProtocol();
                 int packetIdentifier = in.readUnsignedShort();
                 unsubscribeMessage.setPacketIdentifier(packetIdentifier);
                 while (in.readableBytes() > 0) {
@@ -208,34 +208,34 @@ public class MQTTDecoder extends ReplayingDecoder {
             return null;
         }),
         UNSUBACK((byte) 11, (b, in) -> {
-            UnsubackMessage unsubackMessage = new UnsubackMessage();
+            UnsubackProtocol unsubackMessage = new UnsubackProtocol();
             int packetIdentifier = in.readUnsignedShort();
             unsubackMessage.setPacketIdentifier(packetIdentifier);
             return unsubackMessage;
         }),
         PINGREQ((byte) 12, (b, in) -> {
-            return new PingreqMessage();
+            return new PingreqProtocol();
         }),
         PINGRESP((byte) 13, (b, in) -> {
-            return new PingrespMessage();
+            return new PingrespProtocol();
         }),
         DISCONNECT((byte) 14, (b, in) -> {
-            return new DisconnectMessage();
+            return new DisconnectProtocol();
         }),
 
         NULL((byte) 127, (b, in) -> {
             return null;
         });
 
-        private BiFunction<Byte, ByteBuf, MQTTMessage> decode;
+        private BiFunction<Byte, ByteBuf, MQTTProtocol> decode;
         private byte type;
 
-        MQTTDecoderTool(byte type, BiFunction<Byte, ByteBuf, MQTTMessage> decode) {
+        MQTTDecoderTool(byte type, BiFunction<Byte, ByteBuf, MQTTProtocol> decode) {
             this.type = type;
             this.decode = decode;
         }
 
-        public MQTTMessage decode(byte byte1, ByteBuf in) {
+        public MQTTProtocol decode(byte byte1, ByteBuf in) {
             return decode.apply(byte1, in);
         }
 

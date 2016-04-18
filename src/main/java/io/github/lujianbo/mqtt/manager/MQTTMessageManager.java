@@ -1,8 +1,10 @@
 package io.github.lujianbo.mqtt.manager;
 
 /**
- * 处理消息的部分
+ * 消息管理
  */
 public class MQTTMessageManager {
+
+
 
 }

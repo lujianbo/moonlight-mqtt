@@ -3,7 +3,7 @@ package io.github.lujianbo.mqtt.domain;
 /**
  * Created by jianbo on 2016/3/24.
  */
-public class ConnackMessage extends MQTTMessage {
+public class ConnackProtocol extends MQTTProtocol {
 
     //连接返回的状态编码
     public static final byte CONNECTION_ACCEPTED = 0x00;

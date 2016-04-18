@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by jianbo on 2016/3/24.
  */
-public class SubscribeMessage extends MQTTMessage {
+public class SubscribeProtocol extends MQTTProtocol {
 
     private int packetIdentifier;
     private List<TopicFilterQoSPair> pairs = new LinkedList<>();

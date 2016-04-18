@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by jianbo on 2016/3/24.
  */
-public class UnsubscribeMessage extends MQTTMessage {
+public class UnsubscribeProtocol extends MQTTProtocol {
 
     protected int packetIdentifier;
 

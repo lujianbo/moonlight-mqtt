@@ -20,17 +20,17 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
     }
 
 
-    public void onRead(MQTTMessage msg) {
+    public void onRead(MQTTProtocol msg) {
 
         //处理心跳程序
-        if (msg instanceof PingreqMessage) {
-            session.write(new PingrespMessage());
+        if (msg instanceof PingreqProtocol) {
+            session.write(new PingrespProtocol());
             return;
         }
 
         //处理connect
-        if (msg instanceof ConnectMessage) {
-            ConnackMessage connackMessage = handleConnectMessage((ConnectMessage) msg);
+        if (msg instanceof ConnectProtocol) {
+            ConnackProtocol connackMessage = handleConnectMessage((ConnectProtocol) msg);
             session.write(connackMessage);
 
             /**
@@ -38,70 +38,70 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
 
              If the Server rejects the ClientId it MUST respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection [MQTT-3.1.3-9].
              */
-            if (connackMessage.getReturnCode() == ConnackMessage.IDENTIFIER_REJECTED) {
+            if (connackMessage.getReturnCode() == ConnackProtocol.IDENTIFIER_REJECTED) {
                 session.close();
             }
 
             return;
         }
         //处理subscribe
-        if (msg instanceof SubscribeMessage) {
-            session.write(handleSubscribeMessage((SubscribeMessage) msg));
+        if (msg instanceof SubscribeProtocol) {
+            session.write(handleSubscribeMessage((SubscribeProtocol) msg));
             return;
         }
         //处理unSubscribe
-        if (msg instanceof UnsubscribeMessage) {
-            session.write(handleUnsubscribeMessage((UnsubscribeMessage) msg));
+        if (msg instanceof UnsubscribeProtocol) {
+            session.write(handleUnsubscribeMessage((UnsubscribeProtocol) msg));
             return;
         }
 
 
         //处理 publish
-        if (msg instanceof PublishMessage) {
-            PublishMessage message = (PublishMessage) msg;
-            if (message.getQosLevel() == PublishMessage.reserved) {
-                session.write(new DisconnectMessage());
+        if (msg instanceof PublishProtocol) {
+            PublishProtocol message = (PublishProtocol) msg;
+            if (message.getQosLevel() == PublishProtocol.reserved) {
+                session.write(new DisconnectProtocol());
                 return;
             }
-            if (message.getQosLevel() == PublishMessage.mostOnce) {
+            if (message.getQosLevel() == PublishProtocol.mostOnce) {
                 handlePublishQS0Message(message);
                 return;
             }
 
-            if (message.getQosLevel() == PublishMessage.leastOnce) {
+            if (message.getQosLevel() == PublishProtocol.leastOnce) {
                 session.write(handlePublishQS1Message(message));
                 return;
             }
 
-            if (message.getQosLevel() == PublishMessage.exactlyOnce) {
+            if (message.getQosLevel() == PublishProtocol.exactlyOnce) {
                 session.write(handlePublishQS2Message(message));
                 return;
             }
         }
 
 
-        if (msg instanceof PubackMessage) {
+        if (msg instanceof PubackProtocol) {
             //doNothing
             return;
         }
 
-        if (msg instanceof PubrecMessage) {
-            PubrecMessage message = (PubrecMessage) msg;
+        if (msg instanceof PubrecProtocol) {
+            PubrecProtocol message = (PubrecProtocol) msg;
 
             //doSomeThing
 
-            PubrelMessage pubrelMessage = new PubrelMessage();
+            PubrelProtocol pubrelMessage = new PubrelProtocol();
             pubrelMessage.setPacketIdentifier(message.getPacketIdentifier());
             session.write(pubrelMessage);
             return;
         }
 
-        if (msg instanceof PubrelMessage) {
-            session.write(handlePubrelMessage((PubrelMessage) msg));
+        if (msg instanceof PubrelProtocol) {
+            session.write(handlePubrelMessage((PubrelProtocol) msg));
             return;
         }
 
-        if (msg instanceof PubcompMessage) {
+        if (msg instanceof PubcompProtocol) {
             //doNothing
         }
 
@@ -110,22 +110,22 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
     /**
      * 处理连接
      * */
-    private ConnackMessage handleConnectMessage(ConnectMessage message) {
+    private ConnackProtocol handleConnectMessage(ConnectProtocol message) {
 
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        ConnackMessage connackMessage = new ConnackMessage();
+        ConnackProtocol connackMessage = new ConnackProtocol();
 
         if ((null == message.getClientId() || message.getClientId().equals("")) && (!message.isCleanSession())) {
-            connackMessage.setReturnCode(ConnackMessage.IDENTIFIER_REJECTED);
+            connackMessage.setReturnCode(ConnackProtocol.IDENTIFIER_REJECTED);
             return connackMessage;
         }
 
         //默认测试
-        connackMessage.setReturnCode(ConnackMessage.CONNECTION_ACCEPTED);
+        connackMessage.setReturnCode(ConnackProtocol.CONNECTION_ACCEPTED);
         connackMessage.setSessionPresentFlag(false);
 
         return connackMessage;
@@ -134,7 +134,7 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
     /**
      * 处理publish
      * */
-    private void handlePublishQS0Message(PublishMessage message) {
+    private void handlePublishQS0Message(PublishProtocol message) {
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {
@@ -145,14 +145,14 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
     /**
      * 处理qs1的publish
      * */
-    private PubackMessage handlePublishQS1Message(PublishMessage message) {
+    private PubackProtocol handlePublishQS1Message(PublishProtocol message) {
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        PubackMessage pubackMessage = new PubackMessage();
+        PubackProtocol pubackMessage = new PubackProtocol();
         pubackMessage.setPacketIdentifier(message.getPacketIdentifier());
         return pubackMessage;
     }
@@ -160,14 +160,14 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
     /**
      * 处理qs2的publish
      * */
-    private PubrecMessage handlePublishQS2Message(PublishMessage message) {
+    private PubrecProtocol handlePublishQS2Message(PublishProtocol message) {
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        PubrecMessage pubrecMessage = new PubrecMessage();
+        PubrecProtocol pubrecMessage = new PubrecProtocol();
         pubrecMessage.setPacketIdentifier(message.getPacketIdentifier());
         return pubrecMessage;
     }
@@ -175,14 +175,14 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
     /**
      * qs2相关的处理
      * */
-    private PubcompMessage handlePubrelMessage(PubrelMessage message) {
+    private PubcompProtocol handlePubrelMessage(PubrelProtocol message) {
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        PubcompMessage pubcompMessage = new PubcompMessage();
+        PubcompProtocol pubcompMessage = new PubcompProtocol();
         pubcompMessage.setPacketIdentifier(message.getPacketIdentifier());
         return pubcompMessage;
     }
@@ -190,24 +190,24 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
     /**
      * 订阅相关的处理
      * */
-    private SubackMessage handleSubscribeMessage(SubscribeMessage message) {
+    private SubackProtocol handleSubscribeMessage(SubscribeProtocol message) {
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        SubackMessage subackMessage = new SubackMessage();
+        SubackProtocol subackMessage = new SubackProtocol();
         subackMessage.setPacketIdentifier(message.getPacketIdentifier());
-        for (SubscribeMessage.TopicFilterQoSPair pair : message.getPairs()) {
-            if (pair.getQos() == MQTTMessage.mostOnce) {
-                subackMessage.addReturnCode(SubackMessage.SuccessMaximumQoS0);
+        for (SubscribeProtocol.TopicFilterQoSPair pair : message.getPairs()) {
+            if (pair.getQos() == MQTTProtocol.mostOnce) {
+                subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS0);
             }
-            if (pair.getQos() == MQTTMessage.leastOnce) {
-                subackMessage.addReturnCode(SubackMessage.SuccessMaximumQoS1);
+            if (pair.getQos() == MQTTProtocol.leastOnce) {
+                subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS1);
             }
-            if (pair.getQos() == MQTTMessage.exactlyOnce) {
-                subackMessage.addReturnCode(SubackMessage.SuccessMaximumQoS2);
+            if (pair.getQos() == MQTTProtocol.exactlyOnce) {
+                subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS2);
             }
         }
         return subackMessage;
@@ -216,7 +216,7 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
     /**
      * 取消订阅相关的处理
      * */
-    private UnsubackMessage handleUnsubscribeMessage(UnsubscribeMessage message) {
+    private UnsubackProtocol handleUnsubscribeMessage(UnsubscribeProtocol message) {
 
         try {
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
@@ -224,7 +224,7 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
             e.printStackTrace();
         }
 
-        UnsubackMessage unsubackMessage = new UnsubackMessage();
+        UnsubackProtocol unsubackMessage = new UnsubackProtocol();
         unsubackMessage.setPacketIdentifier(message.getPacketIdentifier());
         return unsubackMessage;
     }

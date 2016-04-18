@@ -7,5 +7,5 @@ import io.github.lujianbo.mqtt.domain.*;
  */
 public interface MQTTMessageHandler {
 
-    public void onRead(MQTTMessage message);
+    public void onRead(MQTTProtocol message);
 }

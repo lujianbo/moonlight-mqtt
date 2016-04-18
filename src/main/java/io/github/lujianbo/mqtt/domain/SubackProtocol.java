@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by jianbo on 2016/3/24.
  */
-public class SubackMessage extends MQTTMessage {
+public class SubackProtocol extends MQTTProtocol {
 
     public static byte SuccessMaximumQoS0 = 0x00;
     public static byte SuccessMaximumQoS1 = 0x01;

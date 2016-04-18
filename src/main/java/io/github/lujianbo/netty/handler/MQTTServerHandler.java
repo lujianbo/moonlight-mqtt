@@ -1,10 +1,9 @@
 package io.github.lujianbo.netty.handler;
 
 
-import io.github.lujianbo.mqtt.domain.MQTTMessage;
+import io.github.lujianbo.mqtt.domain.MQTTProtocol;
 import io.github.lujianbo.mqtt.service.MQTTMessageHandler;
 import io.github.lujianbo.mqtt.service.MQTTMessageHandlerFactory;
-import io.github.lujianbo.netty.handler.MQTTNettyConnection;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -12,7 +11,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 /**
  * 完成MQTT和Netty部分的对接，实现数据的上下行
  */
-public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTMessage> {
+public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol> {
 
     private MQTTMessageHandlerFactory factory;
 
@@ -32,7 +31,7 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTMessage> 
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, MQTTMessage msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, MQTTProtocol msg) throws Exception {
         handler.onRead(msg);
     }
 

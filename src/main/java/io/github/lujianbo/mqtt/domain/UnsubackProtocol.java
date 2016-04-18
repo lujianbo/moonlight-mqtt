@@ -3,7 +3,7 @@ package io.github.lujianbo.mqtt.domain;
 /**
  * Created by jianbo on 2016/3/24.
  */
-public class PubrecMessage extends MQTTMessage {
+public class UnsubackProtocol extends MQTTProtocol {
 
     protected int packetIdentifier;
 
@@ -14,4 +14,5 @@ public class PubrecMessage extends MQTTMessage {
     public void setPacketIdentifier(int packetIdentifier) {
         this.packetIdentifier = packetIdentifier;
     }
+
 }

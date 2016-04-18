@@ -1,7 +1,7 @@
 package io.github.lujianbo.netty.handler;
 
 
-import io.github.lujianbo.mqtt.domain.MQTTMessage;
+import io.github.lujianbo.mqtt.domain.MQTTProtocol;
 import io.github.lujianbo.mqtt.service.MQTTConnection;
 import io.netty.channel.Channel;
 
@@ -17,7 +17,7 @@ public class MQTTNettyConnection implements MQTTConnection {
     }
 
     @Override
-    public void write(MQTTMessage message) {
+    public void write(MQTTProtocol message) {
         channel.write(message);
     }
 
