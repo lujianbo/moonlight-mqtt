@@ -18,6 +18,14 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
 
     private MQTTSession session;//仅当登陆后才会获得该session
 
+    private enum State{
+        init,//初始化状态
+        normal,//正常状态
+        close//关闭状态
+    }
+
+    private State state=State.init;
+
     public DefaultMQTTMessageHandler(MQTTContext context,MQTTConnection connection) {
         this.context=context;
         this.connection = connection;
@@ -251,4 +259,16 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
     public void onRead(PubackProtocol message) {
 
     }
+
+    @Override
+    public void onClose() {
+
+    }
+
+    @Override
+    public void onException() {
+
+    }
+
+
 }

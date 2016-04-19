@@ -35,5 +35,8 @@ public interface MQTTMessageHandler {
 
     public void onRead(UnsubackProtocol message);
 
+    public void onClose();
+
+    public void onException();
 
 }

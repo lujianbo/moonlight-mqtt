@@ -22,7 +22,6 @@ public class MQTTContext {
      * */
     private MQTTTopicManager topicManager;
 
-
     /**
      * scheduler
      * */
@@ -37,10 +36,14 @@ public class MQTTContext {
      * 推送消息
      * */
     public void publish(MQTTMessage message){
-        //查找广播目标
-
-
-        //提交广播任务
+        /**
+         * 提交任务
+         * */
+        pool.submit(() -> {
+            topicManager.findSubscriber(message.getTopic()).forEach(clientId -> {
+                sessionManager.getMQTTSession(clientId);
+            });
+        });
     }
 
     /**

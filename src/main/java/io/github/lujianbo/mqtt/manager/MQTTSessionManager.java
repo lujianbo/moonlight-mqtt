@@ -10,10 +10,12 @@ import java.util.function.BiConsumer;
  */
 public interface MQTTSessionManager {
 
+
     /**
-     * 添加一个MQTTSession
+     * 获取或初始化一个session
      * */
-    public void put(String clientId,MQTTSession session);
+    public MQTTSession getMQTTSession(String clientId);
+
 
     /**
      * 关闭并移除一个session
@@ -25,10 +27,7 @@ public interface MQTTSessionManager {
      * */
     public void closeAll();
 
-    /**
-     * 根据clientId来查询session
-     * */
-    public MQTTSession getMQTTSession(String clientId);
+
 
     /**
      * 返回当前session的总数

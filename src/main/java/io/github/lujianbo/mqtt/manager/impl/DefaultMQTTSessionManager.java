@@ -1,7 +1,5 @@
 package io.github.lujianbo.mqtt.manager.impl;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import io.github.lujianbo.mqtt.common.MQTTSession;
 
 import java.util.concurrent.ConcurrentHashMap;
