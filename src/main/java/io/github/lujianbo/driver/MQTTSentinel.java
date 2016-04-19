@@ -3,15 +3,20 @@ package io.github.lujianbo.driver;
 import io.github.lujianbo.driver.common.BroadcastMessage;
 
 /**
- * Sentinel的抽象描述
+ * Sentinel的接口,描述了一个sentinel必须实现的接口
  * */
-public interface MQTTSentinel {
+public abstract class MQTTSentinel {
+
+    /**
+     * 哨兵的Id
+     * */
+    private String sentinelId;
 
 
-    public void broadcast(BroadcastMessage message);
+    abstract public void broadcast(BroadcastMessage message);
 
     /**
      * 关闭clientId
      * */
-    public void close(String clientId);
+    abstract public void close(String clientId);
 }

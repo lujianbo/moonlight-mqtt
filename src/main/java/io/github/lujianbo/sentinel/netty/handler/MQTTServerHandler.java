@@ -1,6 +1,7 @@
 package io.github.lujianbo.sentinel.netty.handler;
 
 
+import io.github.lujianbo.sentinel.netty.impl.MQTTNettyConnection;
 import io.github.lujianbo.sentinel.protocol.*;
 import io.github.lujianbo.sentinel.proxy.MQTTMessageHandler;
 import io.github.lujianbo.sentinel.proxy.MQTTMessageHandlerFactory;

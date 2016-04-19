@@ -3,7 +3,7 @@ package io.github.lujianbo.driver.common;
 /**
  * 一条消息的抽象
  */
-public class MQTTMessage {
+public class PublishMessage {
 
     /**
      * 发送者
@@ -24,10 +24,10 @@ public class MQTTMessage {
     public byte[] playLoad;
 
 
-    public MQTTMessage() {
+    public PublishMessage() {
     }
 
-    public MQTTMessage(String sender, String topic, int packetIdentifier, byte[] playLoad) {
+    public PublishMessage(String sender, String topic, int packetIdentifier, byte[] playLoad) {
         this.sender = sender;
         this.topic = topic;
         this.packetIdentifier = packetIdentifier;
@@ -41,8 +41,6 @@ public class MQTTMessage {
     public void setPacketIdentifier(int packetIdentifier) {
         this.packetIdentifier = packetIdentifier;
     }
-
-
 
     public String getSender() {
         return sender;

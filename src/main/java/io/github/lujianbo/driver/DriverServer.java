@@ -1,15 +1,17 @@
 package io.github.lujianbo.driver;
 
+import io.github.lujianbo.driver.service.DriverService;
+
 /**
  * Driver服务
  *
  * 启动后，将会进行Sentinel的监听
  */
-public interface DriverServer {
+public class DriverServer {
 
 
-    /**
-     * 启动一个DriverServer服务
-     * */
+    public DriverService connect(MQTTSentinel sentinel){
 
+        return null;
+    }
 }

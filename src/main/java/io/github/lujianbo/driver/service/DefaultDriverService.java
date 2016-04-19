@@ -1,13 +1,16 @@
-package io.github.lujianbo.driver.impl;
+package io.github.lujianbo.driver.service;
 
-import io.github.lujianbo.driver.service.DriverService;
+import io.github.lujianbo.driver.MQTTSentinel;
 
 /**
- * 默认的 DriverService 实现
+ * 内存内链接的实现
  */
 public class DefaultDriverService implements DriverService{
 
-
+    /**
+     * 此接口对应的sentinel
+     * */
+    private MQTTSentinel sentinel;
 
 
     @Override

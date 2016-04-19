@@ -5,11 +5,8 @@ package io.github.lujianbo.sentinel;
  */
 public class SentinelServer {
 
-
     /**
-     * 连接指定的 driverService
+     * 描述了Sentinel的实现
      * */
-
-
 
 }
