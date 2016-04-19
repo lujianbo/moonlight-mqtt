@@ -1,7 +1,7 @@
 package io.github.lujianbo.mqtt.common.domain;
 
-import io.github.lujianbo.mqtt.common.handler.MQTTConnection;
-import io.github.lujianbo.mqtt.manager.MQTTContext;
+import io.github.lujianbo.mqtt.gateway.common.MQTTConnection;
+import io.github.lujianbo.mqtt.context.MQTTContext;
 
 import java.util.LinkedList;
 import java.util.List;
