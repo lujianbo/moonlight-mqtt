@@ -3,6 +3,7 @@ package io.github.lujianbo.mqtt.manager.impl;
 import io.github.lujianbo.mqtt.manager.MQTTTopicManager;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
@@ -22,6 +23,7 @@ public class DefaultMQTTTopicManager implements MQTTTopicManager {
     /**
      * 订阅
      * */
+    @Override
     public void subscribe(String clientId,String topicFilter){
         findMatchTopic(topicFilter).addListener(clientId);
     }
@@ -29,8 +31,14 @@ public class DefaultMQTTTopicManager implements MQTTTopicManager {
     /**
      * 反订阅
      * */
+    @Override
     public void unSubscribe(String clientId,String topicFilter){
         findMatchTopic(topicFilter).removeListener(clientId);
+    }
+
+    @Override
+    public Iterable<String> findSubscriber(String topicFilter) {
+        return findMatchTopic(topicFilter).listeners;
     }
 
 

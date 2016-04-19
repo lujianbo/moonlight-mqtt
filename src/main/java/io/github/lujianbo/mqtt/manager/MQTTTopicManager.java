@@ -1,7 +1,5 @@
 package io.github.lujianbo.mqtt.manager;
 
-import java.util.List;
-
 /**
  * Topic管理，
  * 根据规范,Topic利用 /xx/xx  的方式进行描述
@@ -22,8 +20,7 @@ public interface MQTTTopicManager {
     /**
      *  返回topic下的订阅者的迭代器
      * */
-    public List<String> findSubscriber(String topicFilter);
-
+    public Iterable<String> findSubscriber(String topicFilter);
 
 
 }
