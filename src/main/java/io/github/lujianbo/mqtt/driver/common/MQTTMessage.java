@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.common.domain;
+package io.github.lujianbo.mqtt.driver.common;
 
 /**
  * 一条消息的抽象

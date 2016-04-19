@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.common.protocol;
+package io.github.lujianbo.mqtt.gateway.common.protocol;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,9 +1,9 @@
 package io.github.lujianbo.mqtt.driver;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.lujianbo.mqtt.common.domain.MQTTSession;
+import io.github.lujianbo.mqtt.driver.common.MQTTSession;
 import io.github.lujianbo.mqtt.gateway.common.MQTTConnection;
-import io.github.lujianbo.mqtt.common.protocol.*;
+import io.github.lujianbo.mqtt.gateway.common.protocol.*;
 import io.github.lujianbo.mqtt.context.MQTTContext;
 import io.github.lujianbo.util.ObjectMapperUtil;
 import org.slf4j.Logger;

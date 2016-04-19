@@ -1,6 +1,6 @@
 package io.github.lujianbo.mqtt.driver;
 
-import io.github.lujianbo.mqtt.common.protocol.*;
+import io.github.lujianbo.mqtt.gateway.common.protocol.*;
 
 /**
  * Handler处理器接口

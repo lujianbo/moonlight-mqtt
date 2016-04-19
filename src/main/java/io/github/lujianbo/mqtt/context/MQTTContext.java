@@ -4,7 +4,23 @@ package io.github.lujianbo.mqtt.context;
 /**
  * MQTT 相关的上下文
  */
-public interface MQTTContext {
+public class MQTTContext {
+
+    private final MQTTSessionManager sessionManager;
+
+    private final MQTTTopicManager topicManager;
 
 
+    public MQTTContext(MQTTSessionManager sessionManager, MQTTTopicManager topicManager) {
+        this.sessionManager = sessionManager;
+        this.topicManager = topicManager;
+    }
+
+    public MQTTSessionManager getSessionManager() {
+        return sessionManager;
+    }
+
+    public MQTTTopicManager getTopicManager() {
+        return topicManager;
+    }
 }

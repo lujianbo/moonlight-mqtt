@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.common.domain;
+package io.github.lujianbo.mqtt.driver.common;
 
 import io.github.lujianbo.mqtt.gateway.common.MQTTConnection;
 import io.github.lujianbo.mqtt.context.MQTTContext;

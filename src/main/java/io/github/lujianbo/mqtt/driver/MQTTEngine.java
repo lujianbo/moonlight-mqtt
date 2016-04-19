@@ -1,30 +1,39 @@
 package io.github.lujianbo.mqtt.driver;
 
 
-public interface MQTTEngine {
+import io.github.lujianbo.mqtt.driver.common.MQTTMessage;
+import io.github.lujianbo.mqtt.context.MQTTContext;
 
-    /**
-     * 用户上线
-     * */
-    public void connect(String clientId);
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-    /**
-     * 用户离线
-     * */
-    public void disconnect(String clientId);
+public class MQTTEngine {
 
-    /**
-     * 推送信息
-     * */
-    public void publish(String topicName,int packetIdentifier,byte[] playLoad);
+    private final MQTTContext context;
 
-    /**
-     * 订阅信息
-     * */
-    public void subscribe(String topicName,String clientId);
+    public MQTTEngine(MQTTContext context) {
+        this.context = context;
+    }
 
-    /**
-     * 取消订阅
-     * */
-    public void unSubscribe(String topicName,String clientId);
+    private ExecutorService pool= Executors.newCachedThreadPool(runnable -> {
+        Thread thread=new Thread();
+        thread.setDaemon(true);
+        return thread;
+    });
+
+
+    public void publish(MQTTMessage message){
+        /**
+         * 从context中获取订阅频道的订阅者
+         * */
+       pool.submit(() -> context.getTopicManager().findSubscriber(message.getTopic()).forEach(clientId -> {
+
+       }));
+
+
+        /**
+         * 找到订阅者，发送订阅信息
+         * */
+
+    }
 }

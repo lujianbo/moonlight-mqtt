@@ -1,6 +1,6 @@
 package io.github.lujianbo.mqtt.context;
 
-import io.github.lujianbo.mqtt.common.domain.MQTTSession;
+import io.github.lujianbo.mqtt.driver.common.MQTTSession;
 
 import java.util.function.BiConsumer;
 

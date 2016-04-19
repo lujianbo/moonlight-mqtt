@@ -1,9 +1,9 @@
-package io.github.lujianbo.mqtt.common.protocol;
+package io.github.lujianbo.mqtt.gateway.common.protocol;
 
 /**
  * Created by jianbo on 2016/3/24.
  */
-public class UnsubackProtocol extends MQTTProtocol {
+public class PubcompProtocol extends MQTTProtocol {
 
     protected int packetIdentifier;
 
@@ -14,5 +14,4 @@ public class UnsubackProtocol extends MQTTProtocol {
     public void setPacketIdentifier(int packetIdentifier) {
         this.packetIdentifier = packetIdentifier;
     }
-
 }

@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.common.protocol.util;
+package io.github.lujianbo.mqtt.gateway.common.protocol.util;
 
 /**
  * Created by lujianbo on 2016/4/18.

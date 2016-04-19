@@ -1,6 +1,6 @@
 package io.github.lujianbo.mqtt.gateway.common;
 
-import io.github.lujianbo.mqtt.common.protocol.MQTTProtocol;
+import io.github.lujianbo.mqtt.gateway.common.protocol.MQTTProtocol;
 
 
 /**
