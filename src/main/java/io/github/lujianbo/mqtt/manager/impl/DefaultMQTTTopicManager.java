@@ -1,7 +1,8 @@
 package io.github.lujianbo.mqtt.manager.impl;
 
-import io.github.lujianbo.mqtt.common.MQTTTopic;
+import io.github.lujianbo.mqtt.manager.MQTTTopicManager;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
@@ -10,7 +11,7 @@ import java.util.function.BiConsumer;
  * Topic的默认实现，使用内存来管理可以订阅的频道，和管理频道上的订阅者
  * 默认使用树来实现
  * */
-public class DefaultMQTTTopicManager {
+public class DefaultMQTTTopicManager implements MQTTTopicManager {
 
     private final TreeNode root;
 
@@ -86,7 +87,7 @@ public class DefaultMQTTTopicManager {
         }
     }
 
-    public TreeNode find(String nodePath){
+    private TreeNode find(String nodePath){
         TreeNode node=root;
         String[] names=nodePath.split("/");
         for (int i=0;i<names.length;i++){
@@ -97,6 +98,30 @@ public class DefaultMQTTTopicManager {
             }
         }
         return node;
+    }
+
+
+    class MQTTTopic {
+
+        private final String name;
+
+        private final HashSet<String> listeners = new HashSet<>();
+
+        public MQTTTopic(String name) {
+            this.name = name;
+        }
+
+        public void addListener(String listener) {
+            this.listeners.add(listener);
+        }
+
+        public void removeListener(String listener) {
+            this.listeners.remove(listener);
+        }
+
+        public HashSet<String> getListeners() {
+            return listeners;
+        }
     }
 
 

@@ -9,42 +9,21 @@ import java.util.List;
 public interface MQTTTopicManager {
 
     /**
-     * 查找并且返回符合topicFilter的 topic
-     */
-    public List<String> findMatchTopic(String topicFilter);
-
-    /**
-     * 查找指定名称的Topic
-     */
-    public String findTopic(String topicName);
-
-    /**
-     * 添加topic
-     */
-    public void addTopic(String topicName);
-
-
-    /**
-     * 返回当前存在的topic
-     * */
-    List<String> list();
-
-
-    /**
-     * 向目标topic添加订阅者
+     * 订阅
      * */
     public void subscribe(String clientId,String topicFilter);
 
     /**
-     * 向目标Topic移除订阅者
+     * 反订阅
      * */
     public void unSubscribe(String clientId,String topicFilter);
 
 
-
     /**
-     * 返回某个Topic对应的clientId
+     *  返回topic下的订阅者的迭代器
      * */
+    public List<String> findSubscriber(String topicFilter);
+
 
 
 }

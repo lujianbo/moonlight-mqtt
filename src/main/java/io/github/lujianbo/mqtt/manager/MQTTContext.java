@@ -1,6 +1,8 @@
 package io.github.lujianbo.mqtt.manager;
 
 
+import io.github.lujianbo.mqtt.common.MQTTMessage;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,7 +23,6 @@ public class MQTTContext {
     private MQTTTopicManager topicManager;
 
 
-
     /**
      * scheduler
      * */
@@ -35,8 +36,11 @@ public class MQTTContext {
     /**
      * 推送消息
      * */
-    public void publish(){
+    public void publish(MQTTMessage message){
+        //查找广播目标
 
+
+        //提交广播任务
     }
 
     /**

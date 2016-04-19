@@ -1,6 +1,7 @@
 package io.github.lujianbo.mqtt.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.github.lujianbo.mqtt.common.MQTTSession;
 import io.github.lujianbo.mqtt.protocol.*;
 import io.github.lujianbo.mqtt.manager.MQTTContext;
 import io.github.lujianbo.util.ObjectMapperUtil;
@@ -14,6 +15,8 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
     private MQTTConnection connection;
 
     private MQTTContext context;
+
+    private MQTTSession session;//仅当登陆后才会获得该session
 
     public DefaultMQTTMessageHandler(MQTTContext context,MQTTConnection connection) {
         this.context=context;
