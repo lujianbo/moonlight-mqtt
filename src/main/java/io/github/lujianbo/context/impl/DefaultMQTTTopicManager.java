@@ -1,7 +1,5 @@
 package io.github.lujianbo.context.impl;
 
-import io.github.lujianbo.context.MQTTTopicManager;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,25 +17,18 @@ public class DefaultMQTTTopicManager implements MQTTTopicManager {
         root = new TreeNode();
     }
 
-    /**
-     * 订阅
-     * */
-    @Override
+
     public boolean subscribe(String clientId,String topicFilter){
         findMatchTopic(topicFilter).addListener(clientId);
         return true;
     }
 
-    /**
-     * 反订阅
-     * */
-    @Override
+
     public boolean unSubscribe(String clientId,String topicFilter){
         findMatchTopic(topicFilter).removeListener(clientId);
         return true;
     }
 
-    @Override
     public Iterable<String> findSubscriber(String topicFilter) {
         return findMatchTopic(topicFilter).listeners;
     }
