@@ -20,94 +20,6 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
         this.connection = connection;
     }
 
-
-    public void onRead(MQTTProtocol msg) {
-
-        //处理心跳程序
-        if (msg instanceof PingreqProtocol) {
-            connection.write(new PingrespProtocol());
-            return;
-        }
-
-        //处理connect
-        if (msg instanceof ConnectProtocol) {
-            ConnackProtocol connackMessage = handleConnectMessage((ConnectProtocol) msg);
-            connection.write(connackMessage);
-
-            /**
-             If the Client supplies a zero-byte ClientId with CleanSession set to 0, the Server MUST respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection [MQTT-3.1.3-8].
-
-             If the Server rejects the ClientId it MUST respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection [MQTT-3.1.3-9].
-             */
-            if (connackMessage.getReturnCode() == ConnackProtocol.IDENTIFIER_REJECTED) {
-                connection.close();
-            }
-
-            return;
-        }
-        //处理subscribe
-        if (msg instanceof SubscribeProtocol) {
-            connection.write(handleSubscribeMessage((SubscribeProtocol) msg));
-            return;
-        }
-        //处理unSubscribe
-        if (msg instanceof UnsubscribeProtocol) {
-            connection.write(handleUnsubscribeMessage((UnsubscribeProtocol) msg));
-            return;
-        }
-
-
-        //处理 publish
-        if (msg instanceof PublishProtocol) {
-            PublishProtocol message = (PublishProtocol) msg;
-            if (message.getQosLevel() == PublishProtocol.reserved) {
-                connection.write(new DisconnectProtocol());
-                return;
-            }
-            if (message.getQosLevel() == PublishProtocol.mostOnce) {
-                handlePublishQS0Message(message);
-                return;
-            }
-
-            if (message.getQosLevel() == PublishProtocol.leastOnce) {
-                connection.write(handlePublishQS1Message(message));
-                return;
-            }
-
-            if (message.getQosLevel() == PublishProtocol.exactlyOnce) {
-                connection.write(handlePublishQS2Message(message));
-                return;
-            }
-        }
-
-
-        if (msg instanceof PubackProtocol) {
-            //doNothing
-            return;
-        }
-
-        if (msg instanceof PubrecProtocol) {
-            PubrecProtocol message = (PubrecProtocol) msg;
-
-            //doSomeThing
-
-            PubrelProtocol pubrelMessage = new PubrelProtocol();
-            pubrelMessage.setPacketIdentifier(message.getPacketIdentifier());
-            connection.write(pubrelMessage);
-            return;
-        }
-
-        if (msg instanceof PubrelProtocol) {
-            connection.write(handlePubrelMessage((PubrelProtocol) msg));
-            return;
-        }
-
-        if (msg instanceof PubcompProtocol) {
-            //doNothing
-        }
-
-    }
-
     /**
      * 处理连接
      * */
@@ -137,7 +49,6 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
      * */
     private void handlePublishQS0Message(PublishProtocol message) {
         try {
-
             logger.info(ObjectMapperUtil.objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -229,5 +140,112 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
         UnsubackProtocol unsubackMessage = new UnsubackProtocol();
         unsubackMessage.setPacketIdentifier(message.getPacketIdentifier());
         return unsubackMessage;
+    }
+
+    @Override
+    public void onRead(ConnectProtocol message) {
+        ConnackProtocol connackMessage = handleConnectMessage(message);
+        connection.write(connackMessage);
+        /**
+         If the Client supplies a zero-byte ClientId with CleanSession set to 0, the Server MUST respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection [MQTT-3.1.3-8].
+
+         If the Server rejects the ClientId it MUST respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection [MQTT-3.1.3-9].
+         */
+        if (connackMessage.getReturnCode() == ConnackProtocol.IDENTIFIER_REJECTED) {
+            connection.close();
+        }
+    }
+
+
+
+    @Override
+    public void onRead(DisconnectProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(PingreqProtocol message) {
+        //处理ping
+        connection.write(new PingrespProtocol());
+    }
+
+
+
+    @Override
+    public void onRead(PubcompProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(PublishProtocol message) {
+        if (message.getQosLevel() == PublishProtocol.reserved) {
+            connection.write(new DisconnectProtocol());
+            return;
+        }
+        if (message.getQosLevel() == PublishProtocol.mostOnce) {
+            handlePublishQS0Message(message);
+            return;
+        }
+
+        if (message.getQosLevel() == PublishProtocol.leastOnce) {
+            connection.write(handlePublishQS1Message(message));
+            return;
+        }
+
+        if (message.getQosLevel() == PublishProtocol.exactlyOnce) {
+            connection.write(handlePublishQS2Message(message));
+            return;
+        }
+    }
+
+
+
+    @Override
+    public void onRead(PubrelProtocol message) {
+        connection.write(handlePubrelMessage(message));
+    }
+
+    @Override
+    public void onRead(PubrecProtocol message) {
+        //doSomeThing
+
+        PubrelProtocol pubrelMessage = new PubrelProtocol();
+        pubrelMessage.setPacketIdentifier(message.getPacketIdentifier());
+        connection.write(pubrelMessage);
+    }
+
+    @Override
+    public void onRead(SubscribeProtocol message) {
+        connection.write(handleSubscribeMessage(message));
+    }
+
+    @Override
+    public void onRead(UnsubscribeProtocol message) {
+        connection.write(handleUnsubscribeMessage(message));
+    }
+
+    @Override
+    public void onRead(PingrespProtocol message) {
+        //不应当接收到这个数据
+    }
+
+    @Override
+    public void onRead(ConnackProtocol message) {
+        //不应当接收到这个数据
+    }
+
+    @Override
+    public void onRead(SubackProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(UnsubackProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(PubackProtocol message) {
+
     }
 }
