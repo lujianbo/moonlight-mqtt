@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.protocol;
+package io.github.lujianbo.mqtt.common.protocol;
 
 /**
  * Created by jianbo on 2016/3/24.

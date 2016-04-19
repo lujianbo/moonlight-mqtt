@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.protocol;
+package io.github.lujianbo.mqtt.common.protocol;
 
 /**
  *

@@ -1,6 +1,6 @@
-package io.github.lujianbo.mqtt.handler;
+package io.github.lujianbo.mqtt.common.handler;
 
-import io.github.lujianbo.mqtt.protocol.*;
+import io.github.lujianbo.mqtt.common.protocol.*;
 
 /**
  * Handler处理器接口

@@ -1,4 +1,4 @@
-package io.github.lujianbo.server;
+package io.github.lujianbo.launch;
 
 /**
  * Created by jianbo on 2016/3/31.

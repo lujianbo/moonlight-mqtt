@@ -1,12 +1,11 @@
-package io.github.lujianbo.mqtt.protocol;
+package io.github.lujianbo.mqtt.common.protocol;
 
 /**
  * Created by jianbo on 2016/3/24.
  */
-public class PubackProtocol extends MQTTProtocol {
+public class PubrecProtocol extends MQTTProtocol {
 
     protected int packetIdentifier;
-
 
     public int getPacketIdentifier() {
         return packetIdentifier;

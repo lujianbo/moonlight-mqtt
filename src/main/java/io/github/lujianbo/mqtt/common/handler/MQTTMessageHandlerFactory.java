@@ -1,4 +1,4 @@
-package io.github.lujianbo.mqtt.handler;
+package io.github.lujianbo.mqtt.common.handler;
 
 
 

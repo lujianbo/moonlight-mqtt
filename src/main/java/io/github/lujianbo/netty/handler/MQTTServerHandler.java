@@ -1,9 +1,9 @@
 package io.github.lujianbo.netty.handler;
 
 
-import io.github.lujianbo.mqtt.protocol.*;
-import io.github.lujianbo.mqtt.handler.MQTTMessageHandler;
-import io.github.lujianbo.mqtt.handler.MQTTMessageHandlerFactory;
+import io.github.lujianbo.mqtt.common.protocol.*;
+import io.github.lujianbo.mqtt.common.handler.MQTTMessageHandler;
+import io.github.lujianbo.mqtt.common.handler.MQTTMessageHandlerFactory;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 

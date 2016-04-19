@@ -1,7 +1,7 @@
 package io.github.lujianbo.mqtt.manager;
 
 
-import io.github.lujianbo.mqtt.common.MQTTMessage;
+import io.github.lujianbo.mqtt.common.domain.MQTTMessage;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

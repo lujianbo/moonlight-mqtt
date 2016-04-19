@@ -1,6 +1,6 @@
 package io.github.lujianbo.netty.mqtt;
 
-import io.github.lujianbo.mqtt.protocol.*;
+import io.github.lujianbo.mqtt.common.protocol.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

@@ -1,6 +1,6 @@
 package io.github.lujianbo.mqtt.manager.impl;
 
-import io.github.lujianbo.mqtt.common.MQTTSession;
+import io.github.lujianbo.mqtt.common.domain.MQTTSession;
 
 import java.util.concurrent.ConcurrentHashMap;
 

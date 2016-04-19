@@ -1,14 +1,16 @@
-package io.github.lujianbo.mqtt.handler;
+package io.github.lujianbo.mqtt.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.lujianbo.mqtt.common.MQTTSession;
-import io.github.lujianbo.mqtt.protocol.*;
+import io.github.lujianbo.mqtt.common.domain.MQTTSession;
+import io.github.lujianbo.mqtt.common.handler.MQTTConnection;
+import io.github.lujianbo.mqtt.common.handler.MQTTMessageHandler;
+import io.github.lujianbo.mqtt.common.protocol.*;
 import io.github.lujianbo.mqtt.manager.MQTTContext;
 import io.github.lujianbo.util.ObjectMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultMQTTMessageHandler implements MQTTMessageHandler{
+public class DefaultMQTTMessageHandler implements MQTTMessageHandler {
 
     private Logger logger = LoggerFactory.getLogger(DefaultMQTTMessageHandler.class);
 
