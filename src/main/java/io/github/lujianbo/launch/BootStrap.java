@@ -34,7 +34,12 @@ public class BootStrap {
 
     public static void main(String[] args) {
 
+        /**
+         * 配置shutdown的hook
+         * */
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 
+        }));
     }
 
 }
