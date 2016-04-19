@@ -1,7 +1,9 @@
 package io.github.lujianbo.driver;
 
 /**
- * Created by lujianbo on 2016/4/19.
+ * Driver服务
+ *
+ * 启动后，将会进行Sentinel的监听
  */
 public interface DriverServer {
 
