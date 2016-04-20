@@ -49,5 +49,11 @@ public class HandlerContext {
         this.sslCtx = sslCtx;
     }
 
+    public MQTTProtocolHandler getHandler() {
+        return handler;
+    }
 
+    public void setHandler(MQTTProtocolHandler handler) {
+        this.handler = handler;
+    }
 }

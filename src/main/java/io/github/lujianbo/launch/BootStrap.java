@@ -2,12 +2,7 @@ package io.github.lujianbo.launch;
 
 import io.github.lujianbo.context.impl.DefaultContextService;
 import io.github.lujianbo.context.service.ContextService;
-import io.github.lujianbo.driver.DriverServer;
 import io.github.lujianbo.driver.core.MQTTEngine;
-import io.github.lujianbo.driver.service.DefaultDriverService;
-import io.github.lujianbo.driver.service.DriverExporter;
-import io.github.lujianbo.driver.service.DriverService;
-import io.github.lujianbo.driver.service.LocalDriverExporter;
 import io.github.lujianbo.sentinel.SentinelServer;
 
 /**
@@ -25,7 +20,6 @@ public class BootStrap {
      * */
     private MQTTEngine engine;
 
-    private DriverExporter exporter;
 
     /**
      * 初始化哨兵
@@ -44,9 +38,6 @@ public class BootStrap {
          * */
         this.engine= new MQTTEngine(contextService);
 
-        this.exporter=new LocalDriverExporter();
-
-
         /**
          * 从exporter中获取service
          * */
@@ -55,9 +46,6 @@ public class BootStrap {
         /**
          * 启动sentinel
          * */
-        
-
-
 
     }
 

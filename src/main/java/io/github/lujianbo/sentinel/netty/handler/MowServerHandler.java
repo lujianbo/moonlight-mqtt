@@ -79,7 +79,7 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
                         /**
                          * 添加协议的处理桥接部分
                          * */
-                        ctx.pipeline().addLast(new MQTTServerHandler(context.getFactory()));
+                        ctx.pipeline().addLast(new MQTTServerHandler(context.getHandler()));
                     }
                 });
             }

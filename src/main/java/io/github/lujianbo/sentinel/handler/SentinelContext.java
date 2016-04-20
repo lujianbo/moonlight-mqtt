@@ -1,8 +1,7 @@
 package io.github.lujianbo.sentinel.handler;
 
-import io.github.lujianbo.driver.MQTTSentinel;
+import io.github.lujianbo.driver.service.DriverConnection;
 import io.github.lujianbo.driver.common.BroadcastMessage;
-import io.github.lujianbo.driver.common.PublishMessage;
 import io.github.lujianbo.sentinel.protocol.PublishProtocol;
 
 import java.util.Map;
@@ -11,12 +10,18 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  *
  */
-public class SentinelContext extends MQTTSentinel {
+public class SentinelContext extends DriverConnection {
 
     /**
      * 描述了clientId 和 MQTTConnection的关系
      * */
     private Map<String,MQTTConnection> maps=new ConcurrentHashMap<>();
+
+
+    public void add(String clientId,MQTTConnection connection){
+        maps.put(clientId,connection);
+    }
+
     /**
      * 实现信息的广播
      * */
