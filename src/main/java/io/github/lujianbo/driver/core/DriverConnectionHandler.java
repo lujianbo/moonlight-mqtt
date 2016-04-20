@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by lujianbo on 2016/4/20.
+ *
  */
-public class DriverConnectionHandler {
+public class DriverConnectionHandler implements MQTTEngineListener{
 
     /**
      * 存储clientId和 DriverConnection的对应关系，用于下发广播事件
@@ -39,4 +39,12 @@ public class DriverConnectionHandler {
 
     }
 
+    @Override
+    public void onPublish(PublishMessage message) {
+        /**
+         * 根据ClientId的所在位置进行分发
+         * */
+
+
+    }
 }

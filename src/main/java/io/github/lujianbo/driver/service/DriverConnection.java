@@ -18,6 +18,9 @@ public abstract class DriverConnection {
         sentinelId = UUID.randomUUID().toString();
     }
 
+    /**
+     * 广播接口
+     * */
     abstract public void broadcast(BroadcastMessage message);
 
     /**
