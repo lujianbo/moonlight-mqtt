@@ -24,74 +24,33 @@ public class DefaultMQTTTopicManager implements TopicManager {
         root = new TreeNode();
     }
 
+    /**
+     * 添加订阅
+     * */
     public boolean subscribe(String clientId,String topicFilter){
-        findMatchTopic(topicFilter).forEachRemaining(mqttTopic -> mqttTopic.addListener(clientId));
-        maps.put(clientId,topicFilter);
+        findMatchTopic(topicFilter).forEachRemaining(mqttTopic -> {
+            mqttTopic.addListener(clientId);
+            maps.put(clientId,mqttTopic.name);
+        });
+
         return true;
     }
 
-
+    /**
+     * 取消订阅
+     * */
     public boolean unSubscribe(String clientId,String topicFilter){
-        findMatchTopic(topicFilter).forEachRemaining(mqttTopic -> mqttTopic.removeListener(clientId));
-        maps.remove(clientId,topicFilter);
+        findMatchTopic(topicFilter).forEachRemaining(mqttTopic -> {
+            mqttTopic.removeListener(clientId);
+            maps.remove(clientId,mqttTopic.name);
+        });
+
         return true;
     }
+
 
     public Iterator<String> findSubscriber(String topicFilter) {
-        return new ClientIterator(findMatchTopic(topicFilter));
-    }
-
-
-    /**
-     * 迭代器的默认实现
-     * */
-    private static final Iterator<String> initIterator=new Iterator<String>() {
-        @Override
-        public boolean hasNext() {
-            return false;
-        }
-
-        @Override
-        public String next() {
-            return null;
-        }
-    };
-    /**
-     * 双重迭代器
-     * */
-    private class ClientIterator implements Iterator<String>{
-        private Iterator<MQTTTopic> topicIterator;
-        /**
-         * 初始化迭代器使其无法为null
-         * */
-        private Iterator<String> current=initIterator;
-
-        public ClientIterator(Iterator<MQTTTopic> topicIterator){
-            this.topicIterator=topicIterator;
-        }
-
-        /**
-         * 检查和修改当前的设置
-         * */
-        private void validate(){
-            if (!current.hasNext()) {
-                if (topicIterator.hasNext()){
-                    current=topicIterator.next().listeners.iterator();
-                }
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            validate();
-            return current.hasNext();
-        }
-
-        @Override
-        public String next() {
-            validate();
-            return current.next();
-        }
+        return findTopic(topicFilter).listeners.iterator();
     }
 
 
@@ -100,12 +59,12 @@ public class DefaultMQTTTopicManager implements TopicManager {
         /**
          * 移除监听
          * */
-        maps.removeAll(clientId).forEach(topicName -> findMatchTopic(topicName).forEachRemaining(mqttTopic -> mqttTopic.removeListener(clientId)));
+        maps.removeAll(clientId).forEach(topicName -> findTopic(topicName).removeListener(clientId));
     }
 
 
     /**
-     * 查找匹配的 topic
+     * 查找正则匹配的 topic
      */
     private Iterator<MQTTTopic> findMatchTopic(String topicFilter) {
         return new Iterator<MQTTTopic>() {
@@ -123,6 +82,13 @@ public class DefaultMQTTTopicManager implements TopicManager {
                 return find(topicFilter).data;
             }
         };
+    }
+
+    /**
+     * 查找指定的Topic
+     * */
+    private MQTTTopic findTopic(String topicName){
+        return find(topicName).data;
     }
 
 

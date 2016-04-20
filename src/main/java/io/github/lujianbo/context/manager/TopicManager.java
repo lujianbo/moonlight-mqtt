@@ -8,13 +8,23 @@ import java.util.Iterator;
  */
 public interface TopicManager {
 
-
+    /**
+     * 订阅频道
+     * */
     public boolean subscribe(String clientId, String topicFilter);
 
-
+    /**
+     * 反订阅
+     * */
     public boolean unSubscribe(String clientId, String topicFilter);
 
+    /**
+     * 返回某个频道的监听者
+     * */
     public Iterator<String> findSubscriber(String topicFilter);
 
+    /**
+     * 清理用户的所有监听
+     * */
     public void clear(String clientId);
 }
