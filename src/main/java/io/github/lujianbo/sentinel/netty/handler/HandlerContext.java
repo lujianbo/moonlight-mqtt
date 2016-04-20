@@ -1,6 +1,6 @@
 package io.github.lujianbo.sentinel.netty.handler;
 
-import io.github.lujianbo.sentinel.proxy.MQTTMessageHandlerFactory;
+import io.github.lujianbo.sentinel.handler.MQTTProtocolHandler;
 import io.netty.handler.ssl.SslContext;
 
 /**
@@ -8,7 +8,7 @@ import io.netty.handler.ssl.SslContext;
  */
 public class HandlerContext {
 
-    private MQTTMessageHandlerFactory factory;
+    private MQTTProtocolHandler handler;
 
     private String path;
 
@@ -41,14 +41,6 @@ public class HandlerContext {
         this.host = host;
     }
 
-    public MQTTMessageHandlerFactory getFactory() {
-        return factory;
-    }
-
-    public void setFactory(MQTTMessageHandlerFactory factory) {
-        this.factory = factory;
-    }
-
     public SslContext getSslCtx() {
         return sslCtx;
     }
@@ -56,4 +48,6 @@ public class HandlerContext {
     public void setSslCtx(SslContext sslCtx) {
         this.sslCtx = sslCtx;
     }
+
+
 }

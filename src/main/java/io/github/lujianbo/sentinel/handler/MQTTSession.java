@@ -1,4 +1,4 @@
-package io.github.lujianbo.sentinel.proxy;
+package io.github.lujianbo.sentinel.handler;
 
 import java.util.LinkedList;
 import java.util.List;

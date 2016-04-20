@@ -1,4 +1,4 @@
-package io.github.lujianbo.sentinel.proxy;
+package io.github.lujianbo.sentinel.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.lujianbo.sentinel.protocol.*;
@@ -6,25 +6,91 @@ import io.github.lujianbo.util.ObjectMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultMQTTMessageHandler implements MQTTMessageHandler {
+public class DefaultMQTTMessageHandler implements MQTTProtocolHandler {
 
     private Logger logger = LoggerFactory.getLogger(DefaultMQTTMessageHandler.class);
 
-    private MQTTConnection connection;
 
-    private MQTTSession session;//仅当登陆后才会获得该session
+    @Override
+    public void onRead(MQTTConnection connection, ConnectProtocol message) {
 
-    private enum State{
-        init,//初始化状态
-        normal,//正常状态
-        close//关闭状态
     }
 
-    private State state=State.init;
+    @Override
+    public void onRead(MQTTConnection connection, ConnackProtocol message) {
 
-    public DefaultMQTTMessageHandler(MQTTConnection connection) {
-        this.connection = connection;
     }
+
+    @Override
+    public void onRead(MQTTConnection connection, DisconnectProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, PingreqProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, PingrespProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, PubcompProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, PublishProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, PubackProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, PubrelProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, PubrecProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, SubackProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, SubscribeProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, UnsubscribeProtocol message) {
+
+    }
+
+    @Override
+    public void onRead(MQTTConnection connection, UnsubackProtocol message) {
+
+    }
+
+    @Override
+    public void onClose(MQTTConnection connection) {
+
+    }
+
+    @Override
+    public void onException(MQTTConnection connection) {
+
+    }
+
 
     /**
      * 处理连接
@@ -148,122 +214,7 @@ public class DefaultMQTTMessageHandler implements MQTTMessageHandler {
         return unsubackMessage;
     }
 
-    @Override
-    public void onRead(ConnectProtocol message) {
-        ConnackProtocol connackMessage = handleConnectMessage(message);
-        connection.write(connackMessage);
-        /**
-         If the Client supplies a zero-byte ClientId with CleanSession set to 0, the Server MUST respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection [MQTT-3.1.3-8].
 
-         If the Server rejects the ClientId it MUST respond to the CONNECT Packet with a CONNACK return code 0x02 (Identifier rejected) and then close the Network Connection [MQTT-3.1.3-9].
-         */
-        if (connackMessage.getReturnCode() == ConnackProtocol.IDENTIFIER_REJECTED) {
-            connection.close();
-        }
-    }
-
-
-
-    @Override
-    public void onRead(DisconnectProtocol message) {
-
-    }
-
-    @Override
-    public void onRead(PingreqProtocol message) {
-        //处理ping
-        connection.write(new PingrespProtocol());
-    }
-
-
-
-    @Override
-    public void onRead(PubcompProtocol message) {
-
-    }
-
-    @Override
-    public void onRead(PublishProtocol message) {
-        if (message.getQosLevel() == PublishProtocol.reserved) {
-            connection.write(new DisconnectProtocol());
-            return;
-        }
-        if (message.getQosLevel() == PublishProtocol.mostOnce) {
-            handlePublishQS0Message(message);
-            return;
-        }
-
-        if (message.getQosLevel() == PublishProtocol.leastOnce) {
-            connection.write(handlePublishQS1Message(message));
-            return;
-        }
-
-        if (message.getQosLevel() == PublishProtocol.exactlyOnce) {
-            connection.write(handlePublishQS2Message(message));
-            return;
-        }
-    }
-
-
-
-    @Override
-    public void onRead(PubrelProtocol message) {
-        connection.write(handlePubrelMessage(message));
-    }
-
-    @Override
-    public void onRead(PubrecProtocol message) {
-        //doSomeThing
-
-        PubrelProtocol pubrelMessage = new PubrelProtocol();
-        pubrelMessage.setPacketIdentifier(message.getPacketIdentifier());
-        connection.write(pubrelMessage);
-    }
-
-    @Override
-    public void onRead(SubscribeProtocol message) {
-        connection.write(handleSubscribeMessage(message));
-    }
-
-    @Override
-    public void onRead(UnsubscribeProtocol message) {
-        connection.write(handleUnsubscribeMessage(message));
-    }
-
-    @Override
-    public void onRead(PingrespProtocol message) {
-        //不应当接收到这个数据
-    }
-
-    @Override
-    public void onRead(ConnackProtocol message) {
-        //不应当接收到这个数据
-    }
-
-    @Override
-    public void onRead(SubackProtocol message) {
-
-    }
-
-    @Override
-    public void onRead(UnsubackProtocol message) {
-
-    }
-
-    @Override
-    public void onRead(PubackProtocol message) {
-
-    }
-
-    @Override
-    public void onClose() {
-
-    }
-
-    @Override
-    public void onException() {
-
-    }
 
 
 }

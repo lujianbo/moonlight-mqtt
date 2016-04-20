@@ -1,6 +1,6 @@
 package io.github.lujianbo.context.impl;
 
-import io.github.lujianbo.sentinel.proxy.MQTTSession;
+import io.github.lujianbo.sentinel.handler.MQTTSession;
 
 import java.util.function.BiConsumer;
 
