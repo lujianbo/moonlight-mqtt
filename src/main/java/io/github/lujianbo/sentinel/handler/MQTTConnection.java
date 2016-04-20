@@ -4,7 +4,7 @@ import io.github.lujianbo.sentinel.protocol.*;
 
 
 /**
- *  代表的是一个MQTT的链接
+ *  代表的是一个实际的MQTT 协议实现者的连接
  * */
 public interface MQTTConnection {
 

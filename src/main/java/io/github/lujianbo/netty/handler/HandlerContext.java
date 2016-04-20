@@ -10,9 +10,9 @@ public class HandlerContext {
 
     private MQTTProtocolHandler handler;
 
-    private String path;
+    private String path="mqtt";
 
-    private String host;
+    private String host="localhost";
 
     private SslContext sslCtx;
 

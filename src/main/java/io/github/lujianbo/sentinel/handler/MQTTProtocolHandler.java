@@ -1,24 +1,53 @@
 package io.github.lujianbo.sentinel.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.github.lujianbo.driver.common.BroadcastMessage;
+import io.github.lujianbo.driver.core.MQTTEngine;
 import io.github.lujianbo.sentinel.protocol.*;
 import io.github.lujianbo.util.ObjectMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class MQTTProtocolHandler  {
 
     private Logger logger = LoggerFactory.getLogger(MQTTProtocolHandler.class);
 
-    private SentinelContext sentinelContext;
+    /**
+     * 描述了clientId 和 MQTTConnection的关系
+     * */
+    private Map<String,MQTTConnection> maps=new ConcurrentHashMap<>();
 
-    public MQTTProtocolHandler(SentinelContext sentinelContext){
-        this.sentinelContext=sentinelContext;
+    private MQTTEngine engine;
+
+
+    public MQTTProtocolHandler(MQTTEngine engine){
+        this.engine=engine;
+        engine.addListener(message -> {
+            /**
+             * 构建协议
+             * */
+            PublishProtocol publishProtocol=new PublishProtocol();
+            /**
+             * 循环发送
+             * */
+            for (String clientId:message.getClientIds()){
+                if (maps.get(clientId)!=null){
+                    maps.get(clientId).write(publishProtocol);
+                }
+            }
+        });
     }
 
 
     public void onRead(MQTTConnection connection, ConnectProtocol message) {
 
+        /**
+         * 进行登录验证后就可以了
+         * */
+        maps.put(message.getClientId(),connection);
     }
 
     

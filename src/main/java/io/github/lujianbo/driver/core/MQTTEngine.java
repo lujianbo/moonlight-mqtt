@@ -1,7 +1,9 @@
 package io.github.lujianbo.driver.core;
 
 
+import io.github.lujianbo.context.manager.AuthManager;
 import io.github.lujianbo.context.service.ContextService;
+import io.github.lujianbo.driver.common.AuthMessage;
 import io.github.lujianbo.driver.common.PublishMessage;
 import io.github.lujianbo.driver.common.SubscribeMessage;
 import io.github.lujianbo.driver.common.UnSubscribeMessage;
@@ -57,6 +59,14 @@ public class MQTTEngine {
      * 修改订阅
      * */
     public void unSubscribe(UnSubscribeMessage unSubscribeMessage){
+
+    }
+
+    public boolean auth(AuthMessage authMessage){
+        return true;
+    }
+
+    public void disconnect(String clientId){
 
     }
 }
