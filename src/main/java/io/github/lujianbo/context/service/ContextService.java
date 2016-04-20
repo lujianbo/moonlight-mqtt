@@ -16,6 +16,9 @@ public interface ContextService {
      * */
     public boolean unSubscribe(String clientId,String topicFilter);
 
+
+    public void clear(String clientId);
+
     /**
      *  返回topic下的订阅者的迭代器
      * */

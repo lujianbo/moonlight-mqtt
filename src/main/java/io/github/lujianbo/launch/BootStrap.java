@@ -2,10 +2,10 @@ package io.github.lujianbo.launch;
 
 import io.github.lujianbo.context.impl.DefaultContextService;
 import io.github.lujianbo.context.service.ContextService;
-import io.github.lujianbo.driver.core.MQTTEngine;
+import io.github.lujianbo.engine.core.MQTTEngine;
+import io.github.lujianbo.engine.wapper.SingleSentinelEngine;
 import io.github.lujianbo.netty.MowServer;
 import io.github.lujianbo.netty.handler.HandlerContext;
-import io.github.lujianbo.sentinel.SentinelServer;
 import io.github.lujianbo.sentinel.handler.MQTTProtocolHandler;
 
 import javax.net.ssl.SSLException;
@@ -38,7 +38,7 @@ public class BootStrap {
         /**
          * 初始化引擎
          * */
-        this.engine= new MQTTEngine(contextService);
+        this.engine= new SingleSentinelEngine(contextService);
 
         /**
          * 从exporter中获取service

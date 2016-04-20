@@ -1,4 +1,4 @@
-package io.github.lujianbo.driver.common;
+package io.github.lujianbo.engine.common;
 
 /**
  * 订阅消息

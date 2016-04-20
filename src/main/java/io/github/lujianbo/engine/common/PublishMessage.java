@@ -1,4 +1,4 @@
-package io.github.lujianbo.driver.common;
+package io.github.lujianbo.engine.common;
 
 /**
  * 一条消息的抽象
