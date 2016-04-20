@@ -4,6 +4,8 @@ import io.github.lujianbo.context.manager.AuthManager;
 import io.github.lujianbo.context.manager.TopicManager;
 import io.github.lujianbo.context.service.ContextService;
 
+import java.util.Iterator;
+
 /**
  * Created by lujianbo on 2016/4/19.
  */
@@ -41,7 +43,7 @@ public class DefaultContextService implements ContextService{
     }
 
     @Override
-    public Iterable<String> findSubscriber(String topicFilter) {
+    public Iterator<String> findSubscriber(String topicFilter) {
         return topicManager.findSubscriber(topicFilter);
     }
 }

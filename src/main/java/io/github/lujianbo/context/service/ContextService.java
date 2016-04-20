@@ -1,6 +1,8 @@
 package io.github.lujianbo.context.service;
 
 
+import java.util.Iterator;
+
 /**
  * 资源服务接口
  * */
@@ -22,7 +24,7 @@ public interface ContextService {
     /**
      *  返回topic下的订阅者的迭代器
      * */
-    public Iterable<String> findSubscriber(String topicFilter);
+    public Iterator<String> findSubscriber(String topicFilter);
 
 
 
