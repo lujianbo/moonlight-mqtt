@@ -7,4 +7,12 @@ package io.github.lujianbo.context.manager;
 public interface TopicManager {
 
 
+    public boolean subscribe(String clientId, String topicFilter);
+
+
+    public boolean unSubscribe(String clientId, String topicFilter);
+
+    public Iterable<String> findSubscriber(String topicFilter);
+
+    public void clear(String clientId);
 }

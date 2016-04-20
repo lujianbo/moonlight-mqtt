@@ -68,6 +68,10 @@ public class BootStrap {
 
     }
 
+    public static void main(String[] args) {
+        new BootStrap();
+    }
+
 
     private void registerHook(){
 

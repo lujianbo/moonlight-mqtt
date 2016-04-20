@@ -1,5 +1,9 @@
 package io.github.lujianbo.context.impl;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import io.github.lujianbo.context.manager.TopicManager;
 
 import java.util.HashSet;
@@ -15,19 +19,22 @@ public class DefaultMQTTTopicManager implements TopicManager {
 
     private final TreeNode root;
 
+    private Multimap<String,String> maps= ArrayListMultimap.create();
+
     public DefaultMQTTTopicManager() {
         root = new TreeNode();
     }
 
-
     public boolean subscribe(String clientId,String topicFilter){
         findMatchTopic(topicFilter).addListener(clientId);
+        maps.put(clientId,topicFilter);
         return true;
     }
 
 
     public boolean unSubscribe(String clientId,String topicFilter){
         findMatchTopic(topicFilter).removeListener(clientId);
+        maps.remove(clientId,topicFilter);
         return true;
     }
 
@@ -35,11 +42,21 @@ public class DefaultMQTTTopicManager implements TopicManager {
         return findMatchTopic(topicFilter).listeners;
     }
 
+    @Override
+    public void clear(String clientId) {
+        /**
+         * 移除监听
+         * */
+        maps.removeAll(clientId).forEach(topicName ->{
+            findMatchTopic(topicName).removeListener(clientId);
+        } );
+    }
+
 
     /**
      * 查找匹配的 topic
      */
-    public MQTTTopic findMatchTopic(String topicFilter) {
+    private MQTTTopic findMatchTopic(String topicFilter) {
         return find(topicFilter).data;
     }
 

@@ -24,16 +24,24 @@ public class DefaultContextService implements ContextService{
 
     @Override
     public boolean subscribe(String clientId, String topicFilter) {
-        return false;
+        topicManager.subscribe(clientId,topicFilter);
+        return true;
     }
 
     @Override
     public boolean unSubscribe(String clientId, String topicFilter) {
-        return false;
+
+        topicManager.unSubscribe(clientId,topicFilter);
+        return true;
+    }
+
+    @Override
+    public void clear(String clientId) {
+        topicManager.clear(clientId);
     }
 
     @Override
     public Iterable<String> findSubscriber(String topicFilter) {
-        return null;
+        return topicManager.findSubscriber(topicFilter);
     }
 }
