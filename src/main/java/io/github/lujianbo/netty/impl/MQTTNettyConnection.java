@@ -16,74 +16,73 @@ public class MQTTNettyConnection implements MQTTConnection {
         this.channel = channel;
     }
 
-
     @Override
-    public void onWrite(ConnectProtocol message) {
+    public void write(ConnectProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(ConnackProtocol message) {
+    public void write(ConnackProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(DisconnectProtocol message) {
+    public void write(DisconnectProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(PingreqProtocol message) {
+    public void write(PingreqProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(PingrespProtocol message) {
+    public void write(PingrespProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(PubcompProtocol message) {
+    public void write(PubcompProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(PublishProtocol message) {
+    public void write(PublishProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(PubackProtocol message) {
+    public void write(PubackProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(PubrelProtocol message) {
+    public void write(PubrelProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(PubrecProtocol message) {
+    public void write(PubrecProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(SubackProtocol message) {
+    public void write(SubackProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(SubscribeProtocol message) {
+    public void write(SubscribeProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(UnsubscribeProtocol message) {
+    public void write(UnsubscribeProtocol message) {
         channel.write(message);
     }
 
     @Override
-    public void onWrite(UnsubackProtocol message) {
+    public void write(UnsubackProtocol message) {
         channel.write(message);
     }
 
