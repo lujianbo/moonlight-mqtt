@@ -12,6 +12,11 @@ public class BroadcastMessage {
      * */
     private List<String> clientIds;
 
+
+    private String topicName;
+
+    private int packetIdentifier;
+
     /**
      * 需要广播的内容
      * */
@@ -39,5 +44,14 @@ public class BroadcastMessage {
 
     public void setClientIds(List<String> clientIds) {
         this.clientIds = clientIds;
+    }
+
+
+    public String getTopicName() {
+        return topicName;
+    }
+
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
     }
 }

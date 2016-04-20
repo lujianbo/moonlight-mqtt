@@ -18,7 +18,7 @@ public class DefaultMQTTMessageHandler implements MQTTProtocolHandler {
 
     @Override
     public void onRead(MQTTConnection connection, ConnackProtocol message) {
-
+        //不会出现该数据包
     }
 
     @Override
