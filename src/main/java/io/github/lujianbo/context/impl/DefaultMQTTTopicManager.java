@@ -1,5 +1,7 @@
 package io.github.lujianbo.context.impl;
 
+import io.github.lujianbo.context.manager.TopicManager;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,7 +11,7 @@ import java.util.function.BiConsumer;
  * Topic的默认实现，使用内存来管理可以订阅的频道，和管理频道上的订阅者
  * 默认使用树来实现
  * */
-public class DefaultMQTTTopicManager implements MQTTTopicManager {
+public class DefaultMQTTTopicManager implements TopicManager {
 
     private final TreeNode root;
 

@@ -3,7 +3,7 @@ package io.github.lujianbo.driver.core;
 import io.github.lujianbo.driver.common.PublishMessage;
 
 /**
- * Created by lujianbo on 2016/4/20.
+ * MQTTEngine 上的监听者
  */
 public interface MQTTEngineListener {
 

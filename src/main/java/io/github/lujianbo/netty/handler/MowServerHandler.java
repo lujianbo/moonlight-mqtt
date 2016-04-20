@@ -1,7 +1,7 @@
-package io.github.lujianbo.sentinel.netty.handler;
+package io.github.lujianbo.netty.handler;
 
-import io.github.lujianbo.sentinel.netty.mqtt.MQTTServerCodec;
-import io.github.lujianbo.sentinel.netty.websocket.WebSocketTransportCodec;
+import io.github.lujianbo.netty.mqtt.MQTTServerCodec;
+import io.github.lujianbo.netty.websocket.WebSocketTransportCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;

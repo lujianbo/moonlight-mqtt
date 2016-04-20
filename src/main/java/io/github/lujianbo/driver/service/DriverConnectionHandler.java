@@ -1,6 +1,8 @@
-package io.github.lujianbo.driver.core;
+package io.github.lujianbo.driver.service;
 
-import io.github.lujianbo.driver.service.DriverConnection;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import io.github.lujianbo.driver.core.MQTTEngineListener;
 import io.github.lujianbo.driver.common.AuthMessage;
 import io.github.lujianbo.driver.common.PublishMessage;
 import io.github.lujianbo.driver.common.SubscribeMessage;
@@ -11,19 +13,31 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  *
  */
-public class DriverConnectionHandler implements MQTTEngineListener{
+public class DriverConnectionHandler implements MQTTEngineListener {
 
     /**
      * 存储clientId和 DriverConnection的对应关系，用于下发广播事件
      * */
-    private Map<String,DriverConnection> maps=new ConcurrentHashMap<>();
+    private BiMap<String,DriverConnection> maps= HashBiMap.create();
 
 
     public void onConnection(DriverConnection connection){
 
     }
 
-    public void oauth(AuthMessage authMessage){
+    public void oauth(DriverConnection connection,AuthMessage authMessage){
+
+        /**
+         * 如果验证成功
+         * */
+        maps.put(authMessage.getClientId(),connection);
+
+    }
+
+    /**
+     * 移除该clientId的相关信息
+     * */
+    public void disconnect(String clientId){
 
     }
 

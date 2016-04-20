@@ -1,4 +1,4 @@
-package io.github.lujianbo.sentinel.netty.handler;
+package io.github.lujianbo.netty.handler;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

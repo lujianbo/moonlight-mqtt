@@ -1,6 +1,6 @@
-package io.github.lujianbo.sentinel.netty;
+package io.github.lujianbo.netty;
 
-import io.github.lujianbo.sentinel.netty.handler.HandlerContext;
+import io.github.lujianbo.netty.handler.HandlerContext;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;

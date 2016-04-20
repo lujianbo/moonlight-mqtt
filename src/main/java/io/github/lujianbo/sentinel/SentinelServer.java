@@ -5,9 +5,4 @@ package io.github.lujianbo.sentinel;
  */
 public abstract class SentinelServer {
 
-    /**
-     * 描述了Sentinel的实现
-     * */
-
-
 }

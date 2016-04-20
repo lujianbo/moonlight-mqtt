@@ -1,4 +1,4 @@
-package io.github.lujianbo.sentinel.netty.impl;
+package io.github.lujianbo.netty.impl;
 
 
 import io.github.lujianbo.sentinel.protocol.*;

@@ -1,4 +1,4 @@
-package io.github.lujianbo.sentinel.netty.websocket;
+package io.github.lujianbo.netty.websocket;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

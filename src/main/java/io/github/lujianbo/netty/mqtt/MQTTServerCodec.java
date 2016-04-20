@@ -1,4 +1,4 @@
-package io.github.lujianbo.sentinel.netty.mqtt;
+package io.github.lujianbo.netty.mqtt;
 
 import io.netty.channel.CombinedChannelDuplexHandler;
 

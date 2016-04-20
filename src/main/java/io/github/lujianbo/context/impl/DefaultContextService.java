@@ -1,5 +1,7 @@
 package io.github.lujianbo.context.impl;
 
+import io.github.lujianbo.context.manager.AuthManager;
+import io.github.lujianbo.context.manager.TopicManager;
 import io.github.lujianbo.context.service.ContextService;
 
 /**
@@ -7,20 +9,16 @@ import io.github.lujianbo.context.service.ContextService;
  */
 public class DefaultContextService implements ContextService{
 
-    private final MQTTSessionManager sessionManager;
+    private final TopicManager topicManager;
 
-    private final MQTTTopicManager topicManager;
+    private final AuthManager authManager;
 
     public DefaultContextService() {
-        this.sessionManager = new DefaultMQTTSessionManager();
         this.topicManager = new DefaultMQTTTopicManager();
+        this.authManager=new DefaultAuthManager();
     }
 
-    public MQTTSessionManager getSessionManager() {
-        return sessionManager;
-    }
-
-    public MQTTTopicManager getTopicManager() {
+    public TopicManager getTopicManager() {
         return topicManager;
     }
 

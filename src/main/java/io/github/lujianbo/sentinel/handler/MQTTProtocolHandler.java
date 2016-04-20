@@ -10,7 +10,6 @@ public class MQTTProtocolHandler  {
 
     private Logger logger = LoggerFactory.getLogger(MQTTProtocolHandler.class);
 
-
     private SentinelContext sentinelContext;
 
     public MQTTProtocolHandler(SentinelContext sentinelContext){
@@ -18,7 +17,6 @@ public class MQTTProtocolHandler  {
     }
 
 
-    
     public void onRead(MQTTConnection connection, ConnectProtocol message) {
 
     }
