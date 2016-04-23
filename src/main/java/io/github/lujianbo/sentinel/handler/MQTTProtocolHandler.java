@@ -8,9 +8,6 @@ import io.github.lujianbo.util.ObjectMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class MQTTProtocolHandler  {
 
     private Logger logger = LoggerFactory.getLogger(MQTTProtocolHandler.class);
@@ -73,10 +70,6 @@ public class MQTTProtocolHandler  {
         connection.close();
     }
 
-    
-
-
-    
     public void onRead(MQTTConnection connection, PublishProtocol message) {
         switch (message.getQosLevel()){
             case MQTTProtocol.mostOnce:
@@ -84,8 +77,10 @@ public class MQTTProtocolHandler  {
                 break;
             case MQTTProtocol.leastOnce:
                 connection.write(handlePublishQS1Message(message));
+                break;
             case MQTTProtocol.exactlyOnce:
                 connection.write(handlePublishQS2Message(message));
+                break;
         }
     }
 
