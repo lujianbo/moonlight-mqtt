@@ -18,72 +18,72 @@ public class MQTTNettyConnection implements MQTTConnection {
 
     @Override
     public void write(ConnectProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(ConnackProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(DisconnectProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(PingreqProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(PingrespProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(PubcompProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(PublishProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(PubackProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(PubrelProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(PubrecProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(SubackProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(SubscribeProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(UnsubscribeProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override
     public void write(UnsubackProtocol message) {
-        channel.write(message);
+        channel.writeAndFlush(message);
     }
 
     @Override

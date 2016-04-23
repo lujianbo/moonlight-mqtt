@@ -42,7 +42,7 @@ public abstract class MQTTEngine {
      * */
     public void publish(PublishMessage publishMessage){
         BroadcastMessage broadcastMessage=new BroadcastMessage();
-        contextService.findSubscriber(publishMessage.getTopic()).forEach(s -> {
+        contextService.findSubscriber(publishMessage.getTopic()).forEachRemaining(s -> {
             broadcastMessage.getClientIds().add(s);
         });
         broadcastMessage.setPayload(publishMessage.getPlayLoad());

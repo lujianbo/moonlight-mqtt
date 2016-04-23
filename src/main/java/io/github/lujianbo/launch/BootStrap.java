@@ -4,8 +4,9 @@ import io.github.lujianbo.context.impl.DefaultContextService;
 import io.github.lujianbo.context.service.ContextService;
 import io.github.lujianbo.engine.core.MQTTEngine;
 import io.github.lujianbo.engine.wapper.SingleSentinelEngine;
-import io.github.lujianbo.netty.MowServer;
+import io.github.lujianbo.netty.NettyServer;
 import io.github.lujianbo.netty.handler.HandlerContext;
+import io.github.lujianbo.netty.handler.MQTTServerInitializer;
 import io.github.lujianbo.sentinel.handler.MQTTProtocolHandler;
 
 import javax.net.ssl.SSLException;
@@ -58,14 +59,14 @@ public class BootStrap {
          * 配置主要的处理器
          * */
         context.setHandler(protocolHandler);
+
+        MQTTServerInitializer initializer=new MQTTServerInitializer(context);
         try {
-            MowServer mowServer = new MowServer(context);
+            NettyServer mowServer = new NettyServer(initializer);
             mowServer.start();
         } catch (CertificateException | SSLException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public static void main(String[] args) {
