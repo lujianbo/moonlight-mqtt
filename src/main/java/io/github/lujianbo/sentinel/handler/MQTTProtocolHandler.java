@@ -139,12 +139,15 @@ public class MQTTProtocolHandler  {
 
     
     public void onClose(MQTTConnection connection) {
-
+        /**
+         * 清理连接
+         * */
+        maps.inverse().remove(connection);
     }
 
     
     public void onException(MQTTConnection connection) {
-
+        maps.inverse().remove(connection);
     }
 
 
