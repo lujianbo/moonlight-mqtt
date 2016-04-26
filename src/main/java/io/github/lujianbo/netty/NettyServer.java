@@ -42,12 +42,9 @@ public class NettyServer {
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(initializer);
-            b.bind(PORT).sync().channel().closeFuture().sync();
+            b.bind(PORT).sync();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
         }
     }
 
