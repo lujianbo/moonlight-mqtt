@@ -3,6 +3,7 @@ package io.github.lujianbo.netty;
 import io.github.lujianbo.engine.core.MQTTEngine;
 import io.github.lujianbo.netty.handler.HandlerContext;
 import io.github.lujianbo.netty.handler.MQTTServerInitializer;
+import io.github.lujianbo.netty.handler.MowServerInitializer;
 import io.github.lujianbo.sentinel.SentinelServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
@@ -39,7 +40,7 @@ public class NettyServer extends SentinelServer {
              * */
             context.setHandler(this.mqttProtocolHandler);
 
-            MQTTServerInitializer initializer=new MQTTServerInitializer(context);
+            MowServerInitializer initializer=new MowServerInitializer(context);
 
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)

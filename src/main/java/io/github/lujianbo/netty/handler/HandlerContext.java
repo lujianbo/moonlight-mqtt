@@ -10,7 +10,7 @@ public class HandlerContext {
 
     private MQTTProtocolHandler handler;
 
-    private String path="mqtt";
+    private String path="/mqtt";
 
     private String host="localhost";
 

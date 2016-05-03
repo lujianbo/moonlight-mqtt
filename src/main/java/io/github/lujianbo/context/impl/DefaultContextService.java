@@ -24,8 +24,10 @@ public class DefaultContextService implements ContextService{
         return topicManager;
     }
 
+
+
     @Override
-    public boolean subscribe(String clientId, String topicFilter) {
+    public boolean subscribe(String clientId, String topicFilter, byte qos) {
         topicManager.subscribe(clientId,topicFilter);
         return true;
     }

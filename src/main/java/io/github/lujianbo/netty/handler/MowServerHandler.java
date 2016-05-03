@@ -53,7 +53,7 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
                 && HttpHeaders.Values.WEBSOCKET.equalsIgnoreCase(req.headers().get(HttpHeaders.Names.UPGRADE))
                 ) {
             WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
-                    context.getWebSocketLocation(), null, true, 5 * 1024 * 1024);
+                    context.getWebSocketLocation(), "mqttv3.1", true, 5 * 1024 * 1024);
             WebSocketServerHandshaker handshaker = wsFactory.newHandshaker(req);
             if (handshaker == null) {
                 /**
@@ -80,6 +80,7 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
                          * 添加协议的处理桥接部分
                          * */
                         ctx.pipeline().addLast(new MQTTServerHandler(context.getHandler()));
+                        ctx.pipeline().fireChannelActive();
                     }
                 });
             }
