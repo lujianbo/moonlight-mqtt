@@ -65,7 +65,7 @@ public abstract class MQTTEngine {
         contextService.unSubscribe(clientId,topicName);
     }
 
-    public boolean auth(AuthMessage authMessage){
+    public boolean auth(String clientId,String username,byte[] password){
         return true;
     }
 
