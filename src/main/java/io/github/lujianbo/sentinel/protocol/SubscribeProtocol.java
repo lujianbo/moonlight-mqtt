@@ -32,20 +32,20 @@ public class SubscribeProtocol extends MQTTProtocol {
     }
 
     public class TopicFilterQoSPair {
-        private String topicName;
+        private String topicFilter;
         private byte qos;
 
-        public TopicFilterQoSPair(String topicName, byte qos) {
-            this.topicName = topicName;
+        public TopicFilterQoSPair(String topicFilter, byte qos) {
+            this.topicFilter = topicFilter;
             this.qos = qos;
         }
 
-        public String getTopicName() {
-            return topicName;
+        public String getTopicFilter() {
+            return topicFilter;
         }
 
-        public void setTopicName(String topicName) {
-            this.topicName = topicName;
+        public void setTopicFilter(String topicFilter) {
+            this.topicFilter = topicFilter;
         }
 
         public byte getQos() {

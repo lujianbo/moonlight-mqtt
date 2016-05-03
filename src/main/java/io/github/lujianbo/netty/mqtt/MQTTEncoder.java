@@ -143,7 +143,7 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTProtocol> {
 
             ByteBuf payload = ctx.alloc().buffer();
             for (SubscribeProtocol.TopicFilterQoSPair pair : message.getPairs()) {
-                payload.writeBytes(encodeString(pair.getTopicName()));
+                payload.writeBytes(encodeString(pair.getTopicFilter()));
                 payload.writeByte(pair.getQos());
             }
             out.writeByte(MQTTProtocol.SUBSCRIBE << 4);

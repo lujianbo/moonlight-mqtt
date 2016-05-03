@@ -158,7 +158,7 @@ public class MQTTProtocolHandler {
         subackMessage.setPacketIdentifier(message.getPacketIdentifier());
         String clientId = maps.inverse().get(connection);
         for (SubscribeProtocol.TopicFilterQoSPair pair : message.getPairs()) {
-            int returnCode = engine.subscribe(clientId, pair.getTopicName(), pair.getQos());
+            int returnCode = engine.subscribe(clientId, pair.getTopicFilter(), pair.getQos());
             //根据returnCode 来构建返回值
 
             /**
