@@ -4,6 +4,7 @@ import io.github.lujianbo.context.service.ContextService;
 import io.github.lujianbo.engine.common.*;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,12 +41,15 @@ public abstract class MQTTEngine {
      * 推送信息
      * */
     public void publish(PublishMessage publishMessage){
-        BroadcastMessage broadcastMessage=new BroadcastMessage();
-        contextService.findSubscriber(publishMessage.getTopic()).forEachRemaining(s -> {
-            broadcastMessage.getClientIds().add(s);
-        });
-        broadcastMessage.setPayload(publishMessage.getPlayLoad());
-        this.listeners.forEach(mqttEngineListener -> mqttEngineListener.broadcast(broadcastMessage));
+        Iterator<String> subscribers=contextService.findSubscriber(publishMessage.getTopic());
+        if (subscribers!=null){
+            BroadcastMessage broadcastMessage=new BroadcastMessage();
+            subscribers.forEachRemaining(s -> {
+                broadcastMessage.getClientIds().add(s);
+            });
+            broadcastMessage.setPayload(publishMessage.getPlayLoad());
+            this.listeners.forEach(mqttEngineListener -> mqttEngineListener.broadcast(broadcastMessage));
+        }
     }
 
 

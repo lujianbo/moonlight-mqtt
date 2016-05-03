@@ -32,7 +32,6 @@ public class DefaultMQTTTopicManager implements TopicManager {
             mqttTopic.addListener(clientId);
             maps.put(clientId,mqttTopic.name);
         });
-
         return true;
     }
 
@@ -50,7 +49,12 @@ public class DefaultMQTTTopicManager implements TopicManager {
 
 
     public Iterator<String> findSubscriber(String topicFilter) {
-        return findTopic(topicFilter).listeners.iterator();
+        MQTTTopic topic=findTopic(topicFilter);
+        if (topic==null){
+            return null;
+        }else {
+            return topic.listeners.iterator();
+        }
     }
 
 
@@ -88,7 +92,12 @@ public class DefaultMQTTTopicManager implements TopicManager {
      * 查找指定的Topic
      * */
     private MQTTTopic findTopic(String topicName){
-        return find(topicName).data;
+        TreeNode node=find(topicName);
+        if (node==null){
+            return null;
+        }else {
+            return node.data;
+        }
     }
 
 
@@ -133,7 +142,7 @@ public class DefaultMQTTTopicManager implements TopicManager {
          * 对于任意child进行操作
          */
         public void foreachChild(BiConsumer<String,TreeNode> consumer) {
-            children.forEach(consumer::accept);
+            children.forEach(consumer);
         }
     }
 

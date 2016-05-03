@@ -47,8 +47,8 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
          * 当且仅当uri为指定path的时候,进行websocket通讯的升级
          * */
         if (context.getPath().equals(req.getUri())
-                //CONNECTION 字段的值为 UPGRADE
-                && HttpHeaders.Values.UPGRADE.equalsIgnoreCase(req.headers().get(HttpHeaders.Names.CONNECTION))
+                //CONNECTION 字段的值为 UPGRADE, firefox上存在多个值的情况
+                && req.headers().get(HttpHeaders.Names.CONNECTION).contains(HttpHeaders.Values.UPGRADE)
                 //UPGRADE 字段的值为 WEBSOCKET
                 && HttpHeaders.Values.WEBSOCKET.equalsIgnoreCase(req.headers().get(HttpHeaders.Names.UPGRADE))
                 ) {
