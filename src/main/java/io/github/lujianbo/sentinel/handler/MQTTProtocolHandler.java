@@ -8,37 +8,55 @@ import io.github.lujianbo.util.ObjectMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 负责处理MQTT协议相关的内容,作为Mqtt的协议前置处理，其主要目的是将MQTT协议抽象到
+ * 一个通用的发布订阅服务上
+ * */
 public class MQTTProtocolHandler  {
 
     private Logger logger = LoggerFactory.getLogger(MQTTProtocolHandler.class);
 
     /**
-     * 描述了clientId 和 MQTTConnection的关系
+     * 描述了clientId 和 MQTTConnection的关系,
+     *
      * */
     private HashBiMap<String,MQTTConnection> maps= HashBiMap.create();
 
+
+    /**
+     * 提供通用 发布订阅服务的引擎
+     * */
     private MQTTEngine engine;
 
 
     public MQTTProtocolHandler(MQTTEngine engine){
         this.engine=engine;
+
+        /**
+         * 向引擎中注册相关的处理方式
+         * */
         engine.addListener(message -> {
             /**
              * 构建协议
              * */
             PublishProtocol publishProtocol=new PublishProtocol();
+
             /**
              * 循环发送
              * */
             for (String clientId:message.getClientIds()){
-                if (maps.get(clientId)!=null){
-                    maps.get(clientId).write(publishProtocol);
+                MQTTConnection connection=maps.get(clientId);
+                if (connection!=null){
+                    connection.write(publishProtocol);
                 }
             }
         });
     }
 
 
+    /**
+     * 处理MQTT的连接和登陆部分的代码
+     * */
     public void onRead(MQTTConnection connection, ConnectProtocol message) {
 
         /**
@@ -50,9 +68,12 @@ public class MQTTProtocolHandler  {
 
     }
 
-    
+    /**
+     * 登陆信息的返回，在服务端不会出现该数据包
+     * */
     public void onRead(MQTTConnection connection, ConnackProtocol message) {
         //不会出现该数据包
+        connection.close();
     }
 
     
@@ -60,7 +81,9 @@ public class MQTTProtocolHandler  {
         engine.disconnect(maps.inverse().get(connection));
     }
 
-    
+    /**
+     * 心跳协议的实现
+     * */
     public void onRead(MQTTConnection connection, PingreqProtocol message) {
         connection.write(new PingrespProtocol());
     }
@@ -101,11 +124,16 @@ public class MQTTProtocolHandler  {
 
     }
 
+    /**
+     * 在服务器端不会接收到 SubackProtocol
+     * */
     public void onRead(MQTTConnection connection, SubackProtocol message) {
         connection.close();
     }
 
-    
+    /**
+     * 订阅相关的消息服务
+     * */
     public void onRead(MQTTConnection connection, SubscribeProtocol message) {
         debug(message);
         SubackProtocol subackMessage = new SubackProtocol();
@@ -124,7 +152,9 @@ public class MQTTProtocolHandler  {
         connection.write(subackMessage);
     }
 
-    
+    /**
+     * 取消订阅的操作
+     * */
     public void onRead(MQTTConnection connection, UnsubscribeProtocol message) {
         debug(message);
         UnsubackProtocol unsubackMessage = new UnsubackProtocol();

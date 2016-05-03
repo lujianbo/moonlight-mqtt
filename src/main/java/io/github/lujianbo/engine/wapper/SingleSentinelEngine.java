@@ -4,7 +4,7 @@ import io.github.lujianbo.context.service.ContextService;
 import io.github.lujianbo.engine.core.MQTTEngine;
 
 /**
- * Created by lujianbo on 2016/4/20.
+ * Local模式的Sentinel
  */
 public class SingleSentinelEngine extends MQTTEngine {
 
