@@ -34,6 +34,12 @@ public class PublishMessage {
         this.playLoad = playLoad;
     }
 
+    public PublishMessage(String sender, String topic,byte[] playLoad) {
+        this.sender = sender;
+        this.topic = topic;
+        this.playLoad = playLoad;
+    }
+
     public int getPacketIdentifier() {
         return packetIdentifier;
     }

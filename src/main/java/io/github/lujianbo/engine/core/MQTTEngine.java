@@ -1,6 +1,5 @@
 package io.github.lujianbo.engine.core;
 
-
 import io.github.lujianbo.context.service.ContextService;
 import io.github.lujianbo.engine.common.*;
 
@@ -49,18 +48,21 @@ public abstract class MQTTEngine {
         this.listeners.forEach(mqttEngineListener -> mqttEngineListener.broadcast(broadcastMessage));
     }
 
+
     /**
-     * 修改订阅
+     * 为clientId 订阅topicName的信息
+     * 返回订阅的结果
      * */
-    public void subscribe(SubscribeMessage subscribeMessage){
-        contextService.subscribe(subscribeMessage.clientId,subscribeMessage.getTopicName());
+    public byte subscribe(String clientId,String topicName,byte qos){
+        contextService.subscribe(clientId,topicName,qos);
+        return 0;
     }
 
     /**
-     * 修改订阅
+     * 不管成功失败，都没有返回值
      * */
-    public void unSubscribe(UnSubscribeMessage unSubscribeMessage){
-        contextService.unSubscribe(unSubscribeMessage.clientId,unSubscribeMessage.getTopicName());
+    public void unSubscribe(String clientId,String topicName){
+        contextService.unSubscribe(clientId,topicName);
     }
 
     public boolean auth(AuthMessage authMessage){

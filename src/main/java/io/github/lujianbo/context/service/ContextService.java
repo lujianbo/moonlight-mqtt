@@ -11,7 +11,7 @@ public interface ContextService {
     /**
      * 订阅
      * */
-    public boolean subscribe(String clientId,String topicFilter);
+    public boolean subscribe(String clientId,String topicFilter,byte qos);
 
     /**
      * 反订阅
