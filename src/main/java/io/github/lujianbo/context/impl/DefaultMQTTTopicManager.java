@@ -1,10 +1,9 @@
 package io.github.lujianbo.context.impl;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
 import io.github.lujianbo.context.manager.TopicManager;
+import io.netty.util.internal.StringUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,12 +15,19 @@ import java.util.function.BiConsumer;
  * */
 public class DefaultMQTTTopicManager implements TopicManager {
 
-    private final TreeNode root;
+    /**
+     * 根节点名字为空
+     * */
+    private final TreeNode root=new TreeNode(null,new MQTTTopic(""));
 
-    private Multimap<String,String> maps= ArrayListMultimap.create();
+    /**
+     * 记录clientId已经订阅的Topic
+     * */
+    private Multimap<String,MQTTTopic> maps= ArrayListMultimap.create();
+
 
     public DefaultMQTTTopicManager() {
-        root = new TreeNode();
+
     }
 
     /**
@@ -29,8 +35,7 @@ public class DefaultMQTTTopicManager implements TopicManager {
      * */
     public boolean subscribe(String clientId,String topicFilter){
         findMatchTopic(topicFilter).forEachRemaining(mqttTopic -> {
-            mqttTopic.addListener(clientId);
-            maps.put(clientId,mqttTopic.name);
+            recordSubscribe(clientId,mqttTopic);
         });
         return true;
     }
@@ -40,11 +45,21 @@ public class DefaultMQTTTopicManager implements TopicManager {
      * */
     public boolean unSubscribe(String clientId,String topicFilter){
         findMatchTopic(topicFilter).forEachRemaining(mqttTopic -> {
-            mqttTopic.removeListener(clientId);
-            maps.remove(clientId,mqttTopic.name);
+            removeSubscribe(clientId,mqttTopic);
         });
 
         return true;
+    }
+
+
+    private void recordSubscribe(String clientId,MQTTTopic mqttTopic){
+        mqttTopic.addListener(clientId);
+        maps.put(clientId,mqttTopic);
+    }
+
+    private void removeSubscribe(String clientId,MQTTTopic mqttTopic){
+        mqttTopic.removeListener(clientId);
+        maps.remove(clientId,mqttTopic);
     }
 
 
@@ -63,7 +78,7 @@ public class DefaultMQTTTopicManager implements TopicManager {
         /**
          * 移除监听
          * */
-        maps.removeAll(clientId).forEach(topicName -> findTopic(topicName).removeListener(clientId));
+        maps.removeAll(clientId).forEach(topic -> topic.removeListener(clientId));
     }
 
 
@@ -71,6 +86,56 @@ public class DefaultMQTTTopicManager implements TopicManager {
      * 查找正则匹配的 topic
      */
     private Iterator<MQTTTopic> findMatchTopic(String topicFilter) {
+
+        /**
+         * # 只能出现在最后的部分
+         * + 只能出现在中间部分
+         *
+         * # 代表订阅以该节点为根节点的所有子节点
+         *
+         * + 代表的是某个层级上的通配符 即任意的意思
+         *
+         * $ 只能在第一个位置出现,代表特殊的信息
+         * */
+
+        String[] tokens= StringUtil.split(topicFilter,'/');
+        int length=tokens.length;
+        int last=length-1;
+        /**
+         * 合法性检验
+         * */
+        for (int i=0;i<length;i++){
+            //# 不在最后一个位置
+            String token=tokens[i];
+            if (token.contains("#")){
+                //# 和其他字符混在一起
+                if (token.length()>1){
+                    break;
+                }
+                //# 不在最后一个位置
+                if (i!=last){
+                    break;
+                }
+
+            }
+            // + 在最后位置
+            if (tokens[i].contains("+")){
+
+                // + 和其他符号混用
+                if (token.length()>1){
+                    break;
+                }
+                // + 在最后一个位置
+                if (i==last){
+                    break;
+                }
+            }
+
+        }
+
+
+
+
         return new Iterator<MQTTTopic>() {
 
             private int max=1;
@@ -104,18 +169,34 @@ public class DefaultMQTTTopicManager implements TopicManager {
     /**
      * 树结点
      */
-    public static class TreeNode {
+    public class TreeNode {
         private TreeNode parent = null;
         private MQTTTopic data;
-        private Map<String, TreeNode> children = new ConcurrentHashMap<>();
+        private ConcurrentHashMap<String, TreeNode> children = new ConcurrentHashMap<>();
 
-        public TreeNode(TreeNode parent, MQTTTopic data) {
+        private TreeNode(TreeNode parent, MQTTTopic data) {
             this.parent = parent;
             this.data = data;
         }
 
         public TreeNode() {
 
+        }
+
+        /**
+         * 当子节点不存在的时候就创造
+         * 返回一个必然存在的子节点
+         * */
+        public TreeNode createChildIfNotExit(String name){
+            TreeNode child=children.get(name);
+            if (child==null){
+                child=new TreeNode(this,new MQTTTopic(name));
+                TreeNode returnNode=children.putIfAbsent(name,child);
+                if (returnNode!=null){
+                    child=returnNode;
+                }
+            }
+            return child;
         }
 
         public TreeNode getParent() {
@@ -160,7 +241,7 @@ public class DefaultMQTTTopicManager implements TopicManager {
     }
 
 
-    class MQTTTopic {
+    public class MQTTTopic {
 
         private final String name;
 
