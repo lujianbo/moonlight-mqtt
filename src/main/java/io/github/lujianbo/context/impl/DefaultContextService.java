@@ -6,9 +6,6 @@ import io.github.lujianbo.context.service.ContextService;
 
 import java.util.Iterator;
 
-/**
- * Created by lujianbo on 2016/4/19.
- */
 public class DefaultContextService implements ContextService {
 
     private final TopicManager topicManager;
@@ -27,15 +24,12 @@ public class DefaultContextService implements ContextService {
 
     @Override
     public boolean subscribe(String clientId, String topicFilter, byte qos) {
-        topicManager.subscribe(clientId, topicFilter);
-        return true;
+        return topicManager.subscribe(clientId, topicFilter);
     }
 
     @Override
     public boolean unSubscribe(String clientId, String topicFilter) {
-
-        topicManager.unSubscribe(clientId, topicFilter);
-        return true;
+        return topicManager.unSubscribe(clientId, topicFilter);
     }
 
     @Override
