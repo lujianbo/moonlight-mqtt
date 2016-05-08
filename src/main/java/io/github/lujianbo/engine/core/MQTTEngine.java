@@ -14,11 +14,13 @@ public abstract class MQTTEngine {
     private final ContextService contextService;
 
     /**
-     * 回调接口集合
+     * MQTT engine上的监听者
      */
     private Set<MQTTEngineListener> listeners = new HashSet<>();
 
-
+    /**
+     * 执行广播任务的线程池
+     * */
     private ExecutorService pool = Executors.newCachedThreadPool(runnable -> {
         Thread thread = new Thread();
         thread.setDaemon(true);
@@ -41,15 +43,17 @@ public abstract class MQTTEngine {
      * 推送信息
      */
     public void publish(PublishMessage publishMessage) {
-        Iterator<String> subscribers = contextService.findSubscriber(publishMessage.getTopic());
-        if (subscribers != null) {
-            BroadcastMessage broadcastMessage = new BroadcastMessage();
-            subscribers.forEachRemaining(s -> {
-                broadcastMessage.getClientIds().add(s);
-            });
-            broadcastMessage.setPayload(publishMessage.getPlayLoad());
-            this.listeners.forEach(mqttEngineListener -> mqttEngineListener.broadcast(broadcastMessage));
-        }
+        pool.submit(() -> {
+            Iterator<String> subscribers = contextService.findSubscriber(publishMessage.getTopic());
+            if (subscribers != null) {
+                BroadcastMessage broadcastMessage = new BroadcastMessage();
+                subscribers.forEachRemaining(s -> {
+                    broadcastMessage.getClientIds().add(s);
+                });
+                broadcastMessage.setPayload(publishMessage.getPlayLoad());
+                this.listeners.forEach(mqttEngineListener -> mqttEngineListener.broadcast(broadcastMessage));
+            }
+        });
     }
 
 

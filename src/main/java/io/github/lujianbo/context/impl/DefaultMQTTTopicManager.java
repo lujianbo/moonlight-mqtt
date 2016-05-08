@@ -3,11 +3,12 @@ package io.github.lujianbo.context.impl;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import io.github.lujianbo.context.manager.TopicManager;
-import io.netty.util.internal.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Topic的默认实现，使用内存来管理可以订阅的频道，和管理频道上的订阅者
@@ -18,7 +19,7 @@ public class DefaultMQTTTopicManager implements TopicManager {
     /**
      * 根节点名字为空
      */
-    private final TopicNode root = new TopicNode(null, "");
+    private final TopicNode root ;
 
     /**
      * 记录clientId已经订阅的Topic
@@ -26,29 +27,42 @@ public class DefaultMQTTTopicManager implements TopicManager {
     private Multimap<String, TopicNode> maps = ArrayListMultimap.create();
 
 
-    public DefaultMQTTTopicManager() {
-
+    public DefaultMQTTTopicManager(String topicName) {
+        this.root=new TopicNode(null, topicName);
     }
 
     /**
      * 添加订阅
      */
     public boolean subscribe(String clientId, String topicFilter) {
-        findMatchTopic(topicFilter).forEachRemaining(mqttTopic -> {
-            recordSubscribe(clientId, mqttTopic);
-        });
-        return true;
+        return forEachTopic(topicFilter,topicNode -> recordSubscribe(clientId, topicNode));
     }
 
     /**
      * 取消订阅
      */
     public boolean unSubscribe(String clientId, String topicFilter) {
-        findMatchTopic(topicFilter).forEachRemaining(mqttTopic -> {
-            removeSubscribe(clientId, mqttTopic);
-        });
+        return forEachTopic(topicFilter,topicNode -> removeSubscribe(clientId, topicNode));
+    }
 
-        return true;
+    /**
+     * 查找符合的topicFilter 进行 action 操作
+     * @return true 如果找到了至少一个Topic,false 如果一个topic 都找不到
+     * */
+    private boolean forEachTopic(String topicFilter,Consumer<TopicNode> action){
+        /**
+         * 查找符合条件的Topic
+         * */
+        Iterator<TopicNode> iterator=findMatchTopic(topicFilter);
+        /**
+         * 查找到则成功,找不到则失败
+         * */
+        if (iterator==null|| !iterator.hasNext()){
+            return false;
+        }else {
+            iterator.forEachRemaining(action);
+            return true;
+        }
     }
 
     /**
@@ -58,13 +72,17 @@ public class DefaultMQTTTopicManager implements TopicManager {
         mqttTopic.addListener(clientId);
         maps.put(clientId, mqttTopic);
     }
-
+    /**
+     * 移除订阅信息
+     * */
     private void removeSubscribe(String clientId, TopicNode mqttTopic) {
         mqttTopic.removeListener(clientId);
         maps.remove(clientId, mqttTopic);
     }
 
-
+    /**
+     * 返回某个topic上的订阅者
+     * */
     public Iterator<String> findSubscriber(String topicFilter) {
         TopicNode topic = find(topicFilter);
         if (topic == null) {
@@ -88,8 +106,8 @@ public class DefaultMQTTTopicManager implements TopicManager {
      * 查找正则匹配的 topic
      */
     private Iterator<TopicNode> findMatchTopic(String topicFilter) {
-
         /**
+         * 通配符只能出现一次
          * # 只能出现在最后的部分
          * + 只能出现在中间部分
          *
@@ -99,8 +117,7 @@ public class DefaultMQTTTopicManager implements TopicManager {
          *
          * $ 只能在第一个位置出现,代表特殊的信息
          * */
-
-        String[] tokens = StringUtil.split(topicFilter, '/');
+        String[] tokens = StringUtils.split(topicFilter, '/');
         int length = tokens.length;
         int last = length - 1;
         /**
@@ -155,6 +172,7 @@ public class DefaultMQTTTopicManager implements TopicManager {
      * 树结点
      */
     public class TopicNode {
+
         private TopicNode parent = null;
 
         private final String name;
@@ -183,6 +201,10 @@ public class DefaultMQTTTopicManager implements TopicManager {
 
         public HashSet<String> getListeners() {
             return listeners;
+        }
+
+        public String getName() {
+            return name;
         }
 
         /**
@@ -219,6 +241,22 @@ public class DefaultMQTTTopicManager implements TopicManager {
          */
         public void foreachChild(BiConsumer<String, TopicNode> consumer) {
             children.forEach(consumer);
+        }
+
+        /**
+         * 返回该结点的全称名字
+         * */
+        public String getAbsoluteName(){
+
+            StringBuilder sb=new StringBuilder(this.getName());
+            //从该结点进行递归到父节点在进行输出
+            TopicNode myParent=this.parent;
+            while (myParent!=null){
+                sb.insert(0,"/");
+                sb.insert(0,myParent.getName());
+                myParent=myParent.parent;
+            }
+            return sb.toString();
         }
     }
 
