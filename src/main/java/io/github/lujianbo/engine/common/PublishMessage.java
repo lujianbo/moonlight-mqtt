@@ -7,20 +7,20 @@ public class PublishMessage {
 
     /**
      * 发送者
-     * */
+     */
     public String sender;
 
     /**
      * 目标topic
-     * */
-    public String  topic;
+     */
+    public String topic;
 
 
     public int packetIdentifier;
 
     /**
      * 消息内容
-     * */
+     */
     public byte[] playLoad;
 
 
@@ -34,7 +34,7 @@ public class PublishMessage {
         this.playLoad = playLoad;
     }
 
-    public PublishMessage(String sender, String topic,byte[] playLoad) {
+    public PublishMessage(String sender, String topic, byte[] playLoad) {
         this.sender = sender;
         this.topic = topic;
         this.playLoad = playLoad;

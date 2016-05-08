@@ -6,5 +6,4 @@ package io.github.lujianbo.sentinel.protocol.util;
 public class ProtocolFactory {
 
 
-
 }

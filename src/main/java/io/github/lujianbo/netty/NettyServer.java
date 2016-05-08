@@ -24,23 +24,21 @@ public class NettyServer extends SentinelServer {
 
     static final int PORT = Integer.parseInt(System.getProperty("port", SSL ? "8443" : "8080"));
 
-
     public NettyServer(MQTTEngine engine) {
         super(engine);
     }
 
-
     public void start() {
         try {
 
-            HandlerContext context=new HandlerContext();
+            HandlerContext context = new HandlerContext();
 
             /**
              * 配置主要的处理器
              * */
             context.setHandler(this.mqttProtocolHandler);
 
-            MowServerInitializer initializer=new MowServerInitializer(context);
+            MowServerInitializer initializer = new MowServerInitializer(context);
 
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)

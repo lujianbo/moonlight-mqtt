@@ -9,7 +9,7 @@ import java.util.Iterator;
 /**
  * Created by lujianbo on 2016/4/19.
  */
-public class DefaultContextService implements ContextService{
+public class DefaultContextService implements ContextService {
 
     private final TopicManager topicManager;
 
@@ -17,7 +17,7 @@ public class DefaultContextService implements ContextService{
 
     public DefaultContextService() {
         this.topicManager = new DefaultMQTTTopicManager();
-        this.authManager=new DefaultAuthManager();
+        this.authManager = new DefaultAuthManager();
     }
 
     public TopicManager getTopicManager() {
@@ -25,17 +25,16 @@ public class DefaultContextService implements ContextService{
     }
 
 
-
     @Override
     public boolean subscribe(String clientId, String topicFilter, byte qos) {
-        topicManager.subscribe(clientId,topicFilter);
+        topicManager.subscribe(clientId, topicFilter);
         return true;
     }
 
     @Override
     public boolean unSubscribe(String clientId, String topicFilter) {
 
-        topicManager.unSubscribe(clientId,topicFilter);
+        topicManager.unSubscribe(clientId, topicFilter);
         return true;
     }
 

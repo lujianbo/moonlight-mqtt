@@ -6,5 +6,4 @@ package io.github.lujianbo.context.manager;
 public interface AuthManager {
 
 
-
 }

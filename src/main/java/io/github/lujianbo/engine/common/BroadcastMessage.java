@@ -9,7 +9,7 @@ public class BroadcastMessage {
 
     /**
      * 需要广播的clientId
-     * */
+     */
     private List<String> clientIds;
 
 
@@ -19,7 +19,7 @@ public class BroadcastMessage {
 
     /**
      * 需要广播的内容
-     * */
+     */
     private byte[] payload;
 
     public BroadcastMessage(List<String> clientIds, byte[] payload) {

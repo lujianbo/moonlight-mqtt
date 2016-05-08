@@ -62,7 +62,7 @@ public class MQTTProtocolHandler {
          * 进行登录验证后就可以了
          * */
         maps.put(message.getClientId(), connection);
-        byte returnCode=ConnackProtocol.CONNECTION_ACCEPTED;
+        byte returnCode = ConnackProtocol.CONNECTION_ACCEPTED;
 
         /**
          * 构建返回数据包
