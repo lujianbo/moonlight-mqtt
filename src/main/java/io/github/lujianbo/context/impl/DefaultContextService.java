@@ -16,7 +16,7 @@ public class DefaultContextService implements ContextService {
     private final AuthManager authManager;
 
     public DefaultContextService() {
-        this.topicManager = new DefaultMQTTTopicManager();
+        this.topicManager = new DefaultMQTTTopicManager("testTopic");
         this.authManager = new DefaultAuthManager();
     }
 
