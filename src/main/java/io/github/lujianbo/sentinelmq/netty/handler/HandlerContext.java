@@ -14,6 +14,8 @@ public class HandlerContext {
 
     private String host = "localhost";
 
+    private int port=8080;
+
     private SslContext sslCtx;
 
     public String getWebSocketLocation() {
@@ -55,5 +57,13 @@ public class HandlerContext {
 
     public void setHandler(MQTTProtocolHandler handler) {
         this.handler = handler;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

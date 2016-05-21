@@ -102,8 +102,9 @@ public class DefaultMQTTTopicManager {
 
     private void findMatch(TopicNode parent, String[] tokens, int i, Consumer<TopicNode> action) {
         //到token的结尾则进行处理
-        if (i == tokens.length - 1) {
+        if (i == tokens.length) {
             action.accept(parent);
+            return;
         }
         String token = tokens[i];
         if ("#".equals(token)) {
@@ -195,7 +196,6 @@ public class DefaultMQTTTopicManager {
          * 返回该结点的全称名字
          */
         public String getAbsoluteName() {
-
             StringBuilder sb = new StringBuilder(this.getName());
             //从该结点进行递归到父节点在进行输出
             TopicNode myParent = this.parent;

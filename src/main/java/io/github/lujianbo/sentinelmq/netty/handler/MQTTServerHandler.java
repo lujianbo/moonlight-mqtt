@@ -105,7 +105,7 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol>
         }
     }
 
-     private class MQTTNettyConnection implements MQTTConnection {
+     private class MQTTNettyConnection extends MQTTConnection {
 
         private Channel channel;
 

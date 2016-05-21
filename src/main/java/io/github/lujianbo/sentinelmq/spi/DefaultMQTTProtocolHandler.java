@@ -28,7 +28,7 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
     /**
      * topic的结点管理,用于向topic的结点添加和查找其中的订阅者
      * */
-    private DefaultMQTTTopicManager topicManager=new DefaultMQTTTopicManager("");
+    private DefaultMQTTTopicManager topicManager;
 
     /**
      * 用于执行耗时的异步任务
@@ -41,7 +41,11 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
 
 
     public DefaultMQTTProtocolHandler() {
+        this.topicManager=new DefaultMQTTTopicManager("");
+    }
 
+    public DefaultMQTTProtocolHandler(DefaultMQTTTopicManager topicManager) {
+        this.topicManager=topicManager;
     }
 
     /**
@@ -49,9 +53,12 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
      */
     public void onRead(MQTTConnection connection, ConnectProtocol message) {
 
+        debug(message);
         maps.put(message.getClientId(), connection);
-        byte returnCode = ConnackProtocol.CONNECTION_ACCEPTED;
+        connection.setClientId(message.getClientId());
 
+
+        byte returnCode = ConnackProtocol.CONNECTION_ACCEPTED;
         ConnackProtocol connackProtocol = new ConnackProtocol();
         connackProtocol.setReturnCode(returnCode);
         connackProtocol.setSessionPresentFlag(false);
@@ -84,8 +91,6 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
 
     public void onRead(MQTTConnection connection, PublishProtocol message) {
         debug(message);
-
-        String clientId = connection.getClientId();
         /**
          * 根据消息类型分别处理
          * */
