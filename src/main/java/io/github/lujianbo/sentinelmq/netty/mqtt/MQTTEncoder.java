@@ -97,13 +97,16 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTProtocol> {
 
             //variableHeader
             variableHeader.writeBytes(encodeString(message.getTopicName()));//topic
-            variableHeader.writeShort(message.getPacketIdentifier());//packet id
+            //packet id
+            if(message.getQosLevel()!=0){
+                variableHeader.writeShort(message.getPacketIdentifier());
+            }
 
             //write
-            out.writeByte(MQTTProtocol.PUBLISH << 4 | flags);
-            out.writeBytes(encodeRemainingLength(variableHeader.readableBytes() + message.getPayload().length));
-            out.writeBytes(variableHeader);
-            out.writeBytes(message.getPayload());
+            out.writeByte(MQTTProtocol.PUBLISH << 4 | flags);//协议部分
+            out.writeBytes(encodeRemainingLength(variableHeader.readableBytes() + message.getPayload().length));//长度部分
+            out.writeBytes(variableHeader);//头部部分
+            out.writeBytes(message.getPayload());//
 
             //release
             variableHeader.release();

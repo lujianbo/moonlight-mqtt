@@ -1,11 +1,16 @@
 package io.github.lujianbo.sentinelmq.netty.handler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.lujianbo.sentinelmq.common.protocol.*;
 import io.github.lujianbo.sentinelmq.common.handler.MQTTConnection;
 import io.github.lujianbo.sentinelmq.common.handler.MQTTProtocolHandler;
+import io.github.lujianbo.sentinelmq.spi.DefaultMQTTProtocolHandler;
+import io.github.lujianbo.sentinelmq.util.ObjectMapperUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -107,6 +112,8 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol>
 
      private class MQTTNettyConnection extends MQTTConnection {
 
+         private Logger logger = LoggerFactory.getLogger(MQTTNettyConnection.class);
+
         private Channel channel;
 
         MQTTNettyConnection(Channel channel) {
@@ -145,6 +152,7 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol>
 
         @Override
         public void write(PublishProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
@@ -192,6 +200,14 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol>
         public void onException() {
             channel.close();
         }
+
+         private void debug(Object message) {
+             try {
+                 logger.debug(ObjectMapperUtil.objectMapper.writeValueAsString(message));
+             } catch (JsonProcessingException e) {
+                 e.printStackTrace();
+             }
+         }
     }
 
 }
