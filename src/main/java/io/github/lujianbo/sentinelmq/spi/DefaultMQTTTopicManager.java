@@ -4,7 +4,9 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -31,11 +33,11 @@ public class DefaultMQTTTopicManager {
     }
 
     //创建topic
-    public void createTopic(String topicFilter){
-        TopicNode current=root;
+    public void createTopic(String topicFilter) {
+        TopicNode current = root;
         String[] tokens = StringUtils.split(topicFilter, '/');
-        for (int i=0;i<tokens.length;i++){
-            current=current.createChildIfNotExit(tokens[i]);
+        for (int i = 0; i < tokens.length; i++) {
+            current = current.createChildIfNotExit(tokens[i]);
         }
     }
 
@@ -85,7 +87,7 @@ public class DefaultMQTTTopicManager {
 
     /**
      * 移除监听
-     * */
+     */
     public void clear(String clientId) {
         maps.removeAll(clientId).forEach(topic -> topic.removeListener(clientId));
     }

@@ -12,12 +12,12 @@ public abstract class MQTTConnection {
 
     /**
      * 存储clientId
-     * */
+     */
     protected String clientId;
     /**
      * 存储一些属性
-     * */
-    protected ConcurrentHashMap<String,String> Attributes=new ConcurrentHashMap<>();
+     */
+    protected ConcurrentHashMap<String, String> Attributes = new ConcurrentHashMap<>();
 
     public String getClientId() {
         return clientId;

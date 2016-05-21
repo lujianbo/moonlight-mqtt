@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
  * Mqtt协议处理的默认实现
  * 通过实现topic的管理来完成
  */
-public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
+public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler {
 
 
     private Logger logger = LoggerFactory.getLogger(DefaultMQTTProtocolHandler.class);
@@ -29,12 +29,12 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
 
     /**
      * topic的结点管理,用于向topic的结点添加和查找其中的订阅者
-     * */
+     */
     private DefaultMQTTTopicManager topicManager;
 
     /**
      * 用于执行耗时的异步任务
-     * */
+     */
     private ExecutorService pool = Executors.newCachedThreadPool(runnable -> {
         Thread thread = new Thread();
         thread.setDaemon(true);
@@ -43,11 +43,11 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
 
 
     public DefaultMQTTProtocolHandler() {
-        this.topicManager=new DefaultMQTTTopicManager("");
+        this.topicManager = new DefaultMQTTTopicManager("");
     }
 
     public DefaultMQTTProtocolHandler(DefaultMQTTTopicManager topicManager) {
-        this.topicManager=topicManager;
+        this.topicManager = topicManager;
     }
 
     /**
@@ -110,33 +110,33 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
 
     /**
      * 收到qos1的返回
-     * */
+     */
     public void onRead(MQTTConnection connection, PubackProtocol message) {
         //可以删除信息
     }
 
     /**
      * 已经完成
-     * */
+     */
     public void onRead(MQTTConnection connection, PubcompProtocol message) {
         //可以删除信息
     }
 
     /**
      * 已经释放
-     * */
+     */
     public void onRead(MQTTConnection connection, PubrelProtocol message) {
-        PubcompProtocol pubcompProtocol=new PubcompProtocol();
+        PubcompProtocol pubcompProtocol = new PubcompProtocol();
         pubcompProtocol.setPacketIdentifier(message.getPacketIdentifier());
         connection.write(pubcompProtocol);
     }
 
     /**
      * 已经收到
-     * */
+     */
     public void onRead(MQTTConnection connection, PubrecProtocol message) {
         //发送已经释放的消息
-        PubrelProtocol pubrelProtocol=new PubrelProtocol();
+        PubrelProtocol pubrelProtocol = new PubrelProtocol();
         pubrelProtocol.setPacketIdentifier(message.getPacketIdentifier());
         connection.write(pubrelProtocol);
     }
@@ -158,7 +158,7 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
         String clientId = connection.getClientId();
         for (SubscribeProtocol.TopicFilterQoSPair pair : message.getPairs()) {
             //订阅topic
-            this.topicManager.subscribe(clientId,pair.getTopicFilter());
+            this.topicManager.subscribe(clientId, pair.getTopicFilter());
             /**
              * 这里的演示是假的
              * */
@@ -207,9 +207,9 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
      */
     private void handlePublishQS0Message(PublishProtocol message) {
         //找到所有订阅者进行push
-        Iterator<String> iterator=this.topicManager.findSubscriber(message.getTopicName());
-        if (iterator!=null){
-            iterator .forEachRemaining(clientId -> maps.get(clientId).write(message));
+        Iterator<String> iterator = this.topicManager.findSubscriber(message.getTopicName());
+        if (iterator != null) {
+            iterator.forEachRemaining(clientId -> maps.get(clientId).write(message));
         }
 
     }
@@ -233,19 +233,9 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
         this.topicManager.findSubscriber(message.getTopicName()).forEachRemaining(clientId -> {
             maps.get(clientId).write(message);
         });
-
         PubrecProtocol pubrecMessage = new PubrecProtocol();
         pubrecMessage.setPacketIdentifier(message.getPacketIdentifier());
         return pubrecMessage;
-    }
-
-    /**
-     * qs2相关的处理
-     */
-    private PubcompProtocol handlePubrelMessage(PubrelProtocol message) {
-        PubcompProtocol pubcompMessage = new PubcompProtocol();
-        pubcompMessage.setPacketIdentifier(message.getPacketIdentifier());
-        return pubcompMessage;
     }
 
     private void debug(Object message) {

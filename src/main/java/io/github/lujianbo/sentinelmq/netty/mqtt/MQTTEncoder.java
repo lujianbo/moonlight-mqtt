@@ -98,7 +98,7 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTProtocol> {
             //variableHeader
             variableHeader.writeBytes(encodeString(message.getTopicName()));//topic
             //packet id
-            if(message.getQosLevel()!=0){
+            if (message.getQosLevel() != 0) {
                 variableHeader.writeShort(message.getPacketIdentifier());
             }
 

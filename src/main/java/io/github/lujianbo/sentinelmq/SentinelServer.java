@@ -10,27 +10,27 @@ import io.github.lujianbo.sentinelmq.spi.DefaultMQTTTopicManager;
  */
 public class SentinelServer {
 
-    private NettyServer nettyServer=new NettyServer();
+    private NettyServer nettyServer = new NettyServer();
 
     private HandlerContext context;
 
     public SentinelServer() {
 
-        DefaultMQTTTopicManager topicManager=new DefaultMQTTTopicManager("");
+        DefaultMQTTTopicManager topicManager = new DefaultMQTTTopicManager("");
         topicManager.createTopic("topic/test/mytopic");
 
-        context=new HandlerContext();
+        context = new HandlerContext();
         context.setHost("localhost");
         context.setPort(8080);
         //配置handler
         context.setHandler(new DefaultMQTTProtocolHandler(topicManager));
     }
 
-    public void start(){
+    public void start() {
         nettyServer.start(context);
     }
 
-    public void stop(){
+    public void stop() {
         nettyServer.stop();
     }
 
@@ -39,7 +39,7 @@ public class SentinelServer {
     }
 
     public static void main(String[] args) {
-        SentinelServer sentinelServer=new SentinelServer();
+        SentinelServer sentinelServer = new SentinelServer();
         sentinelServer.start();
     }
 

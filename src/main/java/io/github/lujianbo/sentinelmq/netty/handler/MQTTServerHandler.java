@@ -1,9 +1,9 @@
 package io.github.lujianbo.sentinelmq.netty.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.lujianbo.sentinelmq.common.protocol.*;
 import io.github.lujianbo.sentinelmq.common.handler.MQTTConnection;
 import io.github.lujianbo.sentinelmq.common.handler.MQTTProtocolHandler;
+import io.github.lujianbo.sentinelmq.common.protocol.*;
 import io.github.lujianbo.sentinelmq.util.ObjectMapperUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -112,7 +112,7 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol>
         }
     }
 
-     private class MQTTNettyConnection extends MQTTConnection {
+    private class MQTTNettyConnection extends MQTTConnection {
 
         private Channel channel;
 
