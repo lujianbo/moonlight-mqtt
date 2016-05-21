@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.lujianbo.sentinelmq.common.protocol.*;
 import io.github.lujianbo.sentinelmq.common.handler.MQTTConnection;
 import io.github.lujianbo.sentinelmq.common.handler.MQTTProtocolHandler;
-import io.github.lujianbo.sentinelmq.spi.DefaultMQTTProtocolHandler;
 import io.github.lujianbo.sentinelmq.util.ObjectMapperUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,6 +16,8 @@ import org.slf4j.LoggerFactory;
  * 完成MQTT和Netty部分的对接，实现数据的上下行
  */
 public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol> {
+
+    private Logger logger = LoggerFactory.getLogger(MQTTServerHandler.class);
 
     private MQTTProtocolHandler handler;
 
@@ -36,6 +37,7 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol>
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MQTTProtocol msg) throws Exception {
+        debug(msg);
 
         if (msg instanceof PingreqProtocol) {
             handler.onRead(connection, (PingreqProtocol) msg);
@@ -112,8 +114,6 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol>
 
      private class MQTTNettyConnection extends MQTTConnection {
 
-         private Logger logger = LoggerFactory.getLogger(MQTTNettyConnection.class);
-
         private Channel channel;
 
         MQTTNettyConnection(Channel channel) {
@@ -122,31 +122,37 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol>
 
         @Override
         public void write(ConnectProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(ConnackProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(DisconnectProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(PingreqProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(PingrespProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(PubcompProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
@@ -158,36 +164,43 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol>
 
         @Override
         public void write(PubackProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(PubrelProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(PubrecProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(SubackProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(SubscribeProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(UnsubscribeProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
         @Override
         public void write(UnsubackProtocol message) {
+            debug(message);
             channel.writeAndFlush(message);
         }
 
@@ -201,13 +214,15 @@ public class MQTTServerHandler extends SimpleChannelInboundHandler<MQTTProtocol>
             channel.close();
         }
 
-         private void debug(Object message) {
-             try {
-                 logger.debug(ObjectMapperUtil.objectMapper.writeValueAsString(message));
-             } catch (JsonProcessingException e) {
-                 e.printStackTrace();
-             }
-         }
+
+    }
+
+    private void debug(Object message) {
+        try {
+            logger.debug(ObjectMapperUtil.objectMapper.writeValueAsString(message));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

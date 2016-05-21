@@ -3,8 +3,7 @@ package io.github.lujianbo.sentinelmq.common.handler;
 import io.github.lujianbo.sentinelmq.common.protocol.*;
 
 /**
- * 负责处理MQTT协议相关的内容,作为Mqtt的协议前置处理，其主要目的是将MQTT协议抽象到
- * 一个通用的发布订阅服务上
+ * 处理mqtt部分协议的抽象类,用来完成mqtt协议的处理
  */
 public interface MQTTProtocolHandler {
 

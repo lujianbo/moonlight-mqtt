@@ -8,12 +8,14 @@ import io.github.lujianbo.sentinelmq.util.ObjectMapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Created by jianbo on 2016/5/20.
+ * Mqtt协议处理的默认实现
+ * 通过实现topic的管理来完成
  */
 public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
 
@@ -55,8 +57,7 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
 
         debug(message);
         maps.put(message.getClientId(), connection);
-        connection.setClientId(message.getClientId());
-
+        connection.setClientId(message.getClientId());//clientId 和 connection绑定
 
         byte returnCode = ConnackProtocol.CONNECTION_ACCEPTED;
         ConnackProtocol connackProtocol = new ConnackProtocol();
@@ -90,7 +91,6 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
     }
 
     public void onRead(MQTTConnection connection, PublishProtocol message) {
-        debug(message);
         /**
          * 根据消息类型分别处理
          * */
@@ -108,20 +108,37 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
     }
 
 
+    /**
+     * 收到qos1的返回
+     * */
     public void onRead(MQTTConnection connection, PubackProtocol message) {
-
+        //可以删除信息
     }
 
+    /**
+     * 已经完成
+     * */
     public void onRead(MQTTConnection connection, PubcompProtocol message) {
-
+        //可以删除信息
     }
 
+    /**
+     * 已经释放
+     * */
     public void onRead(MQTTConnection connection, PubrelProtocol message) {
-
+        PubcompProtocol pubcompProtocol=new PubcompProtocol();
+        pubcompProtocol.setPacketIdentifier(message.getPacketIdentifier());
+        connection.write(pubcompProtocol);
     }
 
+    /**
+     * 已经收到
+     * */
     public void onRead(MQTTConnection connection, PubrecProtocol message) {
-
+        //发送已经释放的消息
+        PubrelProtocol pubrelProtocol=new PubrelProtocol();
+        pubrelProtocol.setPacketIdentifier(message.getPacketIdentifier());
+        connection.write(pubrelProtocol);
     }
 
     /**
@@ -135,8 +152,6 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
      * 订阅相关的消息服务
      */
     public void onRead(MQTTConnection connection, SubscribeProtocol message) {
-        debug(message);
-
         //构建返回值
         SubackProtocol subackMessage = new SubackProtocol();
         subackMessage.setPacketIdentifier(message.getPacketIdentifier());
@@ -164,7 +179,6 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
      * 取消订阅的操作
      */
     public void onRead(MQTTConnection connection, UnsubscribeProtocol message) {
-        debug(message);
         UnsubackProtocol unsubackMessage = new UnsubackProtocol();
         for (String topicName : message.getTopicNames()) {
             this.topicManager.unSubscribe(connection.getClientId(), topicName);
@@ -193,18 +207,22 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
      */
     private void handlePublishQS0Message(PublishProtocol message) {
         //找到所有订阅者进行push
-        this.topicManager.findSubscriber(message.getTopicName()).forEachRemaining(clientId -> {
-            maps.get(clientId).write(message);
-        });
+        Iterator<String> iterator=this.topicManager.findSubscriber(message.getTopicName());
+        if (iterator!=null){
+            iterator .forEachRemaining(clientId -> maps.get(clientId).write(message));
+        }
+
     }
 
     /**
      * 处理qs1的publish
      */
     private PubackProtocol handlePublishQS1Message(PublishProtocol message) {
+        this.topicManager.findSubscriber(message.getTopicName()).forEachRemaining(clientId -> {
+            maps.get(clientId).write(message);
+        });
         PubackProtocol pubackMessage = new PubackProtocol();
         pubackMessage.setPacketIdentifier(message.getPacketIdentifier());
-
         return pubackMessage;
     }
 
@@ -212,6 +230,10 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler{
      * 处理qs2的publish
      */
     private PubrecProtocol handlePublishQS2Message(PublishProtocol message) {
+        this.topicManager.findSubscriber(message.getTopicName()).forEachRemaining(clientId -> {
+            maps.get(clientId).write(message);
+        });
+
         PubrecProtocol pubrecMessage = new PubrecProtocol();
         pubrecMessage.setPacketIdentifier(message.getPacketIdentifier());
         return pubrecMessage;
