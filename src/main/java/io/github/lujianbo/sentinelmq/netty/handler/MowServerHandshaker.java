@@ -23,11 +23,11 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 /**
  * 完成 websocket 的握手和后续处理器的配置
  */
-public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+public class MowServerHandshaker extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     private HandlerContext context;
 
-    public MowServerHandler(HandlerContext context) {
+    public MowServerHandshaker(HandlerContext context) {
         this.context = context;
     }
 
