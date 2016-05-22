@@ -56,33 +56,11 @@ public class MowServerHandler extends SimpleChannelInboundHandler<FullHttpReques
                     context.getWebSocketLocation(), "mqttv3.1", true, 5 * 1024 * 1024);
             WebSocketServerHandshaker handshaker = wsFactory.newHandshaker(req);
             if (handshaker == null) {
-                /**
-                 * 不支持的协议
-                 * */
+                //不支持的协议
                 WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
             } else {
-                /**
-                 * 握手结束后补充如下协议
-                 * */
-                handshaker.handshake(ctx.channel(), req).addListener(future -> {
-                    if (future.isSuccess()) {
-                        /**
-                         * 添加websocket Frame 的支持
-                         * */
-                        ctx.pipeline().addLast(new WebSocketTransportCodec(handshaker));
-
-                        /**
-                         * 添加Mqtt的协议支持
-                         * */
-                        ctx.pipeline().addLast(new MQTTServerCodec());
-
-                        /**
-                         * 添加协议的处理桥接部分
-                         * */
-                        ctx.pipeline().addLast(new MQTTServerHandler(context.getHandler()));
-                        ctx.pipeline().fireChannelActive();
-                    }
-                });
+                //握手结束后补充如下协议
+                handshaker.handshake(ctx.channel(), req);
             }
             return;
         }

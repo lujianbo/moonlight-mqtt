@@ -42,19 +42,30 @@ public class DefaultMQTTTopicManager {
     }
 
     /**
-     * 添加订阅
+     * 为clientId 添加 topicFilter的订阅
+     * @return int 返回订阅的topic个数
+     * @param clientId 需要订阅的clientId
+     * @param topicFilter 需要订阅的topic
      */
-    public boolean subscribe(String clientId, String topicFilter) {
-        findMatchTopic(topicFilter, topicNode -> recordSubscribe(clientId, topicNode));
-        return true;
+    public int subscribe(String clientId, String topicFilter) {
+        final int[] count = {0};
+        findMatchTopic(topicFilter, topicNode -> {
+            recordSubscribe(clientId, topicNode);
+            count[0]++;
+        });
+        return count[0];
     }
 
     /**
      * 取消订阅
      */
-    public boolean unSubscribe(String clientId, String topicFilter) {
-        findMatchTopic(topicFilter, topicNode -> removeSubscribe(clientId, topicNode));
-        return true;
+    public int unSubscribe(String clientId, String topicFilter) {
+        final int[] count = {0};
+        findMatchTopic(topicFilter, topicNode ->{
+            removeSubscribe(clientId, topicNode);
+            count[0]++;
+        });
+        return count[0];
     }
 
     /**
@@ -98,6 +109,7 @@ public class DefaultMQTTTopicManager {
      */
     private void findMatchTopic(String topicFilter, Consumer<TopicNode> action) {
         String[] tokens = StringUtils.split(topicFilter, '/');
+        int count = 0;
         findMatch(root, tokens, 0, action);
     }
 

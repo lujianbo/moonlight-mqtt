@@ -1,5 +1,7 @@
 package io.github.lujianbo.sentinelmq.netty.websocket;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import io.netty.handler.codec.http.websocketx.*;
@@ -10,23 +12,17 @@ import java.util.List;
 
 public class WebSocketTransportDecoder extends MessageToMessageDecoder<WebSocketFrame> {
 
-    private final WebSocketServerHandshaker handshaker;
-
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketTransportDecoder.class);
-
-    public WebSocketTransportDecoder(WebSocketServerHandshaker handshaker) {
-        this.handshaker = handshaker;
-    }
-
     @Override
     protected void decode(ChannelHandlerContext ctx, WebSocketFrame msg, List<Object> out) throws Exception {
         if (msg instanceof CloseWebSocketFrame) {
-            handshaker.close(ctx.channel(), (CloseWebSocketFrame) msg.retain());
+            Channel channel=ctx.channel();
+            channel.writeAndFlush((CloseWebSocketFrame) msg.retain(), channel.newPromise()).addListener(ChannelFutureListener.CLOSE);
             return;
         }
         if (msg instanceof TextWebSocketFrame) {
             //TextWebSocketFrame 已经被禁止
-            handshaker.close(ctx.channel(), (CloseWebSocketFrame) msg.retain());
+            Channel channel=ctx.channel();
+            channel.writeAndFlush(new CloseWebSocketFrame(), channel.newPromise()).addListener(ChannelFutureListener.CLOSE);
             return;
         }
 

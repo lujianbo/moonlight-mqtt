@@ -8,13 +8,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
  */
 public final class WebSocketTransportCodec extends CombinedChannelDuplexHandler<WebSocketTransportDecoder, WebSocketTransportEncoder> {
 
-    /**
-     * 完成握手后添加的编解码
-     */
-    private final WebSocketServerHandshaker handshaker;
-
-    public WebSocketTransportCodec(WebSocketServerHandshaker handshaker) {
-        super(new WebSocketTransportDecoder(handshaker), new WebSocketTransportEncoder());
-        this.handshaker = handshaker;
+    public WebSocketTransportCodec() {
+        super(new WebSocketTransportDecoder(), new WebSocketTransportEncoder());
     }
 }

@@ -1,5 +1,7 @@
 package io.github.lujianbo.sentinelmq.netty.handler;
 
+import io.github.lujianbo.sentinelmq.netty.mqtt.MQTTServerCodec;
+import io.github.lujianbo.sentinelmq.netty.websocket.WebSocketTransportCodec;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -32,12 +34,27 @@ public class MowServerInitializer extends ChannelInitializer<SocketChannel> {
          * 编解码Http协议
          * */
         pipeline.addLast(new HttpServerCodec());
-
         pipeline.addLast(new HttpObjectAggregator(65536));
 
         /**
          * 完成握手和后置的Handler配置
          * */
         pipeline.addLast(new MowServerHandler(handlerContext));
+
+        /**
+         * 添加websocket Frame 的支持
+         * */
+        pipeline.addLast(new WebSocketTransportCodec());
+
+        /**
+         * 添加Mqtt的协议支持
+         * */
+        pipeline.addLast(new MQTTServerCodec());
+
+        /**
+         * 添加协议的处理桥接部分
+         * */
+        pipeline.addLast(new MQTTServerHandler(handlerContext.getHandler()));
+        pipeline.fireChannelActive();
     }
 }

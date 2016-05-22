@@ -75,7 +75,7 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler {
     }
 
     public void onRead(MQTTConnection connection, DisconnectProtocol message) {
-        this.topicManager.clear(connection.getClientId());
+        onClose(connection);
     }
 
     /**
@@ -158,18 +158,19 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler {
         String clientId = connection.getClientId();
         for (SubscribeProtocol.TopicFilterQoSPair pair : message.getPairs()) {
             //订阅topic
-            this.topicManager.subscribe(clientId, pair.getTopicFilter());
-            /**
-             * 这里的演示是假的
-             * */
-            if (pair.getQos() == MQTTProtocol.mostOnce) {
-                subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS0);
-            }
-            if (pair.getQos() == MQTTProtocol.leastOnce) {
-                subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS1);
-            }
-            if (pair.getQos() == MQTTProtocol.exactlyOnce) {
-                subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS2);
+            int count=this.topicManager.subscribe(clientId, pair.getTopicFilter());
+            if (count>0){
+                if (pair.getQos() == MQTTProtocol.mostOnce) {
+                    subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS0);
+                }
+                if (pair.getQos() == MQTTProtocol.leastOnce) {
+                    subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS1);
+                }
+                if (pair.getQos() == MQTTProtocol.exactlyOnce) {
+                    subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS2);
+                }
+            }else {
+                subackMessage.addReturnCode(SubackProtocol.Failure);
             }
         }
         connection.write(subackMessage);
@@ -195,6 +196,7 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler {
 
     public void onClose(MQTTConnection connection) {
         maps.remove(connection.getClientId());
+        this.topicManager.clear(connection.getClientId());
     }
 
 
