@@ -1,7 +1,6 @@
 package io.github.lujianbo.sentinelmq.netty;
 
 
-import io.github.lujianbo.sentinelmq.netty.handler.HandlerContext;
 import io.github.lujianbo.sentinelmq.netty.handler.MowServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;

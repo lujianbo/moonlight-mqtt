@@ -1,5 +1,6 @@
 package io.github.lujianbo.sentinelmq.netty.handler;
 
+import io.github.lujianbo.sentinelmq.netty.HandlerContext;
 import io.github.lujianbo.sentinelmq.netty.mqtt.MQTTServerCodec;
 import io.github.lujianbo.sentinelmq.netty.websocket.WebSocketTransportCodec;
 import io.netty.channel.ChannelInitializer;

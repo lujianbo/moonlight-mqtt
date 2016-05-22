@@ -1,4 +1,4 @@
-package io.github.lujianbo.sentinelmq.netty.handler;
+package io.github.lujianbo.sentinelmq.netty;
 
 import io.github.lujianbo.sentinelmq.common.handler.MQTTProtocolHandler;
 import io.netty.handler.ssl.SslContext;
