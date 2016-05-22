@@ -213,7 +213,6 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler {
         if (iterator != null) {
             iterator.forEachRemaining(clientId -> maps.get(clientId).write(message));
         }
-
     }
 
     /**
