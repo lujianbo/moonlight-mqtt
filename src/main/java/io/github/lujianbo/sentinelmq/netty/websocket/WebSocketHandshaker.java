@@ -1,6 +1,5 @@
-package io.github.lujianbo.sentinelmq.netty.handler;
+package io.github.lujianbo.sentinelmq.netty.websocket;
 
-import io.github.lujianbo.sentinelmq.netty.HandlerContext;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -22,12 +21,20 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 /**
  * 完成 websocket 的握手和后续处理器的配置
  */
-public class MowServerHandshaker extends SimpleChannelInboundHandler<FullHttpRequest> {
+public class WebSocketHandshaker extends SimpleChannelInboundHandler<FullHttpRequest> {
 
-    private HandlerContext context;
 
-    public MowServerHandshaker(HandlerContext context) {
-        this.context = context;
+    private String uri="/mqtt";
+
+    private String subprotocols="mqttv3.1";
+
+    public WebSocketHandshaker(){
+
+    }
+
+    public WebSocketHandshaker(String uri,String subprotocols){
+        this.uri=uri;
+        this.subprotocols=subprotocols;
     }
 
     @Override
@@ -45,14 +52,14 @@ public class MowServerHandshaker extends SimpleChannelInboundHandler<FullHttpReq
         /**
          * 当且仅当uri为指定path的时候,进行websocket通讯的升级
          * */
-        if (context.getPath().equals(req.getUri())
+        if (uri.equals(req.getUri())
                 //CONNECTION 字段的值为 UPGRADE, firefox上存在多个值的情况
                 && req.headers().get(HttpHeaders.Names.CONNECTION).contains(HttpHeaders.Values.UPGRADE)
                 //UPGRADE 字段的值为 WEBSOCKET
                 && HttpHeaders.Values.WEBSOCKET.equalsIgnoreCase(req.headers().get(HttpHeaders.Names.UPGRADE))
                 ) {
             WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
-                    context.getWebSocketLocation(), "mqttv3.1", true, 5 * 1024 * 1024);
+                    uri, subprotocols, true, 5 * 1024 * 1024);
             WebSocketServerHandshaker handshaker = wsFactory.newHandshaker(req);
             if (handshaker == null) {
                 //不支持的协议
@@ -84,5 +91,19 @@ public class MowServerHandshaker extends SimpleChannelInboundHandler<FullHttpReq
         }
     }
 
+    public String getUri() {
+        return uri;
+    }
 
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public String getSubprotocols() {
+        return subprotocols;
+    }
+
+    public void setSubprotocols(String subprotocols) {
+        this.subprotocols = subprotocols;
+    }
 }

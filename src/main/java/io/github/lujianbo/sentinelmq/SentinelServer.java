@@ -1,7 +1,7 @@
 package io.github.lujianbo.sentinelmq;
 
-import io.github.lujianbo.sentinelmq.netty.NettyServer;
-import io.github.lujianbo.sentinelmq.netty.HandlerContext;
+import io.github.lujianbo.sentinelmq.common.handler.MQTTProtocolHandler;
+import io.github.lujianbo.sentinelmq.netty.MQTTServer;
 import io.github.lujianbo.sentinelmq.spi.DefaultMQTTProtocolHandler;
 import io.github.lujianbo.sentinelmq.spi.DefaultMQTTTopicManager;
 
@@ -10,24 +10,23 @@ import io.github.lujianbo.sentinelmq.spi.DefaultMQTTTopicManager;
  */
 public class SentinelServer {
 
-    private NettyServer nettyServer = new NettyServer();
+    private MQTTServer nettyServer = new MQTTServer();
 
-    private HandlerContext context;
+    private MQTTProtocolHandler handler;
+
+    /**
+     * webSocket的支持
+     * */
+    private String path="/mqtt";
 
     public SentinelServer() {
-
         DefaultMQTTTopicManager topicManager = new DefaultMQTTTopicManager("");
         topicManager.createTopic("topic/test/mytopic");
-
-        context = new HandlerContext();
-        context.setHost("localhost");
-        context.setPort(8080);
-        //配置handler
-        context.setHandler(new DefaultMQTTProtocolHandler(topicManager));
+        handler=new DefaultMQTTProtocolHandler(topicManager);
     }
 
     public void start() {
-        nettyServer.start(context);
+        nettyServer.start(8080,path,handler);
     }
 
     public void stop() {

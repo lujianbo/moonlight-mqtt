@@ -33,6 +33,9 @@ public class MQTTDecoder extends ReplayingDecoder {
         }
     }
 
+    /**
+     * 读取变长的数据长度
+     * */
     private int decodeRemainingLength(ByteBuf in) {
         int multiplier = 1;
         int value = 0;
@@ -53,8 +56,11 @@ public class MQTTDecoder extends ReplayingDecoder {
                 ConnectProtocol message = new ConnectProtocol();
                 //读取协议名长度
                 String protocolName = decodeUTF8String(in);
+                //读取协议版本号
                 byte protocolLevel = in.readByte();
+                //读取当前连接的参数
                 byte connectFlags = in.readByte();
+                //读取会话保持时间
                 int keepAlive = in.readUnsignedShort();
 
                 message.setProtocolName(protocolName);
@@ -79,7 +85,6 @@ public class MQTTDecoder extends ReplayingDecoder {
                 //读取clientId
                 String clientId = decodeUTF8String(in);
                 message.setClientId(clientId);
-
                 //
                 if (willFlag) {
                     String willTopic = decodeUTF8String(in);
@@ -248,10 +253,16 @@ public class MQTTDecoder extends ReplayingDecoder {
             return NULL;
         }
 
+        /**
+         * 读取带长度的UTF-8 String
+         * */
         private static String decodeUTF8String(ByteBuf in) throws UnsupportedEncodingException {
             return new String(readLengthPrefixedField(in), "UTF-8");
         }
 
+        /**
+         * 读取带长度的String
+         * */
         private static byte[] readLengthPrefixedField(ByteBuf in) {
             int strLen = in.readUnsignedShort();
             byte[] strRaw = new byte[strLen];
