@@ -6,10 +6,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
 import io.netty.util.CharsetUtil;
@@ -21,30 +18,30 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 /**
  * 完成 websocket 的握手和后续处理器的配置
  */
-public class WebSocketHandshaker extends SimpleChannelInboundHandler<FullHttpRequest> {
+public class WebSocketHandShaker extends SimpleChannelInboundHandler<FullHttpRequest> {
 
 
     private String uri="/mqtt";
 
     private String subprotocols="mqttv3.1";
 
-    public WebSocketHandshaker(){
+    public WebSocketHandShaker(){
 
     }
 
-    public WebSocketHandshaker(String uri,String subprotocols){
+    public WebSocketHandShaker(String uri, String subprotocols){
         this.uri=uri;
         this.subprotocols=subprotocols;
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest req) throws Exception {
-        if (!req.getDecoderResult().isSuccess()) {
+        if (!req.decoderResult().isSuccess()) {
             sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, BAD_REQUEST));
             return;
         }
         // Allow only GET methods.
-        if (req.getMethod() != GET) {
+        if (req.method() != GET) {
             sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, FORBIDDEN));
             return;
         }
@@ -52,11 +49,11 @@ public class WebSocketHandshaker extends SimpleChannelInboundHandler<FullHttpReq
         /**
          * 当且仅当uri为指定path的时候,进行websocket通讯的升级
          * */
-        if (uri.equals(req.getUri())
+        if (uri.equals(req.uri())
                 //CONNECTION 字段的值为 UPGRADE, firefox上存在多个值的情况
-                && req.headers().get(HttpHeaders.Names.CONNECTION).contains(HttpHeaders.Values.UPGRADE)
+                && req.headers().get(HttpHeaderNames.CONNECTION).contains(HttpHeaderValues.UPGRADE)
                 //UPGRADE 字段的值为 WEBSOCKET
-                && HttpHeaders.Values.WEBSOCKET.equalsIgnoreCase(req.headers().get(HttpHeaders.Names.UPGRADE))
+                && HttpHeaderValues.WEBSOCKET.contentEqualsIgnoreCase(req.headers().get(HttpHeaderNames.UPGRADE))
                 ) {
             WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
                     uri, subprotocols, true, 5 * 1024 * 1024);
@@ -77,16 +74,16 @@ public class WebSocketHandshaker extends SimpleChannelInboundHandler<FullHttpReq
 
     private static void sendHttpResponse(ChannelHandlerContext ctx, FullHttpRequest req, FullHttpResponse res) {
         // Generate an error page if response getStatus code is not OK (200).
-        if (res.getStatus().code() != 200) {
-            ByteBuf buf = Unpooled.copiedBuffer(res.getStatus().toString(), CharsetUtil.UTF_8);
+        if (res.status().code() != 200) {
+            ByteBuf buf = Unpooled.copiedBuffer(res.status().toString(), CharsetUtil.UTF_8);
             res.content().writeBytes(buf);
             buf.release();
-            HttpHeaders.setContentLength(res, res.content().readableBytes());
+            HttpUtil.setContentLength(res, res.content().readableBytes());
         }
 
         // Send the response and close the connection if necessary.
         ChannelFuture f = ctx.channel().writeAndFlush(res);
-        if (!HttpHeaders.isKeepAlive(req) || res.getStatus().code() != 200) {
+        if (!HttpUtil.isKeepAlive(req) || res.status().code() != 200) {
             f.addListener(ChannelFutureListener.CLOSE);
         }
     }

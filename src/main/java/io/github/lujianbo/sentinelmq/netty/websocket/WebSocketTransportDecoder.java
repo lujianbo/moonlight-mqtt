@@ -30,7 +30,7 @@ public class WebSocketTransportDecoder extends MessageToMessageDecoder<WebSocket
         if (msg instanceof BinaryWebSocketFrame) {
             //将数据传输到下一个handler
             out.add(msg.content().retain());
-            return;
+
         }
     }
 }

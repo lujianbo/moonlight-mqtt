@@ -2,7 +2,7 @@ package io.github.lujianbo.sentinelmq.netty.handler;
 
 import io.github.lujianbo.sentinelmq.common.handler.MQTTProtocolHandler;
 import io.github.lujianbo.sentinelmq.netty.mqtt.MQTTServerCodec;
-import io.github.lujianbo.sentinelmq.netty.websocket.WebSocketHandshaker;
+import io.github.lujianbo.sentinelmq.netty.websocket.WebSocketHandShaker;
 import io.github.lujianbo.sentinelmq.netty.websocket.WebSocketTransportCodec;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -43,7 +43,7 @@ public class MQTTServerInitializer extends ChannelInitializer<SocketChannel> {
             /**
              * 完成握手和后置的Handler配置
              * */
-            pipeline.addLast(new WebSocketHandshaker());
+            pipeline.addLast(new WebSocketHandShaker());
             /**
              * 添加websocket Frame 的支持
              * */
