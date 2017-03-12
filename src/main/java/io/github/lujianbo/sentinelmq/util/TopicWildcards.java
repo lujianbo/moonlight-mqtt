@@ -14,18 +14,7 @@ public class TopicWildcards {
 
     public String[] process(String topicName) {
         String[] result = StringUtils.split(topicName, "/");
-        if (result[0].startsWith("$")) {
 
-        } else {
-            for (String str : result) {
-                if (str.equals("#")) {
-
-                }
-                if (str.equals("+")) {
-
-                }
-            }
-        }
         return result;
     }
 }

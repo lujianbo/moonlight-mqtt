@@ -16,17 +16,17 @@ public class SentinelServer {
 
     /**
      * webSocket的支持
-     * */
-    private String path="/mqtt";
+     */
+    private String path = "/mqtt";
 
     public SentinelServer() {
         DefaultMQTTTopicManager topicManager = new DefaultMQTTTopicManager("");
         topicManager.createTopic("topic/test/mytopic");
-        handler=new DefaultMQTTProtocolHandler(topicManager);
+        handler = new DefaultMQTTProtocolHandler(topicManager);
     }
 
     public void start() {
-        nettyServer.start(8080,path,handler);
+        nettyServer.start(8080, path, handler);
     }
 
     public void stop() {

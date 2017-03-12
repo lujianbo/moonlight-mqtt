@@ -19,7 +19,7 @@ public class MQTTServer {
     private EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     private EventLoopGroup workerGroup = new NioEventLoopGroup();
 
-    public void start(int port,String webSocketPath,MQTTProtocolHandler handler) {
+    public void start(int port, String webSocketPath, MQTTProtocolHandler handler) {
         try {
             //设置
             MQTTServerInitializer initializer = new MQTTServerInitializer();

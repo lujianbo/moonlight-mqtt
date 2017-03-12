@@ -35,7 +35,7 @@ public class MQTTDecoder extends ReplayingDecoder {
 
     /**
      * 读取变长的数据长度
-     * */
+     */
     private int decodeRemainingLength(ByteBuf in) {
         int multiplier = 1;
         int value = 0;
@@ -183,9 +183,8 @@ public class MQTTDecoder extends ReplayingDecoder {
                 }
                 return subscribeMessage;
             } catch (Exception e) {
-                e.printStackTrace();
+                return null;
             }
-            return null;
         }),
         SUBACK((byte) 9, (b, in) -> {
             SubackProtocol subackMessage = new SubackProtocol();
@@ -208,9 +207,8 @@ public class MQTTDecoder extends ReplayingDecoder {
                 }
                 return unsubscribeMessage;
             } catch (Exception e) {
-                e.printStackTrace();
+                return null;
             }
-            return null;
         }),
         UNSUBACK((byte) 11, (b, in) -> {
             UnsubackProtocol unsubackMessage = new UnsubackProtocol();
@@ -218,19 +216,11 @@ public class MQTTDecoder extends ReplayingDecoder {
             unsubackMessage.setPacketIdentifier(packetIdentifier);
             return unsubackMessage;
         }),
-        PINGREQ((byte) 12, (b, in) -> {
-            return new PingreqProtocol();
-        }),
-        PINGRESP((byte) 13, (b, in) -> {
-            return new PingrespProtocol();
-        }),
-        DISCONNECT((byte) 14, (b, in) -> {
-            return new DisconnectProtocol();
-        }),
+        PINGREQ((byte) 12, (b, in) -> new PingreqProtocol()),
+        PINGRESP((byte) 13, (b, in) -> new PingrespProtocol()),
+        DISCONNECT((byte) 14, (b, in) -> new DisconnectProtocol()),
 
-        NULL((byte) 127, (b, in) -> {
-            return null;
-        });
+        NULL((byte) 127, (b, in) -> null);
 
         private BiFunction<Byte, ByteBuf, MQTTProtocol> decode;
         private byte type;
@@ -255,14 +245,14 @@ public class MQTTDecoder extends ReplayingDecoder {
 
         /**
          * 读取带长度的UTF-8 String
-         * */
+         */
         private static String decodeUTF8String(ByteBuf in) throws UnsupportedEncodingException {
             return new String(readLengthPrefixedField(in), "UTF-8");
         }
 
         /**
          * 读取带长度的String
-         * */
+         */
         private static byte[] readLengthPrefixedField(ByteBuf in) {
             int strLen = in.readUnsignedShort();
             byte[] strRaw = new byte[strLen];

@@ -25,35 +25,35 @@ public class MQTTServerInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
-        /**
+        /*
          * 判断是否需要添加ssl支持
          * */
-        if (this.sslCtx!=null){
+        if (this.sslCtx != null) {
             pipeline.addLast(sslCtx.newHandler(ch.alloc()));
         }
-        /**
+        /*
          * 判断是否需要添加websocket支持
          * */
-        if (!path.equals("")){
-            /**
+        if (!path.equals("")) {
+            /*
              * 编解码Http协议
              * */
             pipeline.addLast(new HttpServerCodec());
             pipeline.addLast(new HttpObjectAggregator(65536));
-            /**
+            /*
              * 完成握手和后置的Handler配置
              * */
             pipeline.addLast(new WebSocketHandShaker());
-            /**
+            /*
              * 添加websocket Frame 的支持
              * */
             pipeline.addLast(new WebSocketTransportCodec());
         }
-        /**
+        /*
          * 添加Mqtt的协议支持
          * */
         pipeline.addLast(new MQTTServerCodec());
-        /**
+        /*
          * 添加协议的处理桥接部分
          * */
         pipeline.addLast(new MQTTServerHandler(handler));

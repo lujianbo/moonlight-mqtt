@@ -4,9 +4,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import io.netty.handler.codec.http.websocketx.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 
 import java.util.List;
 
@@ -15,13 +16,13 @@ public class WebSocketTransportDecoder extends MessageToMessageDecoder<WebSocket
     @Override
     protected void decode(ChannelHandlerContext ctx, WebSocketFrame msg, List<Object> out) throws Exception {
         if (msg instanceof CloseWebSocketFrame) {
-            Channel channel=ctx.channel();
-            channel.writeAndFlush((CloseWebSocketFrame) msg.retain(), channel.newPromise()).addListener(ChannelFutureListener.CLOSE);
+            Channel channel = ctx.channel();
+            channel.writeAndFlush(msg.retain(), channel.newPromise()).addListener(ChannelFutureListener.CLOSE);
             return;
         }
         if (msg instanceof TextWebSocketFrame) {
             //TextWebSocketFrame 已经被禁止
-            Channel channel=ctx.channel();
+            Channel channel = ctx.channel();
             channel.writeAndFlush(new CloseWebSocketFrame(), channel.newPromise()).addListener(ChannelFutureListener.CLOSE);
             return;
         }

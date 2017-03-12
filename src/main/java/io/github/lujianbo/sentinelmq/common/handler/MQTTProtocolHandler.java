@@ -17,7 +17,6 @@ public interface MQTTProtocolHandler {
      */
     public void onRead(MQTTConnection connection, ConnackProtocol message);
 
-
     public void onRead(MQTTConnection connection, DisconnectProtocol message);
 
     /**

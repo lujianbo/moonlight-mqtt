@@ -21,17 +21,17 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 public class WebSocketHandShaker extends SimpleChannelInboundHandler<FullHttpRequest> {
 
 
-    private String uri="/mqtt";
+    private String uri = "/mqtt";
 
-    private String subprotocols="mqttv3.1";
+    private String subprotocols = "mqttv3.1";
 
-    public WebSocketHandShaker(){
+    public WebSocketHandShaker() {
 
     }
 
-    public WebSocketHandShaker(String uri, String subprotocols){
-        this.uri=uri;
-        this.subprotocols=subprotocols;
+    public WebSocketHandShaker(String uri, String subprotocols) {
+        this.uri = uri;
+        this.subprotocols = subprotocols;
     }
 
     @Override

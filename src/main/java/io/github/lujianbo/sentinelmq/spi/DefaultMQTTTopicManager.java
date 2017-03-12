@@ -43,9 +43,10 @@ public class DefaultMQTTTopicManager {
 
     /**
      * 为clientId 添加 topicFilter的订阅
-     * @return int 返回订阅的topic个数
-     * @param clientId 需要订阅的clientId
+     *
+     * @param clientId    需要订阅的clientId
      * @param topicFilter 需要订阅的topic
+     * @return int 返回订阅的topic个数
      */
     public int subscribe(String clientId, String topicFilter) {
         final int[] count = {0};
@@ -61,7 +62,7 @@ public class DefaultMQTTTopicManager {
      */
     public int unSubscribe(String clientId, String topicFilter) {
         final int[] count = {0};
-        findMatchTopic(topicFilter, topicNode ->{
+        findMatchTopic(topicFilter, topicNode -> {
             removeSubscribe(clientId, topicNode);
             count[0]++;
         });

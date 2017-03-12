@@ -55,7 +55,6 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler {
      */
     public void onRead(MQTTConnection connection, ConnectProtocol message) {
 
-        debug(message);
         maps.put(message.getClientId(), connection);
         connection.setClientId(message.getClientId());//clientId 和 connection绑定
 
@@ -158,8 +157,8 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler {
         String clientId = connection.getClientId();
         for (SubscribeProtocol.TopicFilterQoSPair pair : message.getPairs()) {
             //订阅topic
-            int count=this.topicManager.subscribe(clientId, pair.getTopicFilter());
-            if (count>0){
+            int count = this.topicManager.subscribe(clientId, pair.getTopicFilter());
+            if (count > 0) {
                 if (pair.getQos() == MQTTProtocol.mostOnce) {
                     subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS0);
                 }
@@ -169,7 +168,7 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler {
                 if (pair.getQos() == MQTTProtocol.exactlyOnce) {
                     subackMessage.addReturnCode(SubackProtocol.SuccessMaximumQoS2);
                 }
-            }else {
+            } else {
                 subackMessage.addReturnCode(SubackProtocol.Failure);
             }
         }
@@ -239,11 +238,4 @@ public class DefaultMQTTProtocolHandler implements MQTTProtocolHandler {
         return pubrecMessage;
     }
 
-    private void debug(Object message) {
-        try {
-            logger.debug(ObjectMapperUtil.objectMapper.writeValueAsString(message));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-    }
 }

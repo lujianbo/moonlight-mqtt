@@ -35,33 +35,7 @@ public abstract class MQTTConnection {
         Attributes = attributes;
     }
 
-    abstract public void write(ConnectProtocol message);
-
-    abstract public void write(ConnackProtocol message);
-
-    abstract public void write(DisconnectProtocol message);
-
-    abstract public void write(PingreqProtocol message);
-
-    abstract public void write(PingrespProtocol message);
-
-    abstract public void write(PubcompProtocol message);
-
-    abstract public void write(PublishProtocol message);
-
-    abstract public void write(PubackProtocol message);
-
-    abstract public void write(PubrelProtocol message);
-
-    abstract public void write(PubrecProtocol message);
-
-    abstract public void write(SubackProtocol message);
-
-    abstract public void write(SubscribeProtocol message);
-
-    abstract public void write(UnsubscribeProtocol message);
-
-    abstract public void write(UnsubackProtocol message);
+    abstract public void write(MQTTProtocol message);
 
     abstract public void close();
 

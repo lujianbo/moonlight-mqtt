@@ -75,7 +75,6 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTProtocol> {
         }
         if (msg instanceof ConnackProtocol) {
             ConnackProtocol message = (ConnackProtocol) msg;
-
             out.writeByte(MQTTProtocol.CONNACK << 4);
             out.writeBytes(encodeRemainingLength(2));
             out.writeByte(message.isSessionPresentFlag() ? 0x01 : 0x00);
@@ -101,13 +100,11 @@ public class MQTTEncoder extends MessageToByteEncoder<MQTTProtocol> {
             if (message.getQosLevel() != 0) {
                 variableHeader.writeShort(message.getPacketIdentifier());
             }
-
             //write
             out.writeByte(MQTTProtocol.PUBLISH << 4 | flags);//协议部分
             out.writeBytes(encodeRemainingLength(variableHeader.readableBytes() + message.getPayload().length));//长度部分
             out.writeBytes(variableHeader);//头部部分
             out.writeBytes(message.getPayload());//
-
             //release
             variableHeader.release();
             return;

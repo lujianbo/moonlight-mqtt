@@ -1,7 +1,6 @@
 package io.github.lujianbo.sentinelmq.netty.websocket;
 
 import io.netty.channel.CombinedChannelDuplexHandler;
-import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 
 /**
  * Created by jianbo on 2016/3/28.
