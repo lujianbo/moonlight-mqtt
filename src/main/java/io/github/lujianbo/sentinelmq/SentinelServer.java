@@ -1,7 +1,7 @@
 package io.github.lujianbo.sentinelmq;
 
 import io.github.lujianbo.sentinelmq.common.handler.MQTTProtocolHandler;
-import io.github.lujianbo.sentinelmq.netty.MQTTServer;
+import io.github.lujianbo.sentinelmq.net.MQTTServer;
 import io.github.lujianbo.sentinelmq.spi.DefaultMQTTProtocolHandler;
 import io.github.lujianbo.sentinelmq.spi.DefaultMQTTTopicManager;
 

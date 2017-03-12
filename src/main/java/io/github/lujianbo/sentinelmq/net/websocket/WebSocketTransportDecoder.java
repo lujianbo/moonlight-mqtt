@@ -1,4 +1,4 @@
-package io.github.lujianbo.sentinelmq.netty.websocket;
+package io.github.lujianbo.sentinelmq.net.websocket;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;

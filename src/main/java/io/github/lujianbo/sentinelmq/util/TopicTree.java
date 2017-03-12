@@ -1,5 +1,6 @@
 package io.github.lujianbo.sentinelmq.util;
 
+
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -16,16 +17,45 @@ public class TopicTree<T> {
 
     }
 
-    private boolean createTopic(String path, T object) {
-        return true;
+    /**
+     * create a new topic
+     * */
+    private void createTopic(String[] path, T object) {
+        TreeNode<T> node=root;
+        for (int i=0;i<path.length;i++){
+            node=node.createIfNotExit(path[i]);
+        }
+        node.setObject(object);
     }
 
-    private T deleteTopic(String path) {
+    /**
+     * delete a topic
+     * */
+    private T deleteTopic(String[] path) {
+        TreeNode<T> node=findNode(path);
+        if (node!=null&&path.length-1>=0){
+            TreeNode<T> removeNode=node.parent.children.remove(path[path.length-1]);
+            return removeNode.object;
+        }
         return null;
     }
 
-    private T findTopic(String path) {
+    private TreeNode<T> findNode(String[] path){
+        TreeNode<T> node=root;
+        for (int i=0;i<path.length;i++){
+            node=node.getChild(path[i]);
+            if (node==null){
+                break;
+            }
+        }
+        return node;
+    }
 
+    private T findTopic(String[] path) {
+        TreeNode<T> node=findNode(path);
+        if (node!=null){
+            return node.object;
+        }
         return null;
     }
 
@@ -38,7 +68,7 @@ public class TopicTree<T> {
 
         private N object;
 
-        private final ConcurrentHashMap<String, TreeNode> children = new ConcurrentHashMap<>();
+        private final ConcurrentHashMap<String, TreeNode<N>> children = new ConcurrentHashMap<>();
 
         TreeNode(TreeNode<N> parent, String name) {
             this.parent = parent;
@@ -64,11 +94,24 @@ public class TopicTree<T> {
         /**
          * 新增一个子节点
          */
-        public void addChild(String name) {
-            this.children.putIfAbsent(name, new TreeNode<N>(this, name));
+        public TreeNode<N> createIfNotExit(String name) {
+            TreeNode<N> child = children.get(name);
+            if (child == null) {
+                child = new TreeNode<N>(this, name);
+                TreeNode<N> returnNode = this.children.putIfAbsent(name, child);
+                if (returnNode != null) {
+                    child = returnNode;
+                }
+            }
+            return child;
         }
 
-        public ConcurrentHashMap<String, TreeNode> getChildren() {
+        public TreeNode<N> getChild(String name){
+            return this.children.get(name);
+        }
+
+
+        public ConcurrentHashMap<String, TreeNode<N>> getChildren() {
             return children;
         }
 

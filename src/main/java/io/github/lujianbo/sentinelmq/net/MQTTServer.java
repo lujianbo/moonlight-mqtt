@@ -1,8 +1,8 @@
-package io.github.lujianbo.sentinelmq.netty;
+package io.github.lujianbo.sentinelmq.net;
 
 
 import io.github.lujianbo.sentinelmq.common.handler.MQTTProtocolHandler;
-import io.github.lujianbo.sentinelmq.netty.handler.MQTTServerInitializer;
+import io.github.lujianbo.sentinelmq.net.handler.MQTTServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -32,7 +32,6 @@ public class MQTTServer {
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(initializer);
             b.bind(port).sync();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
